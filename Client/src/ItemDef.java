@@ -52,7 +52,7 @@ public final class ItemDef {
 		} catch (IOException ioe) {ioe.printStackTrace();}
 	
 	
-	}*/
+	}
 	
 	public static void dumpPrices() {
 		try {
@@ -67,7 +67,8 @@ public final class ItemDef {
 	
 	
 	}
-	
+	*/
+
 	public static void unpackConfig(StreamLoader streamLoader)	 {
 		stream = new Stream(streamLoader.getDataForName("obj.dat"));
 		Stream stream = new Stream(streamLoader.getDataForName("obj.idx"));
@@ -81,9 +82,11 @@ public final class ItemDef {
 		cache = new ItemDef[10];
 		for(int k = 0; k < 10; k++)
 			cache[k] = new ItemDef();
-		//dumpStacks();
-		//dumpNotes();
+		/*
+		dumpStacks();
+		dumpNotes();
 		dumpPrices();
+		*/
 	}
 
 	public Model method194(int j) {
