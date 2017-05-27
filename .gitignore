@@ -7,3 +7,6 @@
 
 # Project
 *.class
+
+# Server
+Server/game/players/*.txt
