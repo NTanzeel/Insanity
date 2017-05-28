@@ -20,7 +20,6 @@ import server.util.log.Logger;
 import server.world.ItemHandler;
 import server.world.ObjectHandler;
 import server.world.ObjectManager;
-import server.world.ShopHandler;
 
 /**
  * Server.java
@@ -47,7 +46,6 @@ public class Server {
     public static ItemHandler itemHandler = new ItemHandler();
     public static PlayerHandler playerHandler = new PlayerHandler();
     public static NPCHandler npcHandler = new NPCHandler();
-    public static ShopHandler shopHandler = new ShopHandler();
     public static ObjectHandler objectHandler = new ObjectHandler();
     public static ObjectManager objectManager = new ObjectManager();
 
@@ -114,7 +112,6 @@ public class Server {
                 itemHandler.process();
                 playerHandler.process();
                 npcHandler.process();
-                shopHandler.process();
                 objectManager.process();
                 long cycleTime = engineTimer.elapsed();
                 sleepTime = cycleRate - cycleTime;

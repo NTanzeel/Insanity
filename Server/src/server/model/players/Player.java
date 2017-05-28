@@ -7,7 +7,6 @@ import server.model.items.Item;
 import server.model.items.ItemAssistant;
 import server.model.npcs.NPC;
 import server.model.npcs.NPCHandler;
-import server.model.shops.ShopAssistant;
 import server.net.HostList;
 import server.net.Packet;
 import server.net.StaticPacketBuilder;
@@ -432,7 +431,6 @@ public class Player {
     private boolean newWalkCmdIsRunning = false;
     private IoSession session;
     private ItemAssistant itemAssistant = new ItemAssistant(this);
-    private ShopAssistant shopAssistant = new ShopAssistant(this);
     private PlayerAssistant playerAssistant = new PlayerAssistant(this);
     private ActionHandler actionHandler = new ActionHandler(this);
     private DialogueHandler dialogueHandler = new DialogueHandler(this);
@@ -568,7 +566,6 @@ public class Player {
 
     public void updateshop(int i) {
         Player p = PlayerHandler.players[playerId];
-        p.getShops().resetShop(i);
     }
 
     public void println_debug(String str) {
@@ -1841,11 +1838,6 @@ public class Player {
     public DialogueHandler getDH() {
         return dialogueHandler;
     }
-
-    public ShopAssistant getShops() {
-        return shopAssistant;
-    }
-
 
     public ActionHandler getActions() {
         return actionHandler;

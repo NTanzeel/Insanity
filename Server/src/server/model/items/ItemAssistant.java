@@ -132,8 +132,7 @@ public class ItemAssistant {
 		boolean itemInInventory = false;
 		for (int i = 0; i < c.playerItems.length; i++) {
 			if (c.playerItems[i] - 1 > 0) {
-				int inventoryItemValue = c.getShops().getItemShopValue(
-						c.playerItems[i] - 1);
+				int inventoryItemValue = 0;
 				if (inventoryItemValue > value && (!c.invSlot[i])) {
 					value = inventoryItemValue;
 					item = c.playerItems[i] - 1;
@@ -144,8 +143,7 @@ public class ItemAssistant {
 		}
 		for (int i1 = 0; i1 < c.playerEquipment.length; i1++) {
 			if (c.playerEquipment[i1] > 0) {
-				int equipmentItemValue = c.getShops().getItemShopValue(
-						c.playerEquipment[i1]);
+				int equipmentItemValue = 0;
 				if (equipmentItemValue > value && (!c.equipSlot[i1])) {
 					value = equipmentItemValue;
 					item = c.playerEquipment[i1];

@@ -742,7 +742,7 @@ public class PlayerAssistant {
                         break;
                     }
                     c.getItems().deleteItem(itemId, slot, 1);
-                    c.getItems().addItem(995, c.getShops().getItemShopValue(itemId) / 3);
+                    c.getItems().addItem(995, 0 / 3);
                     c.startAnimation(c.MAGIC_SPELLS[49][2]);
                     c.gfx100(c.MAGIC_SPELLS[49][3]);
                     c.alchDelay = System.currentTimeMillis();
@@ -759,7 +759,7 @@ public class PlayerAssistant {
                         break;
                     }
                     c.getItems().deleteItem(itemId, slot, 1);
-                    c.getItems().addItem(995, (int) (c.getShops().getItemShopValue(itemId) * .75));
+                    c.getItems().addItem(995, (int) (0 * .75));
                     c.startAnimation(c.MAGIC_SPELLS[50][2]);
                     c.gfx100(c.MAGIC_SPELLS[50][3]);
                     c.alchDelay = System.currentTimeMillis();
