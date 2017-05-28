@@ -2554,8 +2554,7 @@ public class CombatAssistant {
 		}
 		if (c.playerIndex == c.playerId)
 			return false;
-		if (c.inPits && PlayerHandler.players[c.playerIndex].inPits)
-			return true;
+
 		if (PlayerHandler.players[c.playerIndex].inDuelArena()
 				&& c.duelStatus != 5 && !c.usingMagic) {
 			if (c.arenas() || c.duelStatus == 5) {
@@ -2628,8 +2627,6 @@ public class CombatAssistant {
 		}
 		if (i == c.playerId)
 			return false;
-		if (c.inPits && PlayerHandler.players[i].inPits)
-			return true;
 		if (!PlayerHandler.players[i].inWild()) {
 			return false;
 		}

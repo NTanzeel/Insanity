@@ -937,9 +937,7 @@ public class PlayerAssistant {
             c.playerLevel[i] = getLevelForXP(c.playerXP[i]);
             c.getPA().refreshSkill(i);
         }
-        if (c.pitsStatus == 1) {
-            movePlayer(2399, 5173, 0);
-        } else if (c.duelStatus <= 4) { // if we are not in a duel repawn to
+        if (c.duelStatus <= 4) { // if we are not in a duel repawn to
             // wildy
             movePlayer(Config.RESPAWN_X, Config.RESPAWN_Y, 0);
             c.isSkulled = false;
@@ -2065,14 +2063,7 @@ public class PlayerAssistant {
     }
 
     public void resetVariables() {
-        c.getFishing().resetFishing();
-        c.getCrafting().resetCrafting();
         c.usingGlory = false;
-        c.smeltInterface = false;
-        c.smeltType = 0;
-        c.smeltAmount = 0;
-        c.woodcut[0] = c.woodcut[1] = c.woodcut[2] = 0;
-        c.mining[0] = c.mining[1] = c.mining[2] = 0;
     }
 
 

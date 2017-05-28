@@ -20,7 +20,6 @@ import server.util.ISAACRandomGen;
 import server.util.Misc;
 import server.util.Stream;
 import server.model.npcs.NPCHandler;
-import server.model.players.skills.*;
 
 public class Player {
 
@@ -417,57 +416,17 @@ public class Player {
     public int playerAppearance[] = new int[13];
     public int apset;
     public int actionID;
-    public int wearItemTimer, wearId, wearSlot, interfaceId;
-    public int XremoveSlot, XinterfaceID, XremoveID, Xamount;
+    public int wearId, wearSlot, interfaceId;
 
     public int tutorial = 15;
     public boolean usingGlory = false;
-    public int[] woodcut = new int[3];
-    public int wcTimer = 0;
-    public int[] mining = new int[3];
-    public int miningTimer = 0;
-    public boolean fishing = false;
-    public int fishTimer = 0;
-    public int smeltType; // 1 = bronze, 2 = iron, 3 = steel, 4 = gold, 5 =
-    // mith, 6 = addy, 7 = rune
-    public int smeltAmount;
-    public int smeltTimer = 0;
-    public boolean smeltInterface;
-    public boolean patchCleared;
-    public int[] farm = new int[2];
+
 
     public boolean antiFirePot = false;
 
     /**
-     * Castle Wars
-     */
-    public int castleWarsTeam;
-    public boolean inCwGame;
-    public boolean inCwWait;
-
-    /**
-     * Fight Pits
-     */
-    public boolean inPits = false;
-    public int pitsStatus = 0;
-
-    /**
      * SouthWest, NorthEast, SouthWest, NorthEast
      */
-
-    public boolean isInTut() {
-        if (absX >= 2625 && absX <= 2687 && absY >= 4670 && absY <= 4735) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean inBarrows() {
-        if (absX > 3520 && absX < 3598 && absY > 9653 && absY < 9750) {
-            return true;
-        }
-        return false;
-    }
 
     public boolean inArea(int x, int y, int x1, int y1) {
         if (absX > x && absX < x1 && absY < y && absY > y1) {
@@ -1752,25 +1711,6 @@ public class Player {
     private Potions potions = new Potions(this);
     private PotionMixing potionMixing = new PotionMixing(this);
     private Food food = new Food(this);
-    /**
-     * Skill instances
-     */
-    private Slayer slayer = new Slayer(this);
-    private Runecrafting runecrafting = new Runecrafting(this);
-    private Woodcutting woodcutting = new Woodcutting(this);
-    private Mining mine = new Mining(this);
-    private Agility agility = new Agility(this);
-    private Cooking cooking = new Cooking(this);
-    private Fishing fish = new Fishing(this);
-    private Crafting crafting = new Crafting(this);
-    private Smithing smith = new Smithing(this);
-    private Prayer prayer = new Prayer(this);
-    private Fletching fletching = new Fletching(this);
-    private SmithingInterface smithInt = new SmithingInterface(this);
-    private Farming farming = new Farming(this);
-    private Thieving thieving = new Thieving(this);
-    private Firemaking firemaking = new Firemaking(this);
-    private Herblore herblore = new Herblore(this);
 
     public int lowMemoryVersion = 0;
     public int timeOutCounter = 0;
@@ -2003,24 +1943,6 @@ public class Player {
 
     public void process() {
 
-        if (wcTimer > 0 && woodcut[0] > 0) {
-            wcTimer--;
-        } else if (wcTimer == 0 && woodcut[0] > 0) {
-            getWoodcutting().cutWood();
-        } else if (miningTimer > 0 && mining[0] > 0) {
-            miningTimer--;
-        } else if (miningTimer == 0 && mining[0] > 0) {
-            getMining().mineOre();
-        } else if (smeltTimer > 0 && smeltType > 0) {
-            smeltTimer--;
-        } else if (smeltTimer == 0 && smeltType > 0) {
-            getSmithing().smelt(smeltType);
-        } else if (fishing && fishTimer > 0) {
-            fishTimer--;
-        } else if (fishing && fishTimer == 0) {
-            getFishing().catchFish();
-        }
-
         if (System.currentTimeMillis() - lastPoison > 20000 && poisonDamage > 0) {
             int damage = poisonDamage / 2;
             if (damage > 0) {
@@ -2066,44 +1988,7 @@ public class Player {
             }
         }
 
-        if (clickObjectType > 0
-                && goodDistance(objectX + objectXOffset, objectY
-                + objectYOffset, getX(), getY(), objectDistance)) {
-            if (clickObjectType == 1) {
-                getActions().firstClickObject(objectId, objectX, objectY);
-            }
-            if (clickObjectType == 2) {
-                getActions().secondClickObject(objectId, objectX, objectY);
-            }
-            if (clickObjectType == 3) {
-                getActions().thirdClickObject(objectId, objectX, objectY);
-            }
-        }
 
-        if ((clickNpcType > 0) && NPCHandler.npcs[npcClickIndex] != null) {
-            if (goodDistance(getX(), getY(),
-                    NPCHandler.npcs[npcClickIndex].getX(),
-                    NPCHandler.npcs[npcClickIndex].getY(), 1)) {
-                if (clickNpcType == 1) {
-                    turnPlayerTo(NPCHandler.npcs[npcClickIndex].getX(),
-                            NPCHandler.npcs[npcClickIndex].getY());
-                    NPCHandler.npcs[npcClickIndex].facePlayer(playerId);
-                    getActions().firstClickNpc(npcType);
-                }
-                if (clickNpcType == 2) {
-                    turnPlayerTo(NPCHandler.npcs[npcClickIndex].getX(),
-                            NPCHandler.npcs[npcClickIndex].getY());
-                    NPCHandler.npcs[npcClickIndex].facePlayer(playerId);
-                    getActions().secondClickNpc(npcType);
-                }
-                if (clickNpcType == 3) {
-                    turnPlayerTo(NPCHandler.npcs[npcClickIndex].getX(),
-                            NPCHandler.npcs[npcClickIndex].getY());
-                    NPCHandler.npcs[npcClickIndex].facePlayer(playerId);
-                    getActions().thirdClickNpc(npcType);
-                }
-            }
-        }
 
         if (walkingToItem) {
             if (getX() == pItemX && getY() == pItemY
@@ -2367,73 +2252,6 @@ public class Player {
 
     public Food getFood() {
         return food;
-    }
-
-    /**
-     * Skill Constructors
-     */
-    public Slayer getSlayer() {
-        return slayer;
-    }
-
-    public Runecrafting getRunecrafting() {
-        return runecrafting;
-    }
-
-    public Woodcutting getWoodcutting() {
-        return woodcutting;
-    }
-
-    public Mining getMining() {
-        return mine;
-    }
-
-    public Cooking getCooking() {
-        return cooking;
-    }
-
-    public Agility getAgility() {
-        return agility;
-    }
-
-    public Fishing getFishing() {
-        return fish;
-    }
-
-    public Crafting getCrafting() {
-        return crafting;
-    }
-
-    public Smithing getSmithing() {
-        return smith;
-    }
-
-    public Farming getFarming() {
-        return farming;
-    }
-
-    public Thieving getThieving() {
-        return thieving;
-    }
-
-    public Herblore getHerblore() {
-        return herblore;
-    }
-
-    public Firemaking getFiremaking() {
-        return firemaking;
-    }
-
-    public SmithingInterface getSmithingInt() {
-        return smithInt;
-    }
-
-    public Prayer getPrayer() {
-        return prayer;
-    }
-
-    public Fletching getFletching() {
-        return fletching;
     }
 
     /**

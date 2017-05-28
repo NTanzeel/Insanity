@@ -7,6 +7,6 @@ public class Commands implements PacketType {
 
     @Override
     public void processPacket(Player c, int packetType, int packetSize) {
-        String playerCommand = c.getInStream().readString();
+
     }
 }

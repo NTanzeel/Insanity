@@ -12,5 +12,4 @@ public class ClickingInGame implements PacketType {
 	public void processPacket(Player c, int packetType, int packetSize) {
 
 	}
-
 }
