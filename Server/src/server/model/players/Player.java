@@ -2,7 +2,6 @@ package server.model.players;
 
 import org.apache.mina.common.IoSession;
 import server.Config;
-import server.net.HostList;
 import server.net.Packet;
 import server.net.StaticPacketBuilder;
 import server.util.ISAACRandomGen;
@@ -1456,7 +1455,6 @@ public class Player {
     public void destruct() {
         if (session == null) return;
         Misc.println("[DEREGISTERED]: " + playerName + "");
-        HostList.getHostList().remove(session);
         disconnected = true;
         session.close();
         session = null;
