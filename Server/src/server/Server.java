@@ -26,7 +26,6 @@ import java.text.DecimalFormat;
 
 public class Server {
 
-    private static final int cycleRate;
     public static boolean UpdateServer = false;
     public static PlayerHandler playerHandler = new PlayerHandler();
     private static long lastMassSave = System.currentTimeMillis();
@@ -46,7 +45,6 @@ public class Server {
         } else {
             serverlistenerPort = 43594;
         }
-        cycleRate = 600;
         shutdownServer = false;
         engineTimer = new SimpleTimer();
         debugTimer = new SimpleTimer();
@@ -97,7 +95,7 @@ public class Server {
                 engineTimer.reset();
                 playerHandler.process();
                 long cycleTime = engineTimer.elapsed();
-                sleepTime = cycleRate - cycleTime;
+                sleepTime = Config.CYCLE_TIME - cycleTime;
                 totalCycleTime += cycleTime;
                 cycles++;
                 debug();
@@ -109,7 +107,7 @@ public class Server {
                 if (System.currentTimeMillis() - lastMassSave > 300000) {
                     for (Player p : PlayerHandler.players) {
                         if (p == null) continue;
-                        PlayerSave.saveGame((Player) p);
+                        PlayerSave.saveGame(p);
                         System.out.println("Saved game for " + p.playerName + ".");
                         lastMassSave = System.currentTimeMillis();
                     }
@@ -121,7 +119,7 @@ public class Server {
             System.out.println("A fatal exception has been thrown!");
             for (Player p : PlayerHandler.players) {
                 if (p == null) continue;
-                PlayerSave.saveGame((Player) p);
+                PlayerSave.saveGame(p);
                 System.out.println("Saved game for " + p.playerName + ".");
             }
         }
@@ -132,7 +130,7 @@ public class Server {
         if (debugTimer.elapsed() > 360 * 1000 || playerExecuted) {
             long averageCycleTime = totalCycleTime / cycles;
             System.out.println("Average Cycle Time: " + averageCycleTime + "ms");
-            double engineLoad = ((double) averageCycleTime / (double) cycleRate);
+            double engineLoad = ((double) averageCycleTime / (double) Config.CYCLE_TIME);
             System.out.println("Players online: " + PlayerHandler.playerCount + ", engine load: " + debugPercentFormat.format(engineLoad));
             totalCycleTime = 0;
             cycles = 0;
@@ -141,10 +139,6 @@ public class Server {
             debugTimer.reset();
             playerExecuted = false;
         }
-    }
-
-    public static long getSleepTimer() {
-        return sleepTime;
     }
 
 }
