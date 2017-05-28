@@ -1,7 +1,6 @@
 package server.model.players;
 
 import server.Config;
-import server.model.npcs.NPCHandler;
 import server.util.Misc;
 
 public class PlayerAssistant {
@@ -877,99 +876,7 @@ public class PlayerAssistant {
         c.faceUpdate(c.followId + 32768);
     }
 
-    public void followNpc() {
-        if (NPCHandler.npcs[c.followId2] == null || NPCHandler.npcs[c.followId2].isDead) {
-            c.followId2 = 0;
-            return;
-        }
-        if (c.freezeTimer > 0) {
-            return;
-        }
-        if (c.isDead || c.playerLevel[3] <= 0) return;
 
-        int otherX = NPCHandler.npcs[c.followId2].getX();
-        int otherY = NPCHandler.npcs[c.followId2].getY();
-        boolean withinDistance = c.goodDistance(otherX, otherY, c.getX(), c.getY(), 2);
-        c.goodDistance(otherX, otherY, c.getX(), c.getY(), 1);
-        boolean hallyDistance = c.goodDistance(otherX, otherY, c.getX(), c.getY(), 2);
-        boolean bowDistance = c.goodDistance(otherX, otherY, c.getX(), c.getY(), 8);
-        boolean rangeWeaponDistance = c.goodDistance(otherX, otherY, c.getX(), c.getY(), 4);
-        boolean sameSpot = c.absX == otherX && c.absY == otherY;
-        if (!c.goodDistance(otherX, otherY, c.getX(), c.getY(), 25)) {
-            c.followId2 = 0;
-            return;
-        }
-        if (c.goodDistance(otherX, otherY, c.getX(), c.getY(), 1)) {
-            if (otherX != c.getX() && otherY != c.getY()) {
-                stopDiagonal(otherX, otherY);
-                return;
-            }
-        }
-
-        if ((c.usingBow || c.mageFollow || (c.npcIndex > 0 && c.autocastId > 0)) && bowDistance && !sameSpot) {
-            return;
-        }
-
-        if (c.usingRangeWeapon && rangeWeaponDistance && !sameSpot) {
-            return;
-        }
-
-        c.faceUpdate(c.followId2);
-        if (otherX == c.absX && otherY == c.absY) {
-            int r = Misc.random(3);
-            switch (r) {
-                case 0:
-                    walkTo(0, -1);
-                    break;
-                case 1:
-                    walkTo(0, 1);
-                    break;
-                case 2:
-                    walkTo(1, 0);
-                    break;
-                case 3:
-                    walkTo(-1, 0);
-                    break;
-            }
-        } else if (c.isRunning2 && !withinDistance) {
-            if (otherY > c.getY() && otherX == c.getX()) {
-                walkTo(0, getMove(c.getY(), otherY - 1) + getMove(c.getY(), otherY - 1));
-            } else if (otherY < c.getY() && otherX == c.getX()) {
-                walkTo(0, getMove(c.getY(), otherY + 1) + getMove(c.getY(), otherY + 1));
-            } else if (otherX > c.getX() && otherY == c.getY()) {
-                walkTo(getMove(c.getX(), otherX - 1) + getMove(c.getX(), otherX - 1), 0);
-            } else if (otherX < c.getX() && otherY == c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(), otherX + 1), 0);
-            } else if (otherX < c.getX() && otherY < c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(), otherX + 1), getMove(c.getY(), otherY + 1) + getMove(c.getY(), otherY + 1));
-            } else if (otherX > c.getX() && otherY > c.getY()) {
-                walkTo(getMove(c.getX(), otherX - 1) + getMove(c.getX(), otherX - 1), getMove(c.getY(), otherY - 1) + getMove(c.getY(), otherY - 1));
-            } else if (otherX < c.getX() && otherY > c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(), otherX + 1), getMove(c.getY(), otherY - 1) + getMove(c.getY(), otherY - 1));
-            } else if (otherX > c.getX() && otherY < c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1) + getMove(c.getX(), otherX + 1), getMove(c.getY(), otherY - 1) + getMove(c.getY(), otherY - 1));
-            }
-        } else {
-            if (otherY > c.getY() && otherX == c.getX()) {
-                walkTo(0, getMove(c.getY(), otherY - 1));
-            } else if (otherY < c.getY() && otherX == c.getX()) {
-                walkTo(0, getMove(c.getY(), otherY + 1));
-            } else if (otherX > c.getX() && otherY == c.getY()) {
-                walkTo(getMove(c.getX(), otherX - 1), 0);
-            } else if (otherX < c.getX() && otherY == c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1), 0);
-            } else if (otherX < c.getX() && otherY < c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1), getMove(c.getY(), otherY + 1));
-            } else if (otherX > c.getX() && otherY > c.getY()) {
-                walkTo(getMove(c.getX(), otherX - 1), getMove(c.getY(), otherY - 1));
-            } else if (otherX < c.getX() && otherY > c.getY()) {
-                walkTo(getMove(c.getX(), otherX + 1), getMove(c.getY(), otherY - 1));
-            } else if (otherX > c.getX() && otherY < c.getY()) {
-                walkTo(getMove(c.getX(), otherX - 1), getMove(c.getY(), otherY + 1));
-            }
-        }
-        c.faceUpdate(c.followId2);
-    }
 
     public int getRunningMove(int i, int j) {
         if (j - i > 2) return 2;

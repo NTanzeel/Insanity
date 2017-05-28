@@ -2,9 +2,6 @@ package server.model.players;
 
 import org.apache.mina.common.IoSession;
 import server.Config;
-import server.Server;
-import server.model.npcs.NPC;
-import server.model.npcs.NPCHandler;
 import server.net.HostList;
 import server.net.Packet;
 import server.net.StaticPacketBuilder;
@@ -47,7 +44,6 @@ public class Player {
             0, 0, 6, 6, 0, 0, 0 // 250
     };
     private static final int maxPlayerListSize = Config.MAX_PLAYERS;
-    private static final int maxNPCListSize = NPCHandler.maxNPCs;
     private static Stream playerProps;
 
     static {
@@ -281,9 +277,7 @@ public class Player {
     public Player playerList[] = new Player[maxPlayerListSize];
     public int playerListSize = 0;
     public byte playerInListBitmap[] = new byte[(Config.MAX_PLAYERS + 7) >> 3];
-    public NPC npcList[] = new NPC[maxNPCListSize];
     public int npcListSize = 0;
-    public byte npcInListBitmap[] = new byte[(NPCHandler.maxNPCs + 7) >> 3];
     public int mapRegionX, mapRegionY;
     public int absX, absY;
     public int currentX, currentY;
@@ -579,12 +573,6 @@ public class Player {
         return deltaX <= 15 && deltaX >= -16 && deltaY <= 15 && deltaY >= -16;
     }
 
-    public boolean withinDistance(NPC npc) {
-        if (heightLevel != npc.heightLevel) return false;
-        if (npc.needRespawn == true) return false;
-        int deltaX = npc.absX - absX, deltaY = npc.absY - absY;
-        return deltaX <= 15 && deltaX >= -16 && deltaY <= 15 && deltaY >= -16;
-    }
 
     public int distanceToPoint(int pointX, int pointY) {
         return (int) Math.sqrt(Math.pow(absX - pointX, 2) + Math.pow(absY - pointY, 2));
@@ -793,30 +781,6 @@ public class Player {
             str.writeBits(3, Misc.xlateDirectionToClient[dir2]);
             str.writeBits(1, (updateRequired || isChatTextUpdateRequired()) ? 1 : 0);
         }
-    }
-
-    public void addNewNPC(NPC npc, Stream str, Stream updateBlock) {
-        int id = npc.npcId;
-        npcInListBitmap[id >> 3] |= 1 << (id & 7);
-        npcList[npcListSize++] = npc;
-
-        str.writeBits(14, id);
-
-        int z = npc.absY - absY;
-        if (z < 0) z += 32;
-        str.writeBits(5, z);
-        z = npc.absX - absX;
-        if (z < 0) z += 32;
-        str.writeBits(5, z);
-
-        str.writeBits(1, 0);
-        str.writeBits(12, npc.npcType);
-
-        boolean savedUpdateRequired = npc.updateRequired;
-        npc.updateRequired = true;
-        npc.appendNPCUpdateBlock(updateBlock);
-        npc.updateRequired = savedUpdateRequired;
-        str.writeBits(1, 1);
     }
 
     public void addNewPlayer(Player plr, Stream str, Stream updateBlock) {
@@ -1594,7 +1558,6 @@ public class Player {
             saveCharacter = true;
             Misc.println("[REGISTERED]: " + playerName + "");
             handler.updatePlayer(this, outStream);
-            handler.updateNPC(this, outStream);
             flushOutStream();
             getPA().clearClanChat();
             getPA().resetFollow();
@@ -1606,7 +1569,6 @@ public class Player {
     public void update() {
         synchronized (this) {
             handler.updatePlayer(this, outStream);
-            handler.updateNPC(this, outStream);
             flushOutStream();
         }
     }
@@ -1669,8 +1631,6 @@ public class Player {
 
         if (followId > 0) {
             getPA().followPlayer();
-        } else if (followId2 > 0) {
-            getPA().followNpc();
         }
 
         if (System.currentTimeMillis() - singleCombatDelay > 3300) {

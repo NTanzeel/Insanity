@@ -2,7 +2,6 @@ package server.model.players;
 
 import server.Config;
 import server.Server;
-import server.model.npcs.NPCHandler;
 import server.util.Misc;
 import server.util.Stream;
 
@@ -171,54 +170,6 @@ public class PlayerHandler {
         }
     }
 
-    public void updateNPC(Player plr, Stream str) {
-        synchronized (plr) {
-            updateBlock.currentOffset = 0;
-
-            str.createFrameVarSizeWord(65);
-            str.initBitAccess();
-
-            str.writeBits(8, plr.npcListSize);
-            int size = plr.npcListSize;
-            plr.npcListSize = 0;
-            for (int i = 0; i < size; i++) {
-                if (plr.RebuildNPCList == false && plr.withinDistance(plr.npcList[i]) == true) {
-                    plr.npcList[i].updateNPCMovement(str);
-                    plr.npcList[i].appendNPCUpdateBlock(updateBlock);
-                    plr.npcList[plr.npcListSize++] = plr.npcList[i];
-                } else {
-                    int id = plr.npcList[i].npcId;
-                    plr.npcInListBitmap[id >> 3] &= ~(1 << (id & 7));
-                    str.writeBits(1, 1);
-                    str.writeBits(2, 3);
-                }
-            }
-
-            for (int i = 0; i < NPCHandler.maxNPCs; i++) {
-                if (NPCHandler.npcs[i] != null) {
-                    int id = NPCHandler.npcs[i].npcId;
-                    if (plr.RebuildNPCList == false && (plr.npcInListBitmap[id >> 3] & (1 << (id & 7))) != 0) {
-
-                    } else if (plr.withinDistance(NPCHandler.npcs[i]) == false) {
-
-                    } else {
-                        plr.addNewNPC(NPCHandler.npcs[i], str, updateBlock);
-                    }
-                }
-            }
-
-            plr.RebuildNPCList = false;
-
-            if (updateBlock.currentOffset > 0) {
-                str.writeBits(14, 16383);
-                str.finishBitAccess();
-                str.writeBytes(updateBlock.buffer, updateBlock.currentOffset, 0);
-            } else {
-                str.finishBitAccess();
-            }
-            str.endFrameVarSizeWord();
-        }
-    }
 
     public void updatePlayer(Player plr, Stream str) {
         updateBlock.currentOffset = 0;

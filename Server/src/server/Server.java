@@ -9,7 +9,6 @@ import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
 import server.event.EventManager;
-import server.model.npcs.NPCHandler;
 import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.model.players.PlayerSave;
@@ -43,7 +42,6 @@ public class Server {
     private static int garbageCollectDelay = 40;
     private static int serverlistenerPort;
     public static PlayerHandler playerHandler = new PlayerHandler();
-    public static NPCHandler npcHandler = new NPCHandler();
     public static ObjectHandler objectHandler = new ObjectHandler();
     public static ObjectManager objectManager = new ObjectManager();
 
@@ -108,7 +106,6 @@ public class Server {
                     Thread.sleep(600);
                 engineTimer.reset();
                 playerHandler.process();
-                npcHandler.process();
                 objectManager.process();
                 long cycleTime = engineTimer.elapsed();
                 sleepTime = cycleRate - cycleTime;
