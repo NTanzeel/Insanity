@@ -424,7 +424,6 @@ public class Player {
     private IoSession session;
     private PlayerAssistant playerAssistant = new PlayerAssistant(this);
     private ActionHandler actionHandler = new ActionHandler(this);
-    private DialogueHandler dialogueHandler = new DialogueHandler(this);
     private Queue<Packet> queuedPackets = new LinkedList<Packet>();
     private Future<?> currentTask;
 
@@ -1753,10 +1752,6 @@ public class Player {
 
     public PlayerAssistant getPA() {
         return playerAssistant;
-    }
-
-    public DialogueHandler getDH() {
-        return dialogueHandler;
     }
 
     public ActionHandler getActions() {
