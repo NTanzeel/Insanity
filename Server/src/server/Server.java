@@ -77,11 +77,6 @@ public class Server {
         acceptor.bind(new InetSocketAddress(serverlistenerPort), connectionHandler, sac);
 
         /*
-          Initialise Handlers
-         */
-        Connection.initialize();
-
-        /*
           Server Successfully Loaded
          */
         System.out.println("Server listening on port 0.0.0.0:" + serverlistenerPort);
