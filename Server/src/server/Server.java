@@ -1,13 +1,8 @@
 package server;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.text.DecimalFormat;
-
 import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
-
 import server.event.EventManager;
 import server.model.players.Player;
 import server.model.players.PlayerHandler;
@@ -16,8 +11,10 @@ import server.net.ConnectionHandler;
 import server.net.ConnectionThrottleFilter;
 import server.util.SimpleTimer;
 import server.util.log.Logger;
-import server.world.ObjectHandler;
-import server.world.ObjectManager;
+
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.text.DecimalFormat;
 
 /**
  * Server.java
@@ -32,6 +29,7 @@ public class Server {
 
     private static final int cycleRate;
     public static boolean UpdateServer = false;
+    public static PlayerHandler playerHandler = new PlayerHandler();
     private static long lastMassSave = System.currentTimeMillis();
     private static SimpleTimer engineTimer, debugTimer;
     private static long cycles;
@@ -41,9 +39,7 @@ public class Server {
     private static boolean shutdownServer = false;
     private static int garbageCollectDelay = 40;
     private static int serverlistenerPort;
-    public static PlayerHandler playerHandler = new PlayerHandler();
-    public static ObjectHandler objectHandler = new ObjectHandler();
-    public static ObjectManager objectManager = new ObjectManager();
+    private static boolean playerExecuted = false;
 
     static {
         if (!Config.SERVER_DEBUG) {
@@ -59,8 +55,7 @@ public class Server {
         debugPercentFormat = new DecimalFormat("0.0#%");
     }
 
-    public static void main(java.lang.String args[])
-            throws NullPointerException, IOException {
+    public static void main(java.lang.String args[]) throws NullPointerException, IOException {
         /*
           Starting Up Server
          */
@@ -82,8 +77,7 @@ public class Server {
 
         ConnectionThrottleFilter throttleFilter = new ConnectionThrottleFilter(Config.CONNECTION_DELAY);
         sac.getFilterChain().addFirst("throttleFilter", throttleFilter);
-        acceptor.bind(new InetSocketAddress(serverlistenerPort),
-                connectionHandler, sac);
+        acceptor.bind(new InetSocketAddress(serverlistenerPort), connectionHandler, sac);
 
         /*
           Initialise Handlers
@@ -100,13 +94,10 @@ public class Server {
          */
         try {
             while (!Server.shutdownServer) {
-                if (sleepTime >= 0)
-                    Thread.sleep(sleepTime);
-                else
-                    Thread.sleep(600);
+                if (sleepTime >= 0) Thread.sleep(sleepTime);
+                else Thread.sleep(600);
                 engineTimer.reset();
                 playerHandler.process();
-                objectManager.process();
                 long cycleTime = engineTimer.elapsed();
                 sleepTime = cycleRate - cycleTime;
                 totalCycleTime += cycleTime;
@@ -119,11 +110,9 @@ public class Server {
                 }
                 if (System.currentTimeMillis() - lastMassSave > 300000) {
                     for (Player p : PlayerHandler.players) {
-                        if (p == null)
-                            continue;
+                        if (p == null) continue;
                         PlayerSave.saveGame((Player) p);
-                        System.out.println("Saved game for " + p.playerName
-                                + ".");
+                        System.out.println("Saved game for " + p.playerName + ".");
                         lastMassSave = System.currentTimeMillis();
                     }
 
@@ -133,8 +122,7 @@ public class Server {
             ex.printStackTrace();
             System.out.println("A fatal exception has been thrown!");
             for (Player p : PlayerHandler.players) {
-                if (p == null)
-                    continue;
+                if (p == null) continue;
                 PlayerSave.saveGame((Player) p);
                 System.out.println("Saved game for " + p.playerName + ".");
             }
@@ -142,19 +130,12 @@ public class Server {
         System.exit(0);
     }
 
-
-    private static boolean playerExecuted = false;
-
     private static void debug() {
         if (debugTimer.elapsed() > 360 * 1000 || playerExecuted) {
             long averageCycleTime = totalCycleTime / cycles;
-            System.out
-                    .println("Average Cycle Time: " + averageCycleTime + "ms");
+            System.out.println("Average Cycle Time: " + averageCycleTime + "ms");
             double engineLoad = ((double) averageCycleTime / (double) cycleRate);
-            System.out
-                    .println("Players online: " + PlayerHandler.playerCount
-                            + ", engine load: "
-                            + debugPercentFormat.format(engineLoad));
+            System.out.println("Players online: " + PlayerHandler.playerCount + ", engine load: " + debugPercentFormat.format(engineLoad));
             totalCycleTime = 0;
             cycles = 0;
             System.gc();
