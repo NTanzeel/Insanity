@@ -3,7 +3,6 @@ package server;
 import org.apache.mina.common.IoAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptor;
 import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
-import server.event.EventManager;
 import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.model.players.PlayerSave;
@@ -82,7 +81,6 @@ public class Server {
         /*
           Initialise Handlers
          */
-        EventManager.initialize();
         Connection.initialize();
 
         /*
