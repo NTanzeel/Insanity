@@ -1770,9 +1770,6 @@ public class Player {
     public void destruct() {
         if (session == null)
             return;
-        // PlayerSaving.getSingleton().requestSave(playerId);
-        if (clanId >= 0)
-            Server.clanChat.leaveClan(playerId, clanId);
         Misc.println("[DEREGISTERED]: " + playerName + "");
         HostList.getHostList().remove(session);
         disconnected = true;

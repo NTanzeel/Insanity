@@ -1147,12 +1147,6 @@ public class NPCHandler {
                             npcs[i].absX, npcs[i].absY,
                             NPCDrops.rareDrops.get(npcs[i].npcType)[random][1],
                             c.playerId);
-                    if (c.clanId >= 0)
-                        Server.clanChat
-                                .handleLootShare(
-                                        c,
-                                        NPCDrops.rareDrops.get(npcs[i].npcType)[random][0],
-                                        NPCDrops.rareDrops.get(npcs[i].npcType)[random][1]);
                 } else {
                     int random = Misc.random(NPCDrops.normalDrops
                             .get(npcs[i].npcType).length - 1);

@@ -21,7 +21,6 @@ import server.world.ItemHandler;
 import server.world.ObjectHandler;
 import server.world.ObjectManager;
 import server.world.ShopHandler;
-import server.world.ClanChatHandler;
 
 /**
  * Server.java
@@ -51,7 +50,6 @@ public class Server {
     public static ShopHandler shopHandler = new ShopHandler();
     public static ObjectHandler objectHandler = new ObjectHandler();
     public static ObjectManager objectManager = new ObjectManager();
-    public static ClanChatHandler clanChat = new ClanChatHandler();
 
     static {
         if (!Config.SERVER_DEBUG) {
