@@ -433,7 +433,6 @@ public class Player {
     private IoSession session;
     private ItemAssistant itemAssistant = new ItemAssistant(this);
     private ShopAssistant shopAssistant = new ShopAssistant(this);
-    private TradeAndDuel tradeAndDuel = new TradeAndDuel(this);
     private PlayerAssistant playerAssistant = new PlayerAssistant(this);
     private ActionHandler actionHandler = new ActionHandler(this);
     private DialogueHandler dialogueHandler = new DialogueHandler(this);
@@ -1805,15 +1804,6 @@ public class Player {
 
         timeOutCounter++;
 
-        if (inTrade && tradeResetNeeded) {
-            Player o = PlayerHandler.players[tradeWith];
-            if (o != null) {
-                if (o.tradeResetNeeded) {
-                    getTradeAndDuel().resetTrade();
-                    o.getTradeAndDuel().resetTrade();
-                }
-            }
-        }
     }
 
     public Future<?> getCurrentTask() {
@@ -1856,9 +1846,6 @@ public class Player {
         return shopAssistant;
     }
 
-    public TradeAndDuel getTradeAndDuel() {
-        return tradeAndDuel;
-    }
 
     public ActionHandler getActions() {
         return actionHandler;
