@@ -108,14 +108,14 @@ public class SkillMenu {
 	private static final String[] SKILLS = { "Attack", "Defence", "Strength",
 			"Hitpoints", "Ranged", "Prayer", "Magic" };
 
-	public static void openInterface(Client c, int skillType) {
+	public static void openInterface(Player c, int skillType) {
 		removeSidebars(c);
 		writeItems(c, skillType);
 		writeText(c, skillType);
 		c.getPA().showInterface(INTERFACE_ID);
 	}
 
-	private static void removeSidebars(Client c) {
+	private static void removeSidebars(Player c) {
 		int[] temp = { 8849, 8846, 8823, 8824, 8827, 8837, 8840, 8843, 8859,
 				8862, 8865, 15303, 15306, 15309 };
 		for (int j = 0; j < temp.length; j++) {
@@ -123,7 +123,7 @@ public class SkillMenu {
 		}
 	}
 
-	private static void writeItems(Client c, int skillType) {
+	private static void writeItems(Player c, int skillType) {
 		synchronized (c) {
 			c.outStream.createFrameVarSizeWord(53);
 			c.outStream.writeWord(8847);
@@ -141,7 +141,7 @@ public class SkillMenu {
 		}
 	}
 
-	private static void writeText(Client c, int skillType) {
+	private static void writeText(Player c, int skillType) {
 		c.getPA().sendFrame126(SKILLS[skillType], TITLE_LINE);
 		for (int j = 0; j < LEVELS[skillType].length; j++) {
 			c.getPA().sendFrame126(LEVELS[skillType][j], LEVEL_LINE + j);

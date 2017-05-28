@@ -1,6 +1,6 @@
 package server.model.players.packets;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 import server.util.Misc;
 import server.*;
@@ -8,7 +8,7 @@ import server.*;
 public class ItemOnGroundItem implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		c.getInStream().readSignedWordBigEndian();
 		int itemUsed = c.getInStream().readSignedWordA();
 		int groundItem = c.getInStream().readUnsignedWord();

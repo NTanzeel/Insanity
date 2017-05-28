@@ -1,7 +1,7 @@
 package server.model.players.packets;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 import server.model.players.PlayerHandler;
 
@@ -13,7 +13,7 @@ public class AttackPlayer implements PacketType {
 	public static final int ATTACK_PLAYER = 73, MAGE_PLAYER = 249;
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		c.playerIndex = 0;
 		c.npcIndex = 0;
 		switch (packetType) {

@@ -10,7 +10,7 @@ import server.util.Misc;
 
 public class Mining {
 
-	Client c;
+	Player c;
 
 	private final int VALID_PICK[] = { 1265, 1267, 1269, 1273, 1271, 1275 };
 	private final int[] PICK_REQS = { 1, 1, 6, 6, 21, 31, 41, 61 };
@@ -20,7 +20,7 @@ public class Mining {
 	private int pickType;
 	private final int EMOTE = 625;
 
-	public Mining(Client c) {
+	public Mining(Player c) {
 		this.c = c;
 	}
 

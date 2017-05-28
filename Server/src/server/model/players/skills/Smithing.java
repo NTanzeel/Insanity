@@ -1,7 +1,7 @@
 package server.model.players.skills;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * Smithing.java
@@ -12,7 +12,7 @@ import server.model.players.Client;
 
 public class Smithing {
 
-	private Client c;
+	private Player c;
 	private final int[] SMELT_BARS = { 2349, 2351, 2355, 2353, 2357, 2359,
 			2361, 2363 };
 	private final int[] SMELT_FRAME = { 2405, 2406, 2407, 2409, 2410, 2411,
@@ -31,7 +31,7 @@ public class Smithing {
 	private int oreId2;
 	private int barId;
 
-	public Smithing(Client c) {
+	public Smithing(Player c) {
 		this.c = c;
 	}
 
@@ -135,7 +135,7 @@ public class Smithing {
 			return c.getItems().playerHasItem(getOre(barType));
 	}
 
-	public void readInput(int level, String type, Client c, int amounttomake) {
+	public void readInput(int level, String type, Player c, int amounttomake) {
 
 		if (c.getItems().getItemName(Integer.parseInt(type)).contains("Bronze")) {
 			CheckBronze(c, level, amounttomake, type);
@@ -162,7 +162,7 @@ public class Smithing {
 		c.sendMessage("Item: " + type);
 	}
 
-	private void CheckIron(Client c, int level, int amounttomake, String type) {
+	private void CheckIron(Player c, int level, int amounttomake, String type) {
 		remove = 2351;
 
 		if (type.equalsIgnoreCase("1349") && level >= 16) // Axe
@@ -326,7 +326,7 @@ public class Smithing {
 
 	}
 
-	private void CheckSteel(Client c, int level, int amounttomake, String type) {
+	private void CheckSteel(Player c, int level, int amounttomake, String type) {
 		remove = 2353;
 
 		if (type.equalsIgnoreCase("1353") && level >= 31) // Axe
@@ -490,7 +490,7 @@ public class Smithing {
 
 	}
 
-	private void CheckMith(Client c, int level, int amounttomake, String type) {
+	private void CheckMith(Player c, int level, int amounttomake, String type) {
 		remove = 2359;
 
 		if (type.equalsIgnoreCase("1355") && level >= 51) // Axe
@@ -654,7 +654,7 @@ public class Smithing {
 
 	}
 
-	private void CheckRune(Client c, int level, int amounttomake, String type) {
+	private void CheckRune(Player c, int level, int amounttomake, String type) {
 		remove = 2363;
 
 		if (type.equalsIgnoreCase("1359") && level >= 86) // Axe
@@ -819,7 +819,7 @@ public class Smithing {
 
 	}
 
-	private void CheckAddy(Client c, int level, int amounttomake, String type) {
+	private void CheckAddy(Player c, int level, int amounttomake, String type) {
 		remove = 2361;
 
 		if (type.equalsIgnoreCase("1357") && level >= 71) // Axe
@@ -983,7 +983,7 @@ public class Smithing {
 
 	}
 
-	private void CheckBronze(Client c, int level, int amounttomake, String type) {
+	private void CheckBronze(Player c, int level, int amounttomake, String type) {
 		if (type.equalsIgnoreCase("1351") && level >= 1) {
 			xp = 13;
 			item = 1351;
@@ -1145,8 +1145,8 @@ public class Smithing {
 
 	}
 
-	public boolean doaction(Client c, int toadd, int toremove, int toremove2,
-			int timestomake, int NOTUSED, int NOTUSED2, int xp) {
+	public boolean doaction(Player c, int toadd, int toremove, int toremove2,
+                            int timestomake, int NOTUSED, int NOTUSED2, int xp) {
 		int maketimes = timestomake;
 		c.getPA().closeAllWindows();
 		if (c.getItems().playerHasItem(toremove, toremove2)) {

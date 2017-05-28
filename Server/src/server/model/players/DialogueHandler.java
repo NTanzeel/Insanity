@@ -2,10 +2,10 @@ package server.model.players;
 
 public class DialogueHandler {
 
-	private Client c;
+	private Player c;
 
-	public DialogueHandler(Client client) {
-		this.c = client;
+	public DialogueHandler(Player player) {
+		this.c = player;
 	}
 
 	/**

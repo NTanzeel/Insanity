@@ -1,12 +1,12 @@
 package server.model.players.skills;
 
-import server.model.players.Client;
+import server.model.players.Player;
 
 public class SmithingInterface {
 
-	Client c;
+	Player c;
 
-	public SmithingInterface(Client c) {
+	public SmithingInterface(Player c) {
 		this.c = c;
 	}
 
@@ -26,7 +26,7 @@ public class SmithingInterface {
 
 	}
 
-	private void makeRuneInterface(Client c) {
+	private void makeRuneInterface(Player c) {
 		String fiveb = GetForBars(2363, 5, c);
 		String threeb = GetForBars(2363, 3, c);
 		String twob = GetForBars(2363, 2, c);
@@ -127,7 +127,7 @@ public class SmithingInterface {
 		c.getPA().showInterface(994);
 	}
 
-	private void makeAddyInterface(Client c) {
+	private void makeAddyInterface(Player c) {
 		String fiveb = GetForBars(2361, 5, c);
 		String threeb = GetForBars(2361, 3, c);
 		String twob = GetForBars(2361, 2, c);
@@ -228,7 +228,7 @@ public class SmithingInterface {
 		c.getPA().showInterface(994);
 	}
 
-	private void makeMithInterface(Client c) {
+	private void makeMithInterface(Player c) {
 		String fiveb = GetForBars(2359, 5, c);
 		String threeb = GetForBars(2359, 3, c);
 		String twob = GetForBars(2359, 2, c);
@@ -329,7 +329,7 @@ public class SmithingInterface {
 		c.getPA().showInterface(994);
 	}
 
-	private void makeSteelInterface(Client c) {
+	private void makeSteelInterface(Player c) {
 		String fiveb = GetForBars(2353, 5, c);
 		String threeb = GetForBars(2353, 3, c);
 		String twob = GetForBars(2353, 2, c);
@@ -432,7 +432,7 @@ public class SmithingInterface {
 		c.getPA().showInterface(994);
 	}
 
-	private void makeIronInterface(Client c) {
+	private void makeIronInterface(Player c) {
 		String fiveb = GetForBars(2351, 5, c);
 		String threeb = GetForBars(2351, 3, c);
 		String twob = GetForBars(2351, 2, c);
@@ -535,7 +535,7 @@ public class SmithingInterface {
 		c.getPA().showInterface(994);
 	}
 
-	private void makeBronzeInterface(Client c) {
+	private void makeBronzeInterface(Player c) {
 		String fiveb = GetForBars(2349, 5, c);
 		String threeb = GetForBars(2349, 3, c);
 		String twob = GetForBars(2349, 2, c);
@@ -635,14 +635,14 @@ public class SmithingInterface {
 		c.getPA().showInterface(994);
 	}
 
-	private String GetForlvl(int i, Client c) {
+	private String GetForlvl(int i, Player c) {
 		if (c.playerLevel[13] >= i)
 			return "@whi@";
 
 		return "@bla@";
 	}
 
-	private String GetForBars(int i, int j, Client c) {
+	private String GetForBars(int i, int j, Player c) {
 		if (c.getItems().playerHasItem(i, j))
 			return "@gre@";
 

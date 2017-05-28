@@ -6,9 +6,9 @@ package server.model.players;
 
 public class Potions {
 
-	private Client c;
+	private Player c;
 
-	public Potions(Client c) {
+	public Potions(Player c) {
 		this.c = c;
 	}
 

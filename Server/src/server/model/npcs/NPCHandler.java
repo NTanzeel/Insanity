@@ -8,13 +8,10 @@ import java.util.ArrayList;
 
 import server.Config;
 import server.Server;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.util.Misc;
 import server.world.map.VirtualWorld;
-import server.event.EventManager;
-import server.event.Event;
-import server.event.EventContainer;
 
 public class NPCHandler {
     public static int maxNPCs = 10000;
@@ -39,7 +36,7 @@ public class NPCHandler {
             return;
         for (int j = 0; j < PlayerHandler.players.length; j++) {
             if (PlayerHandler.players[j] != null) {
-                Client c = (Client) PlayerHandler.players[j];
+                Player c = (Player) PlayerHandler.players[j];
                 if (c.heightLevel != npcs[i].heightLevel)
                     continue;
                 if (PlayerHandler.players[j].goodDistance(c.absX,
@@ -82,7 +79,7 @@ public class NPCHandler {
         int max = getMaxHit(i);
         for (int j = 0; j < PlayerHandler.players.length; j++) {
             if (PlayerHandler.players[j] != null) {
-                Client c = (Client) PlayerHandler.players[j];
+                Player c = (Player) PlayerHandler.players[j];
                 if (c.isDead || c.heightLevel != npcs[i].heightLevel)
                     continue;
                 if (PlayerHandler.players[j].goodDistance(c.absX,
@@ -896,7 +893,7 @@ public class NPCHandler {
                     if (!npcs[i].isDead) {
                         int p = npcs[i].killerId;
                         if (PlayerHandler.players[p] != null) {
-                            Client c = (Client) PlayerHandler.players[p];
+                            Player c = (Player) PlayerHandler.players[p];
                             followPlayer(i, c.playerId);
                             if (npcs[i] == null)
                                 continue;
@@ -1127,7 +1124,7 @@ public class NPCHandler {
 
     public void dropItems(int i) {
         // long start = System.currentTimeMillis();
-        Client c = (Client) PlayerHandler.players[npcs[i].killedBy];
+        Player c = (Player) PlayerHandler.players[npcs[i].killedBy];
         if (c != null) {
             if (npcs[i].npcType == 912 || npcs[i].npcType == 913
                     || npcs[i].npcType == 914)
@@ -1178,7 +1175,7 @@ public class NPCHandler {
     }
 
     public void appendKillCount(int i) {
-        Client c = (Client) PlayerHandler.players[npcs[i].killedBy];
+        Player c = (Player) PlayerHandler.players[npcs[i].killedBy];
         if (c != null) {
             int[] kcMonsters = {122, 49, 2558, 2559, 2560, 2561, 2550, 2551,
                     2552, 2553, 2562, 2563, 2564, 2565};
@@ -1337,7 +1334,7 @@ public class NPCHandler {
      * Slayer Experience
      **/
     public void appendSlayerExperience(int i) {
-        Client c = (Client) PlayerHandler.players[npcs[i].killedBy];
+        Player c = (Player) PlayerHandler.players[npcs[i].killedBy];
         if (c != null) {
             if (c.slayerTask == npcs[i].npcType) {
                 c.taskAmount--;
@@ -1784,7 +1781,7 @@ public class NPCHandler {
      * NPC Attacking Player
      **/
 
-    public void attackPlayer(Client c, int i) {
+    public void attackPlayer(Player c, int i) {
         if (npcs[i] != null) {
             if (npcs[i].isDead)
                 return;
@@ -1859,7 +1856,7 @@ public class NPCHandler {
         return 0;
     }
 
-    public boolean specialCase(Client c, int i) { // responsible for npcs that
+    public boolean specialCase(Player c, int i) { // responsible for npcs that
         // much
         if (goodDistance(npcs[i].getX(), npcs[i].getY(), c.getX(), c.getY(), 8)
                 && !goodDistance(npcs[i].getX(), npcs[i].getY(), c.getX(),
@@ -1880,7 +1877,7 @@ public class NPCHandler {
             }
             if (npcs[i].isDead)
                 return;
-            Client c = (Client) PlayerHandler.players[npcs[i].oldIndex];
+            Player c = (Player) PlayerHandler.players[npcs[i].oldIndex];
             if (multiAttacks(i)) {
                 multiAttackDamage(i);
                 return;
@@ -1970,7 +1967,7 @@ public class NPCHandler {
         }
     }
 
-    public void handleSpecialEffects(Client c, int i, int damage) {
+    public void handleSpecialEffects(Player c, int i, int damage) {
         if (npcs[i].npcType == 2892 || npcs[i].npcType == 2894) {
             if (damage > 0) {
                 if (c != null) {

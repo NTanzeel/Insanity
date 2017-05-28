@@ -3,8 +3,8 @@ package server.world;
 import java.util.ArrayList;
 
 import server.model.objects.Object;
+import server.model.players.Player;
 import server.util.Misc;
-import server.model.players.Client;
 import server.model.players.PlayerHandler;
 
 /**
@@ -41,7 +41,7 @@ public class ObjectManager {
 	public void removeObject(int x, int y) {
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
-				Client c = (Client) PlayerHandler.players[j];
+				Player c = (Player) PlayerHandler.players[j];
 				c.getPA().object(-1, x, y, 0, 10);
 			}
 		}
@@ -50,7 +50,7 @@ public class ObjectManager {
 	public void updateObject(Object o) {
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
-				Client c = (Client) PlayerHandler.players[j];
+				Player c = (Player) PlayerHandler.players[j];
 				c.getPA().object(o.newId, o.objectX, o.objectY, o.face, o.type);
 			}
 		}
@@ -59,7 +59,7 @@ public class ObjectManager {
 	public void placeObject(Object o) {
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
-				Client c = (Client) PlayerHandler.players[j];
+				Player c = (Player) PlayerHandler.players[j];
 				if (c.distanceToPoint(o.objectX, o.objectY) <= 60)
 					c.getPA().object(o.objectId, o.objectX, o.objectY, o.face,
 							o.type);
@@ -75,7 +75,7 @@ public class ObjectManager {
 		return null;
 	}
 
-	public void loadObjects(Client c) {
+	public void loadObjects(Player c) {
 		if (c == null)
 			return;
 		for (Object o : objects) {
@@ -89,20 +89,20 @@ public class ObjectManager {
 		}
 	}
 
-	public void loadCustomSpawns(Client client) {
-		client.getPA().checkObjectSpawn(410, 3218, 3433, 2, 10);
-		client.getPA().checkObjectSpawn(3044, 3044, 9790, 2, 10);
-		client.getPA().checkObjectSpawn(2213, 3049, 9786, 2, 10);
-		client.getPA().checkObjectSpawn(2213, 2541, 3886, 2, 10);
-		client.getPA().checkObjectSpawn(2213, 2542, 3886, 2, 10);
-		client.getPA().checkObjectSpawn(2213, 2543, 3886, 2, 10);
-		client.getPA().checkObjectSpawn(2213, 2544, 3886, 2, 10);
-		client.getPA().checkObjectSpawn(2213, 2545, 3886, 2, 10);
-		client.getPA().checkObjectSpawn(6552, 3208, 3438, 2, 10);
-		if (client.heightLevel == 0) {
-			client.getPA().checkObjectSpawn(2492, 2911, 3614, 1, 10);
+	public void loadCustomSpawns(Player player) {
+		player.getPA().checkObjectSpawn(410, 3218, 3433, 2, 10);
+		player.getPA().checkObjectSpawn(3044, 3044, 9790, 2, 10);
+		player.getPA().checkObjectSpawn(2213, 3049, 9786, 2, 10);
+		player.getPA().checkObjectSpawn(2213, 2541, 3886, 2, 10);
+		player.getPA().checkObjectSpawn(2213, 2542, 3886, 2, 10);
+		player.getPA().checkObjectSpawn(2213, 2543, 3886, 2, 10);
+		player.getPA().checkObjectSpawn(2213, 2544, 3886, 2, 10);
+		player.getPA().checkObjectSpawn(2213, 2545, 3886, 2, 10);
+		player.getPA().checkObjectSpawn(6552, 3208, 3438, 2, 10);
+		if (player.heightLevel == 0) {
+			player.getPA().checkObjectSpawn(2492, 2911, 3614, 1, 10);
 		} else {
-			client.getPA().checkObjectSpawn(-1, 2911, 3614, 1, 10);
+			player.getPA().checkObjectSpawn(-1, 2911, 3614, 1, 10);
 		}
 	}
 
@@ -153,7 +153,7 @@ public class ObjectManager {
 		}
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
-				Client c = (Client) PlayerHandler.players[j];
+				Player c = (Player) PlayerHandler.players[j];
 				int xOffset = c.absX - obeliskCoords[port][0];
 				int yOffset = c.absY - obeliskCoords[port][1];
 				if (c.goodDistance(c.getX(), c.getY(),
@@ -167,7 +167,7 @@ public class ObjectManager {
 		}
 	}
 
-	public boolean loadForPlayer(Object o, Client c) {
+	public boolean loadForPlayer(Object o, Player c) {
 		if (o == null || c == null)
 			return false;
 		return c.distanceToPoint(o.objectX, o.objectY) <= 60

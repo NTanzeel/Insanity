@@ -8,10 +8,10 @@ import server.util.ScriptManager;
 
 public class ActionHandler {
 
-    private Client c;
+    private Player c;
 
-    public ActionHandler(Client Client) {
-        this.c = Client;
+    public ActionHandler(Player Player) {
+        this.c = Player;
     }
 
     public void firstClickObject(int objectType, int obX, int obY) {

@@ -10,7 +10,7 @@ import server.util.Misc;
 
 public class Woodcutting {
 
-	Client c;
+	Player c;
 
 	private final int VALID_AXE[] = { 1351, 1349, 1353, 1361, 1355, 1357, 1359,
 			6739 };
@@ -20,7 +20,7 @@ public class Woodcutting {
 	private int axeType;
 	private final int EMOTE = 875;
 
-	public Woodcutting(Client c) {
+	public Woodcutting(Player c) {
 		this.c = c;
 	}
 

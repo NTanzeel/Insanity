@@ -12,7 +12,6 @@ import java.util.List;
 import server.Config;
 import server.model.items.GroundItem;
 import server.model.items.ItemList;
-import server.model.players.Client;
 import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.util.Misc;
@@ -77,7 +76,7 @@ public class ItemHandler {
 	/**
 	 * Reloads any items if you enter a new region
 	 **/
-	public void reloadItems(Client c) {
+	public void reloadItems(Player c) {
 		for (GroundItem i : items) {
 			if (c != null) {
 				if (c.getItems().tradeable(i.getItemId())
@@ -159,8 +158,8 @@ public class ItemHandler {
 			{ 4747, 4926 }, { 4749, 4968 }, { 4751, 4994 }, { 4753, 4980 },
 			{ 4755, 4986 }, { 4757, 4992 }, { 4759, 4998 } };
 
-	public void createGroundItem(Client c, int itemId, int itemX, int itemY,
-			int itemAmount, int playerId) {
+	public void createGroundItem(Player c, int itemId, int itemX, int itemY,
+								 int itemAmount, int playerId) {
 		if (itemId > 0) {
 			if (itemId >= 2412 && itemId <= 2414) {
 				c.sendMessage("The cape vanishes as it touches the ground.");
@@ -199,7 +198,7 @@ public class ItemHandler {
 	public void createGlobalItem(GroundItem i) {
 		for (Player p : PlayerHandler.players) {
 			if (p != null) {
-				Client person = (Client) p;
+				Player person = (Player) p;
 				if (person != null) {
 					if (person.playerId != i.getItemController()) {
 						if (!person.getItems().tradeable(i.getItemId())
@@ -220,8 +219,8 @@ public class ItemHandler {
 	 * Removing the ground item
 	 **/
 
-	public void removeGroundItem(Client c, int itemId, int itemX, int itemY,
-			boolean add) {
+	public void removeGroundItem(Player c, int itemId, int itemX, int itemY,
+								 boolean add) {
 		for (GroundItem i : items) {
 			if (i.getItemId() == itemId && i.getItemX() == itemX
 					&& i.getItemY() == itemY) {
@@ -270,8 +269,8 @@ public class ItemHandler {
 	 * Remove item for just the item controller (item not global yet)
 	 **/
 
-	public void removeControllersItem(GroundItem i, Client c, int itemId,
-			int itemX, int itemY, int itemAmount) {
+	public void removeControllersItem(GroundItem i, Player c, int itemId,
+									  int itemX, int itemY, int itemAmount) {
 		c.getItems().removeGroundItem(itemId, itemX, itemY, itemAmount);
 		removeItem(i);
 	}
@@ -284,7 +283,7 @@ public class ItemHandler {
 			int itemY, int itemAmount) {
 		for (Player p : PlayerHandler.players) {
 			if (p != null) {
-				Client person = (Client) p;
+				Player person = (Player) p;
 				if (person != null) {
 					if (person.distanceToPoint(itemX, itemY) <= 60) {
 						person.getItems().removeGroundItem(itemId, itemX,

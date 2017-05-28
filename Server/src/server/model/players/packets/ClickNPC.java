@@ -2,7 +2,7 @@ package server.model.players.packets;
 
 import server.Config;
 import server.model.npcs.NPCHandler;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 
 /**
@@ -13,7 +13,7 @@ public class ClickNPC implements PacketType {
 			SECOND_CLICK = 17, THIRD_CLICK = 21;
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		c.npcIndex = 0;
 		c.npcClickIndex = 0;
 		c.playerIndex = 0;

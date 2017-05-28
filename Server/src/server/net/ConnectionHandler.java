@@ -5,7 +5,7 @@ import org.apache.mina.common.IoHandler;
 import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.ProtocolCodecFilter;
 
-import server.model.players.Client;
+import server.model.players.Player;
 
 public class ConnectionHandler implements IoHandler {
 
@@ -19,7 +19,7 @@ public class ConnectionHandler implements IoHandler {
 	@Override
 	public void messageReceived(IoSession arg0, Object arg1) throws Exception {
 		if (arg0.getAttachment() != null) {
-			Client plr = (Client) arg0.getAttachment();
+			Player plr = (Player) arg0.getAttachment();
 			plr.queueMessage((Packet) arg1);
 		}
 	}
@@ -33,7 +33,7 @@ public class ConnectionHandler implements IoHandler {
 	@Override
 	public void sessionClosed(IoSession arg0) throws Exception {
 		if (arg0.getAttachment() != null) {
-			Client plr = (Client) arg0.getAttachment();
+			Player plr = (Player) arg0.getAttachment();
 			plr.disconnected = true;
 		}
 		HostList.getHostList().remove(arg0);

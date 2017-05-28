@@ -8,9 +8,9 @@ import java.util.HashMap;
 
 public class Food {
 
-	private Client c;
+	private Player c;
 
-	public Food(Client c) {
+	public Food(Player c) {
 		this.c = c;
 	}
 

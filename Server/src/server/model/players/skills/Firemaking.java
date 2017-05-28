@@ -1,7 +1,7 @@
 package server.model.players.skills;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.objects.Objects;
 import server.Server;
 
@@ -13,7 +13,7 @@ import server.Server;
  **/
 public class Firemaking {
 
-	private Client c;
+	private Player c;
 
 	private int[] logs = { 1511, 1521, 1519, 1517, 1515, 1513 };
 	private int[] level = { 1, 15, 30, 45, 60, 75 };
@@ -21,7 +21,7 @@ public class Firemaking {
 	private int DELAY = 1250;
 	public boolean resetAnim = false;
 
-	public Firemaking(Client c) {
+	public Firemaking(Player c) {
 		this.c = c;
 	}
 

@@ -1,18 +1,18 @@
 package server.task;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.util.ScriptManager;
 
 public class TaskFactory {
 
 	public static Task getDelayedTask(final String callbackFunction,
-			final Client client, final int actionX, final int actionY) {
-		Task task = new Task(client, false) {
+                                      final Player player, final int actionX, final int actionY) {
+		Task task = new Task(player, false) {
 			@Override
 			public void run() {
 				synchronized (PlayerHandler.players) {
-					ScriptManager.callFunc(callbackFunction, client, actionX,
+					ScriptManager.callFunc(callbackFunction, player, actionX,
 							actionY);
 				}
 			}
@@ -21,13 +21,13 @@ public class TaskFactory {
 	}
 
 	public static Task getDelayedTask(final String callbackFunction,
-			final Client client, final int actionID, final int actionX,
-			final int actionY) {
-		Task task = new Task(client, false) {
+                                      final Player player, final int actionID, final int actionX,
+                                      final int actionY) {
+		Task task = new Task(player, false) {
 			@Override
 			public void run() {
 				synchronized (PlayerHandler.players) {
-					ScriptManager.callFunc(callbackFunction, client, actionID,
+					ScriptManager.callFunc(callbackFunction, player, actionID,
 							actionX, actionY);
 				}
 			}
@@ -51,19 +51,19 @@ public class TaskFactory {
 
 	protected static class Task implements Runnable {
 
-		private Client client;
+		private Player player;
 		private boolean global;
 
-		public Task(Client client, boolean global) {
-			this.client = client;
+		public Task(Player player, boolean global) {
+			this.player = player;
 			this.global = global;
 		}
 
 		public void run() {
 		}
 
-		public Client getClient() {
-			return client;
+		public Player getPlayer() {
+			return player;
 		}
 
 		public boolean isGlobal() {

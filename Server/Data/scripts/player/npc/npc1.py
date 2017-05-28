@@ -1,4 +1,4 @@
-from server.model.players import Client
+from server.model.players import Player
 from server.util import ScriptManager
 
 def npcClick1_943(c, npcId):

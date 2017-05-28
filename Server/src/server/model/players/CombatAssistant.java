@@ -7,10 +7,10 @@ import server.util.Misc;
 
 public class CombatAssistant {
 
-	private Client c;
+	private Player c;
 
-	public CombatAssistant(Client Client) {
-		this.c = Client;
+	public CombatAssistant(Player Player) {
+		this.c = Player;
 	}
 
 	public int[][] slayerReqs = { { 1648, 5 }, { 1612, 15 }, { 1643, 45 },
@@ -1052,7 +1052,7 @@ public class CombatAssistant {
 					c.oldPlayerIndex = i;
 					c.oldSpellId = c.spellId;
 					c.spellId = 0;
-					Client o = (Client) PlayerHandler.players[i];
+					Player o = (Player) PlayerHandler.players[i];
 					if (c.MAGIC_SPELLS[c.oldSpellId][0] == 12891 && o.isMoving) {
 						// c.sendMessage("Barrage projectile..");
 						c.getPA().createPlayersProjectile(pX, pY, offX, offY,
@@ -1157,7 +1157,7 @@ public class CombatAssistant {
 				c.playerIndex = 0;
 				return;
 			}
-			Client o = (Client) PlayerHandler.players[i];
+			Player o = (Player) PlayerHandler.players[i];
 			o.getPA().removeAllWindows();
 			if (o.playerIndex <= 0 && o.npcIndex <= 0) {
 				if (o.autoRet == 1) {
@@ -1544,7 +1544,7 @@ public class CombatAssistant {
 
 	public void appendMultiBarrage(int playerId, boolean splashed) {
 		if (PlayerHandler.players[playerId] != null) {
-			Client c2 = (Client) PlayerHandler.players[playerId];
+			Player c2 = (Player) PlayerHandler.players[playerId];
 			if (c2.isDead || c2.respawnTimer > 0)
 				return;
 			if (checkMultiBarrageReqs(playerId)) {
@@ -1621,7 +1621,7 @@ public class CombatAssistant {
 	}
 
 	public void applyPlayerMeleeDamage(int i, int damageMask) {
-		Client o = (Client) PlayerHandler.players[i];
+		Player o = (Player) PlayerHandler.players[i];
 		if (o == null) {
 			return;
 		}
@@ -1802,7 +1802,7 @@ public class CombatAssistant {
 		if (damage <= 0)
 			return;
 		if (PlayerHandler.players[index] != null) {
-			Client c2 = (Client) PlayerHandler.players[index];
+			Player c2 = (Player) PlayerHandler.players[index];
 			c2.playerLevel[5] -= (int) (damage / 4);
 			if (c2.playerLevel[5] <= 0) {
 				c2.playerLevel[5] = 0;
@@ -2244,7 +2244,7 @@ public class CombatAssistant {
 			c.startAnimation(405);
 			c.gfx100(253);
 			if (c.playerIndex > 0) {
-				Client o = (Client) PlayerHandler.players[i];
+				Player o = (Player) PlayerHandler.players[i];
 				o.getPA().getSpeared(c.absX, c.absY);
 			}
 			break;
@@ -4020,7 +4020,7 @@ public class CombatAssistant {
 
 	public void handleGmaulPlayer() {
 		if (c.playerIndex > 0) {
-			Client o = (Client) PlayerHandler.players[c.playerIndex];
+			Player o = (Player) PlayerHandler.players[c.playerIndex];
 			if (c.goodDistance(c.getX(), c.getY(), o.getX(), o.getY(),
 					getRequiredDistance())) {
 				if (checkReqs()) {

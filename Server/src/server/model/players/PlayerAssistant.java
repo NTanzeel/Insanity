@@ -1,16 +1,15 @@
 package server.model.players;
 
 import server.Config;
-import server.Server;
 import server.model.npcs.NPCHandler;
 import server.util.Misc;
 
 public class PlayerAssistant {
 
-    private Client c;
+    private Player c;
 
-    public PlayerAssistant(Client Client) {
-        this.c = Client;
+    public PlayerAssistant(Player Player) {
+        this.c = Player;
     }
 
     public int CraftInt, Dcolor, FletchInt;
@@ -381,7 +380,7 @@ public class PlayerAssistant {
         // synchronized(c) {
         for (int i = 0; i < Config.MAX_PLAYERS; i++) {
             if (PlayerHandler.players[i] != null) {
-                Client person = (Client) PlayerHandler.players[i];
+                Player person = (Player) PlayerHandler.players[i];
                 if (person != null) {
                     if (person.getOutStream() != null && !person.disconnected) {
                         if (c.distanceToPoint(person.getX(), person.getY()) <= 25) {
@@ -454,7 +453,7 @@ public class PlayerAssistant {
         for (int i = 0; i < Config.MAX_PLAYERS; i++) {
             Player p = PlayerHandler.players[i];
             if (p != null) {
-                Client person = (Client) p;
+                Player person = (Player) p;
                 if (person != null) {
                     if (person.getOutStream() != null) {
                         if (person.distanceToPoint(x, y) <= 25) {
@@ -476,7 +475,7 @@ public class PlayerAssistant {
         for (int i = 0; i < Config.MAX_PLAYERS; i++) {
             Player p = PlayerHandler.players[i];
             if (p != null) {
-                Client person = (Client) p;
+                Player person = (Player) p;
                 if (person != null) {
                     if (person.getOutStream() != null) {
                         if (person.distanceToPoint(x, y) <= 25) {
@@ -514,7 +513,7 @@ public class PlayerAssistant {
         for (int i = 0; i < Config.MAX_PLAYERS; i++) {
             Player p = PlayerHandler.players[i];
             if (p != null) {
-                Client person = (Client) p;
+                Player person = (Player) p;
                 if (person != null) {
                     if (person.getOutStream() != null) {
                         if (person.distanceToPoint(x, y) <= 25) {
@@ -618,7 +617,7 @@ public class PlayerAssistant {
         for (int i1 = 0; i1 < Config.MAX_PLAYERS; i1++) {
             Player p = PlayerHandler.players[i1];
             if (p != null && p.isActive) {
-                Client o = (Client) p;
+                Player o = (Player) p;
                 if (o != null) {
                     o.getPA().updatePM(c.playerId, 1);
                 }
@@ -633,7 +632,7 @@ public class PlayerAssistant {
                     if (p != null
                             && p.isActive
                             && Misc.playerNameToInt64(p.playerName) == c.friends[i]) {
-                        Client o = (Client) p;
+                        Player o = (Player) p;
                         if (o != null) {
                             if (c.playerRights >= 2
                                     || p.privateChat == 0
@@ -656,7 +655,7 @@ public class PlayerAssistant {
             for (int i1 = 1; i1 < Config.MAX_PLAYERS; i1++) {
                 Player p = PlayerHandler.players[i1];
                 if (p != null && p.isActive) {
-                    Client o = (Client) p;
+                    Player o = (Player) p;
                     if (o != null) {
                         o.getPA().updatePM(c.playerId, 1);
                     }
@@ -670,7 +669,7 @@ public class PlayerAssistant {
         if (p == null || p.playerName == null || p.playerName.equals("null")) {
             return;
         }
-        Client o = (Client) p;
+        Player o = (Player) p;
         long l = Misc
                 .playerNameToInt64(PlayerHandler.players[pID].playerName);
 
@@ -823,7 +822,7 @@ public class PlayerAssistant {
         if (c.duelStatus != 6) {
             // c.killerId = c.getCombat().getKillerId(c.playerId);
             c.killerId = findKiller();
-            Client o = (Client) PlayerHandler.players[c.killerId];
+            Player o = (Player) PlayerHandler.players[c.killerId];
             if (o != null) {
                 if (c.killerId != c.playerId)
                     o.sendMessage("You have defeated " + c.playerName + "!");
@@ -890,7 +889,7 @@ public class PlayerAssistant {
         for (int j = 0; j < PlayerHandler.players.length; j++) {
             if (PlayerHandler.players[j] != null) {
                 if (PlayerHandler.players[j].followId == c.playerId) {
-                    Client c = (Client) PlayerHandler.players[j];
+                    Player c = (Player) PlayerHandler.players[j];
                     c.getPA().resetFollow();
                 }
             }
@@ -947,7 +946,7 @@ public class PlayerAssistant {
             c.skullTimer = 0;
             c.attackedPlayers.clear();
         } else { // we are in a duel, respawn outside of arena
-            Client o = (Client) PlayerHandler.players[c.duelingWith];
+            Player o = (Player) PlayerHandler.players[c.duelingWith];
             if (o != null) {
                 o.getPA().createPlayerHints(10, -1);
                 if (o.duelStatus == 6) {

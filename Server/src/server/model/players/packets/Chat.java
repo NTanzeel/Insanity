@@ -1,6 +1,6 @@
 package server.model.players.packets;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 import server.Connection;
 
@@ -10,7 +10,7 @@ import server.Connection;
 public class Chat implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		c.setChatTextEffects(c.getInStream().readUnsignedByteS());
 		c.setChatTextColor(c.getInStream().readUnsignedByteS());
 		c.setChatTextSize((byte) (c.packetSize - 2));

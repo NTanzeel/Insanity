@@ -125,7 +125,7 @@ public class PacketHandler {
 		packetId[60] = new ClanChat();
 	}
 
-	public static void processPacket(Client c, int packetType, int packetSize) {
+	public static void processPacket(Player c, int packetType, int packetSize) {
 		if (packetType == -1) {
 			return;
 		}

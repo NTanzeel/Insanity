@@ -1,7 +1,7 @@
 package server.model.players.skills;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.util.Misc;
 
 /**
@@ -13,7 +13,7 @@ import server.util.Misc;
 
 public class Farming {
 
-	private Client c;
+	private Player c;
 
 	private final int[] VALID_SEEDS = { 5291, 5292, 5293, 5294, 5295, 5296,
 			5297, 5298, 5299, 5300, 5301, 5302, 5303, 5304 };
@@ -28,7 +28,7 @@ public class Farming {
 	private final int PATCH_HERBS = 8143;
 	private final int PATCH_WEEDS = 8389;
 
-	public Farming(Client c) {
+	public Farming(Player c) {
 		this.c = c;
 	}
 

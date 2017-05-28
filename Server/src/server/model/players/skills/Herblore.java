@@ -1,7 +1,7 @@
 package server.model.players.skills;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * Herblore.java
@@ -11,7 +11,7 @@ import server.model.players.Client;
 
 public class Herblore {
 
-	private Client c;
+	private Player c;
 	private int[][] information = { { 199, 249, 1, 3 }, { 201, 251, 5, 4 },
 			{ 203, 253, 11, 5 }, { 205, 255, 20, 6 }, { 207, 257, 25, 8 },
 			{ 3049, 2998, 30, 8 }, { 209, 259, 40, 9 }, { 211, 261, 48, 10 },
@@ -27,7 +27,7 @@ public class Herblore {
 			{ 2998, 6687, 6685, 81, 180 } };
 
 	// {identifiedHerbId,3dosepot,4dosepot,levelreq,exp}
-	public Herblore(Client c) {
+	public Herblore(Player c) {
 		this.c = c;
 	}
 

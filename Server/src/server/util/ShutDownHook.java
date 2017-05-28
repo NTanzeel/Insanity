@@ -1,6 +1,6 @@
 package server.util;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PlayerHandler;
 
 public class ShutDownHook extends Thread {
@@ -10,7 +10,7 @@ public class ShutDownHook extends Thread {
 		System.out.println("Shutdown thread run.");
 		for (int j = 0; j < PlayerHandler.players.length; j++) {
 			if (PlayerHandler.players[j] != null) {
-				Client c = (Client) PlayerHandler.players[j];
+				Player c = (Player) PlayerHandler.players[j];
 				server.model.players.PlayerSave.saveGame(c);
 			}
 		}

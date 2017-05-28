@@ -19,7 +19,7 @@ public class TaskManager {
 		Future<?> taskFuture = TaskManager.scheduledExecutor.schedule(task,
 				delay, TimeUnit.SECONDS);
 		if (!task.isGlobal())
-			task.getClient().setCurrentTask(taskFuture);
+			task.getPlayer().setCurrentTask(taskFuture);
 		return taskFuture;
 	}
 

@@ -1,6 +1,6 @@
 package server.model.players.packets;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 import server.model.players.PlayerHandler;
 import server.util.Misc;
@@ -11,7 +11,7 @@ import server.util.Misc;
 public class ClickingStuff implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		if (c.inTrade) {
 			if (!c.acceptedTrade) {
 				Misc.println("trade reset");
@@ -19,7 +19,7 @@ public class ClickingStuff implements PacketType {
 			}
 		}
 
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o != null) {
 			if (c.duelStatus >= 1 && c.duelStatus <= 4) {
 				c.getTradeAndDuel().declineDuel();

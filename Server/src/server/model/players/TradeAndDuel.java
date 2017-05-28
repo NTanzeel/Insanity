@@ -10,10 +10,10 @@ import server.util.Misc;
 
 public class TradeAndDuel {
 
-	private Client c;
+	private Player c;
 
-	public TradeAndDuel(Client Client) {
-		this.c = Client;
+	public TradeAndDuel(Player Player) {
+		this.c = Player;
 	}
 
 	/**
@@ -24,7 +24,7 @@ public class TradeAndDuel {
 
 	public void requestTrade(int id) {
 		try {
-			Client o = (Client) PlayerHandler.players[id];
+			Player o = (Player) PlayerHandler.players[id];
 			if (id == c.playerId)
 				return;
 			c.tradeWith = id;
@@ -43,7 +43,7 @@ public class TradeAndDuel {
 	}
 
 	public void openTrade() {
-		Client o = (Client) PlayerHandler.players[c.tradeWith];
+		Player o = (Player) PlayerHandler.players[c.tradeWith];
 
 		if (o == null) {
 			return;
@@ -100,7 +100,7 @@ public class TradeAndDuel {
 	}
 
 	public boolean fromTrade(int itemID, int fromSlot, int amount) {
-		Client o = (Client) PlayerHandler.players[c.tradeWith];
+		Player o = (Player) PlayerHandler.players[c.tradeWith];
 		if (o == null) {
 			return false;
 		}
@@ -203,7 +203,7 @@ public class TradeAndDuel {
 	}
 
 	public boolean tradeItem(int itemID, int fromSlot, int amount) {
-		Client o = (Client) PlayerHandler.players[c.tradeWith];
+		Player o = (Player) PlayerHandler.players[c.tradeWith];
 		if (o == null) {
 			return false;
 		}
@@ -307,7 +307,7 @@ public class TradeAndDuel {
 
 	public void declineTrade(boolean tellOther) {
 		c.getPA().removeAllWindows();
-		Client o = (Client) PlayerHandler.players[c.tradeWith];
+		Player o = (Player) PlayerHandler.players[c.tradeWith];
 		if (o == null) {
 			return;
 		}
@@ -339,7 +339,7 @@ public class TradeAndDuel {
 
 	public void resetOTItems(int WriteFrame) {
 		synchronized (c) {
-			Client o = (Client) PlayerHandler.players[c.tradeWith];
+			Player o = (Player) PlayerHandler.players[c.tradeWith];
 			if (o == null) {
 				return;
 			}
@@ -372,7 +372,7 @@ public class TradeAndDuel {
 	}
 
 	public void confirmScreen() {
-		Client o = (Client) PlayerHandler.players[c.tradeWith];
+		Player o = (Player) PlayerHandler.players[c.tradeWith];
 		if (o == null) {
 			return;
 		}
@@ -444,7 +444,7 @@ public class TradeAndDuel {
 	}
 
 	public void giveItems() {
-		Client o = (Client) PlayerHandler.players[c.tradeWith];
+		Player o = (Player) PlayerHandler.players[c.tradeWith];
 		if (o == null) {
 			return;
 		}
@@ -475,7 +475,7 @@ public class TradeAndDuel {
 			resetDuel();
 			resetDuelItems();
 			c.duelingWith = id;
-			Client o = (Client) PlayerHandler.players[id];
+			Player o = (Player) PlayerHandler.players[id];
 			if (o == null) {
 				return;
 			}
@@ -500,7 +500,7 @@ public class TradeAndDuel {
 	}
 
 	public void openDuel() {
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			return;
 		}
@@ -549,7 +549,7 @@ public class TradeAndDuel {
 
 	public void refreshDuelScreen() {
 		synchronized (c) {
-			Client o = (Client) PlayerHandler.players[c.duelingWith];
+			Player o = (Player) PlayerHandler.players[c.duelingWith];
 			if (o == null) {
 				return;
 			}
@@ -621,7 +621,7 @@ public class TradeAndDuel {
 		}
 		if (amount <= 0)
 			return false;
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			declineDuel();
 			return false;
@@ -684,7 +684,7 @@ public class TradeAndDuel {
 	}
 
 	public boolean fromDuel(int itemID, int fromSlot, int amount) {
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			declineDuel();
 			return false;
@@ -784,7 +784,7 @@ public class TradeAndDuel {
 	}
 
 	public void confirmDuel() {
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			declineDuel();
 			return;
@@ -841,7 +841,7 @@ public class TradeAndDuel {
 	}
 
 	public void startDuel() {
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			duelVictory();
 		}
@@ -922,7 +922,7 @@ public class TradeAndDuel {
 	}
 
 	public void duelVictory() {
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o != null) {
 			c.getPA().sendFrame126("" + o.combatLevel, 6839);
 			c.getPA().sendFrame126(o.playerName, 6840);
@@ -1063,7 +1063,7 @@ public class TradeAndDuel {
 	}
 
 	public void changeDuelStuff() {
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			return;
 		}
@@ -1074,7 +1074,7 @@ public class TradeAndDuel {
 	}
 
 	public void selectRule(int i) { // rules
-		Client o = (Client) PlayerHandler.players[c.duelingWith];
+		Player o = (Player) PlayerHandler.players[c.duelingWith];
 		if (o == null) {
 			return;
 		}

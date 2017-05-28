@@ -11,7 +11,7 @@ import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 import server.Config;
 import server.Connection;
 import server.Server;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.model.players.PlayerSave;
 import server.util.ISAACRandomGen;
@@ -173,7 +173,7 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
 			returnCode = 8;
 		}
 
-		Client cl = new Client(session, -1);
+		Player cl = new Player(session, -1);
 		cl.playerName = name;
 		cl.playerName2 = cl.playerName;
 		cl.playerPass = pass;

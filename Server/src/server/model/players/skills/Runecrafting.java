@@ -1,7 +1,7 @@
 package server.model.players.skills;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * RuneCrafting.java
@@ -12,9 +12,9 @@ import server.model.players.Client;
 
 public class Runecrafting {
 
-	private Client c;
+	private Player c;
 
-	public Runecrafting(Client c) {
+	public Runecrafting(Player c) {
 		this.c = c;
 	}
 

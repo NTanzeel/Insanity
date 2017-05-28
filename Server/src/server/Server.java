@@ -10,9 +10,8 @@ import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
 import server.event.EventManager;
 import server.model.npcs.NPCHandler;
-import server.model.players.PlayerHandler;
 import server.model.players.Player;
-import server.model.players.Client;
+import server.model.players.PlayerHandler;
 import server.model.players.PlayerSave;
 import server.net.ConnectionHandler;
 import server.net.ConnectionThrottleFilter;
@@ -133,7 +132,7 @@ public class Server {
                     for (Player p : PlayerHandler.players) {
                         if (p == null)
                             continue;
-                        PlayerSave.saveGame((Client) p);
+                        PlayerSave.saveGame((Player) p);
                         System.out.println("Saved game for " + p.playerName
                                 + ".");
                         lastMassSave = System.currentTimeMillis();
@@ -147,7 +146,7 @@ public class Server {
             for (Player p : PlayerHandler.players) {
                 if (p == null)
                     continue;
-                PlayerSave.saveGame((Client) p);
+                PlayerSave.saveGame((Player) p);
                 System.out.println("Saved game for " + p.playerName + ".");
             }
         }

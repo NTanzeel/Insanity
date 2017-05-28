@@ -25,7 +25,7 @@ public class PlayerHandler {
 			players[i] = null;
 	}
 
-	public boolean newPlayerClient(Client client1) {
+	public boolean newPlayerClient(Player player1) {
 		int slot = -1;
 		for (int i = 1; i < Config.MAX_PLAYERS; i++) {
 			if ((players[i] == null) || players[i].disconnected) {
@@ -35,11 +35,11 @@ public class PlayerHandler {
 		}
 		if (slot == -1)
 			return false;
-		client1.handler = this;
-		client1.playerId = slot;
-		players[slot] = client1;
+		player1.handler = this;
+		player1.playerId = slot;
+		players[slot] = player1;
 		players[slot].isActive = true;
-		players[slot].connectedFrom = ((InetSocketAddress) client1.getSession()
+		players[slot].connectedFrom = ((InetSocketAddress) player1.getSession()
 				.getRemoteAddress()).getAddress().getHostAddress();
 		if (Config.SERVER_DEBUG)
 			Misc.println("Player Slot " + slot + " slot 0 " + players[0]
@@ -108,24 +108,24 @@ public class PlayerHandler {
 									- players[i].logoutDelay > 10000
 									|| players[i].properLogout || kickAllPlayers)) {
 						if (players[i].inTrade) {
-							Client o = (Client) PlayerHandler.players[players[i].tradeWith];
+							Player o = (Player) PlayerHandler.players[players[i].tradeWith];
 							if (o != null) {
 								o.getTradeAndDuel().declineTrade();
 							}
 						}
 						if (players[i].duelStatus == 5) {
-							Client o = (Client) PlayerHandler.players[players[i].duelingWith];
+							Player o = (Player) PlayerHandler.players[players[i].duelingWith];
 							if (o != null) {
 								o.getTradeAndDuel().duelVictory();
 							}
 						} else if (players[i].duelStatus <= 4
 								&& players[i].duelStatus >= 1) {
-							Client o = (Client) PlayerHandler.players[players[i].duelingWith];
+							Player o = (Player) PlayerHandler.players[players[i].duelingWith];
 							if (o != null) {
 								o.getTradeAndDuel().declineDuel();
 							}
 						}
-						Client o = (Client) PlayerHandler.players[i];
+						Player o = (Player) PlayerHandler.players[i];
 						if (PlayerSave.saveGame(o)) {
 							System.out.println("Game saved for player "
 									+ players[i].playerName);
@@ -159,25 +159,25 @@ public class PlayerHandler {
 									- players[i].logoutDelay > 10000
 									|| players[i].properLogout || kickAllPlayers)) {
 						if (players[i].inTrade) {
-							Client o = (Client) PlayerHandler.players[players[i].tradeWith];
+							Player o = (Player) PlayerHandler.players[players[i].tradeWith];
 							if (o != null) {
 								o.getTradeAndDuel().declineTrade();
 							}
 						}
 						if (players[i].duelStatus == 5) {
-							Client o1 = (Client) PlayerHandler.players[players[i].duelingWith];
+							Player o1 = (Player) PlayerHandler.players[players[i].duelingWith];
 							if (o1 != null) {
 								o1.getTradeAndDuel().duelVictory();
 							}
 						} else if (players[i].duelStatus <= 4
 								&& players[i].duelStatus >= 1) {
-							Client o1 = (Client) PlayerHandler.players[players[i].duelingWith];
+							Player o1 = (Player) PlayerHandler.players[players[i].duelingWith];
 							if (o1 != null) {
 								o1.getTradeAndDuel().declineDuel();
 							}
 						}
 
-						Client o1 = (Client) PlayerHandler.players[i];
+						Player o1 = (Player) PlayerHandler.players[i];
 						if (PlayerSave.saveGame(o1)) {
 							System.out.println("Game saved for player "
 									+ players[i].playerName);
@@ -343,7 +343,7 @@ public class PlayerHandler {
 			for (int i = 1; i < Config.MAX_PLAYERS; i++) {
 				if (players[i] == null || players[i].isActive == false)
 					continue;
-				Client o = (Client) PlayerHandler.players[i];
+				Player o = (Player) PlayerHandler.players[i];
 				if (o != null) {
 					o.getPA().updatePM(plr.playerId, 0);
 				}

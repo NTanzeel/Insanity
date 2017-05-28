@@ -1,6 +1,6 @@
 package server.model.players.skills;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.Server;
 import server.util.Misc;
 
@@ -13,9 +13,9 @@ import server.util.Misc;
 
 public class Slayer {
 
-	private Client c;
+	private Player c;
 
-	public Slayer(Client c) {
+	public Slayer(Player c) {
 		this.c = c;
 	}
 

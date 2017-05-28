@@ -12,239 +12,239 @@ public class ClickObject implements PacketType {
 	public ClickObject() {
 	}
 
-	public void processPacket(Client client, int i, int j) {
-		client.clickObjectType = client.objectX = client.objectId = client.objectY = 0;
-		client.objectYOffset = client.objectXOffset = 0;
-		client.getPA().resetFollow();
+	public void processPacket(Player player, int i, int j) {
+		player.clickObjectType = player.objectX = player.objectId = player.objectY = 0;
+		player.objectYOffset = player.objectXOffset = 0;
+		player.getPA().resetFollow();
 		switch (i) {
 		default:
 			break;
 
 		case 132:
-			client.objectX = client.getInStream().readSignedWordBigEndianA();
-			client.objectId = client.getInStream().readUnsignedWord();
-			client.objectY = client.getInStream().readUnsignedWordA();
-			client.objectDistance = 1;
-			if (client.playerRights >= 3
-					&& client.playerName.equalsIgnoreCase("Sanity")) {
+			player.objectX = player.getInStream().readSignedWordBigEndianA();
+			player.objectId = player.getInStream().readUnsignedWord();
+			player.objectY = player.getInStream().readUnsignedWordA();
+			player.objectDistance = 1;
+			if (player.playerRights >= 3
+					&& player.playerName.equalsIgnoreCase("Sanity")) {
 				Misc.println((new StringBuilder()).append("objectId: ")
-						.append(client.objectId).append("  ObjectX: ")
-						.append(client.objectX).append("  objectY: ")
-						.append(client.objectY).append(" Xoff: ")
-						.append(client.getX() - client.objectX)
+						.append(player.objectId).append("  ObjectX: ")
+						.append(player.objectX).append("  objectY: ")
+						.append(player.objectY).append(" Xoff: ")
+						.append(player.getX() - player.objectX)
 						.append(" Yoff: ")
-						.append(client.getY() - client.objectY).toString());
-			} else if (client.playerRights == 3) {
-				client.sendMessage((new StringBuilder()).append("objectId: ")
-						.append(client.objectId).append(" objectX: ")
-						.append(client.objectX).append(" objectY: ")
-						.append(client.objectY).toString());
+						.append(player.getY() - player.objectY).toString());
+			} else if (player.playerRights == 3) {
+				player.sendMessage((new StringBuilder()).append("objectId: ")
+						.append(player.objectId).append(" objectX: ")
+						.append(player.objectX).append(" objectY: ")
+						.append(player.objectY).toString());
 			}
-			if (Math.abs(client.getX() - client.objectX) > 25
-					|| Math.abs(client.getY() - client.objectY) > 25) {
-				client.resetWalkingQueue();
+			if (Math.abs(player.getX() - player.objectX) > 25
+					|| Math.abs(player.getY() - player.objectY) > 25) {
+				player.resetWalkingQueue();
 			} else {
-				for (int k = 0; k < client.getRunecrafting().altarID.length; k++) {
-					if (client.objectId == client.getRunecrafting().altarID[k]) {
-						client.getRunecrafting().craftRunes(client.objectId);
+				for (int k = 0; k < player.getRunecrafting().altarID.length; k++) {
+					if (player.objectId == player.getRunecrafting().altarID[k]) {
+						player.getRunecrafting().craftRunes(player.objectId);
 					}
 				}
 
-				switch (client.objectId) {
+				switch (player.objectId) {
 				case 410:
-					if (client.playerMagicBook == 0) {
-						client.setSidebarInterface(6, 29999);
-						client.playerMagicBook = 2;
-						client.autocasting = false;
-						client.sendMessage("An ancient wisdomin fills your mind.");
-						client.autocastId = -1;
-						client.getPA().resetAutocast();
+					if (player.playerMagicBook == 0) {
+						player.setSidebarInterface(6, 29999);
+						player.playerMagicBook = 2;
+						player.autocasting = false;
+						player.sendMessage("An ancient wisdomin fills your mind.");
+						player.autocastId = -1;
+						player.getPA().resetAutocast();
 					} else {
-						client.setSidebarInterface(6, 1151);
-						client.playerMagicBook = 0;
-						client.autocasting = false;
-						client.sendMessage("You feel a drain on your memory.");
-						client.autocastId = -1;
-						client.getPA().resetAutocast();
+						player.setSidebarInterface(6, 1151);
+						player.playerMagicBook = 0;
+						player.autocasting = false;
+						player.sendMessage("You feel a drain on your memory.");
+						player.autocastId = -1;
+						player.getPA().resetAutocast();
 					}
 					break;
 
 				case 1733:
-					client.objectYOffset = 2;
+					player.objectYOffset = 2;
 					break;
 
 				case 3044:
-					client.objectDistance = 3;
+					player.objectDistance = 3;
 					break;
 
 				case 245:
-					client.objectYOffset = -1;
-					client.objectDistance = 0;
+					player.objectYOffset = -1;
+					player.objectDistance = 0;
 					break;
 
 				case 272:
-					client.objectYOffset = 1;
-					client.objectDistance = 0;
+					player.objectYOffset = 1;
+					player.objectDistance = 0;
 					break;
 
 				case 273:
-					client.objectYOffset = 1;
-					client.objectDistance = 0;
+					player.objectYOffset = 1;
+					player.objectDistance = 0;
 					break;
 
 				case 246:
-					client.objectYOffset = 1;
-					client.objectDistance = 0;
+					player.objectYOffset = 1;
+					player.objectDistance = 0;
 					break;
 
 				case 4493:
 				case 4494:
 				case 4495:
 				case 4496:
-					client.objectDistance = 5;
+					player.objectDistance = 5;
 					break;
 
 				case 6522:
 				case 10229:
-					client.objectDistance = 2;
+					player.objectDistance = 2;
 					break;
 
 				case 8959:
-					client.objectYOffset = 1;
+					player.objectYOffset = 1;
 					break;
 
 				case 4417:
-					if (client.objectX == 2425 && client.objectY == 3074) {
-						client.objectYOffset = 2;
+					if (player.objectX == 2425 && player.objectY == 3074) {
+						player.objectYOffset = 2;
 					}
 					break;
 
 				case 4420:
-					if (client.getX() >= 2383 && client.getX() <= 2385) {
-						client.objectYOffset = 1;
+					if (player.getX() >= 2383 && player.getX() <= 2385) {
+						player.objectYOffset = 1;
 					} else {
-						client.objectYOffset = -2;
+						player.objectYOffset = -2;
 					}
 					// fall through
 
 				case 409:
 				case 6552:
-					client.objectDistance = 2;
+					player.objectDistance = 2;
 					break;
 
 				case 2878:
 				case 2879:
-					client.objectDistance = 3;
+					player.objectDistance = 3;
 					break;
 
 				case 2558:
-					client.objectDistance = 0;
-					if (client.absX > client.objectX && client.objectX == 3044) {
-						client.objectXOffset = 1;
+					player.objectDistance = 0;
+					if (player.absX > player.objectX && player.objectX == 3044) {
+						player.objectXOffset = 1;
 					}
-					if (client.absY > client.objectY) {
-						client.objectYOffset = 1;
+					if (player.absY > player.objectY) {
+						player.objectYOffset = 1;
 					}
-					if (client.absX < client.objectX && client.objectX == 3038) {
-						client.objectXOffset = -1;
+					if (player.absX < player.objectX && player.objectX == 3038) {
+						player.objectXOffset = -1;
 					}
 					break;
 
 				case 9356:
-					client.objectDistance = 2;
+					player.objectDistance = 2;
 					break;
 
 				case 1815:
 				case 1816:
 				case 5959:
 				case 5960:
-					client.objectDistance = 0;
+					player.objectDistance = 0;
 					break;
 
 				case 9293:
-					client.objectDistance = 2;
+					player.objectDistance = 2;
 					break;
 
 				case 4418:
-					if (client.objectX == 2374 && client.objectY == 3131) {
-						client.objectYOffset = -2;
-					} else if (client.objectX == 2369 && client.objectY == 3126) {
-						client.objectXOffset = 2;
-					} else if (client.objectX == 2380 && client.objectY == 3127) {
-						client.objectYOffset = 2;
-					} else if (client.objectX == 2369 && client.objectY == 3126) {
-						client.objectXOffset = 2;
-					} else if (client.objectX == 2374 && client.objectY == 3131) {
-						client.objectYOffset = -2;
+					if (player.objectX == 2374 && player.objectY == 3131) {
+						player.objectYOffset = -2;
+					} else if (player.objectX == 2369 && player.objectY == 3126) {
+						player.objectXOffset = 2;
+					} else if (player.objectX == 2380 && player.objectY == 3127) {
+						player.objectYOffset = 2;
+					} else if (player.objectX == 2369 && player.objectY == 3126) {
+						player.objectXOffset = 2;
+					} else if (player.objectX == 2374 && player.objectY == 3131) {
+						player.objectYOffset = -2;
 					}
 					break;
 
 				case 9706:
-					client.objectDistance = 0;
-					client.objectXOffset = 1;
+					player.objectDistance = 0;
+					player.objectXOffset = 1;
 					break;
 
 				case 9707:
-					client.objectDistance = 0;
-					client.objectYOffset = -1;
+					player.objectDistance = 0;
+					player.objectYOffset = -1;
 					break;
 
 				case 4419:
 				case 6707:
-					client.objectYOffset = 3;
+					player.objectYOffset = 3;
 					break;
 
 				case 6823:
-					client.objectDistance = 2;
-					client.objectYOffset = 1;
+					player.objectDistance = 2;
+					player.objectYOffset = 1;
 					break;
 
 				case 6706:
-					client.objectXOffset = 2;
+					player.objectXOffset = 2;
 					break;
 
 				case 6772:
-					client.objectDistance = 2;
-					client.objectYOffset = 1;
+					player.objectDistance = 2;
+					player.objectYOffset = 1;
 					break;
 
 				case 6705:
-					client.objectYOffset = -1;
+					player.objectYOffset = -1;
 					break;
 
 				case 6822:
-					client.objectDistance = 2;
-					client.objectYOffset = 1;
+					player.objectDistance = 2;
+					player.objectYOffset = 1;
 					break;
 
 				case 6704:
-					client.objectYOffset = -1;
+					player.objectYOffset = -1;
 					break;
 
 				case 6773:
-					client.objectDistance = 2;
-					client.objectXOffset = 1;
-					client.objectYOffset = 1;
+					player.objectDistance = 2;
+					player.objectXOffset = 1;
+					player.objectYOffset = 1;
 					break;
 
 				case 6703:
-					client.objectXOffset = -1;
+					player.objectXOffset = -1;
 					break;
 
 				case 6771:
-					client.objectDistance = 2;
-					client.objectXOffset = 1;
-					client.objectYOffset = 1;
+					player.objectDistance = 2;
+					player.objectXOffset = 1;
+					player.objectYOffset = 1;
 					break;
 
 				case 6702:
-					client.objectXOffset = -1;
+					player.objectXOffset = -1;
 					break;
 
 				case 6821:
-					client.objectDistance = 2;
-					client.objectXOffset = 1;
-					client.objectYOffset = 1;
+					player.objectDistance = 2;
+					player.objectXOffset = 1;
+					player.objectYOffset = 1;
 					break;
 
 				case 1276:
@@ -254,97 +254,97 @@ public class ClickObject implements PacketType {
 				case 1307:
 				case 1308:
 				case 1309:
-					client.objectDistance = 3;
+					player.objectDistance = 3;
 					break;
 
 				default:
-					client.objectDistance = 1;
-					client.objectXOffset = 0;
-					client.objectYOffset = 0;
+					player.objectDistance = 1;
+					player.objectXOffset = 0;
+					player.objectYOffset = 0;
 					break;
 				}
-				if (client.goodDistance(client.objectX + client.objectXOffset,
-						client.objectY + client.objectYOffset, client.getX(),
-						client.getY(), client.objectDistance)) {
-					client.getActions().firstClickObject(client.objectId,
-							client.objectX, client.objectY);
+				if (player.goodDistance(player.objectX + player.objectXOffset,
+						player.objectY + player.objectYOffset, player.getX(),
+						player.getY(), player.objectDistance)) {
+					player.getActions().firstClickObject(player.objectId,
+							player.objectX, player.objectY);
 				} else {
-					client.clickObjectType = 1;
+					player.clickObjectType = 1;
 				}
 			}
 			break;
 
 		case 252:
-			client.objectId = client.getInStream().readUnsignedWordBigEndianA();
-			client.objectY = client.getInStream().readSignedWordBigEndian();
-			client.objectX = client.getInStream().readUnsignedWordA();
-			client.objectDistance = 1;
-			if (client.playerRights >= 3) {
+			player.objectId = player.getInStream().readUnsignedWordBigEndianA();
+			player.objectY = player.getInStream().readSignedWordBigEndian();
+			player.objectX = player.getInStream().readUnsignedWordA();
+			player.objectDistance = 1;
+			if (player.playerRights >= 3) {
 				Misc.println((new StringBuilder()).append("objectId: ")
-						.append(client.objectId).append("  ObjectX: ")
-						.append(client.objectX).append("  objectY: ")
-						.append(client.objectY).append(" Xoff: ")
-						.append(client.getX() - client.objectX)
+						.append(player.objectId).append("  ObjectX: ")
+						.append(player.objectX).append("  objectY: ")
+						.append(player.objectY).append(" Xoff: ")
+						.append(player.getX() - player.objectX)
 						.append(" Yoff: ")
-						.append(client.getY() - client.objectY).toString());
+						.append(player.getY() - player.objectY).toString());
 			}
-			switch (client.objectId) {
+			switch (player.objectId) {
 			case 6162:
 			case 6163:
 			case 6164:
 			case 6165:
 			case 6166:
-				client.objectDistance = 2;
+				player.objectDistance = 2;
 				break;
 
 			default:
-				client.objectDistance = 1;
-				client.objectXOffset = 0;
-				client.objectYOffset = 0;
+				player.objectDistance = 1;
+				player.objectXOffset = 0;
+				player.objectYOffset = 0;
 				break;
 			}
-			if (client.goodDistance(client.objectX + client.objectXOffset,
-					client.objectY + client.objectYOffset, client.getX(),
-					client.getY(), client.objectDistance)) {
-				client.getActions().secondClickObject(client.objectId,
-						client.objectX, client.objectY);
+			if (player.goodDistance(player.objectX + player.objectXOffset,
+					player.objectY + player.objectYOffset, player.getX(),
+					player.getY(), player.objectDistance)) {
+				player.getActions().secondClickObject(player.objectId,
+						player.objectX, player.objectY);
 			} else {
-				client.clickObjectType = 2;
+				player.clickObjectType = 2;
 			}
 			break;
 
 		case 70: // 'F'
-			client.objectX = client.getInStream().readSignedWordBigEndian();
-			client.objectY = client.getInStream().readUnsignedWord();
-			client.objectId = client.getInStream().readUnsignedWordBigEndianA();
-			if (client.playerRights >= 3) {
+			player.objectX = player.getInStream().readSignedWordBigEndian();
+			player.objectY = player.getInStream().readUnsignedWord();
+			player.objectId = player.getInStream().readUnsignedWordBigEndianA();
+			if (player.playerRights >= 3) {
 				Misc.println((new StringBuilder()).append("objectId: ")
-						.append(client.objectId).append("  ObjectX: ")
-						.append(client.objectX).append("  objectY: ")
-						.append(client.objectY).append(" Xoff: ")
-						.append(client.getX() - client.objectX)
+						.append(player.objectId).append("  ObjectX: ")
+						.append(player.objectX).append("  objectY: ")
+						.append(player.objectY).append(" Xoff: ")
+						.append(player.getX() - player.objectX)
 						.append(" Yoff: ")
-						.append(client.getY() - client.objectY).toString());
+						.append(player.getY() - player.objectY).toString());
 			}
-			switch (client.objectId) {
+			switch (player.objectId) {
 			default:
-				client.objectDistance = 1;
+				player.objectDistance = 1;
 				break;
 			}
-			client.objectXOffset = 0;
-			client.objectYOffset = 0;
-			if (client.goodDistance(client.objectX + client.objectXOffset,
-					client.objectY + client.objectYOffset, client.getX(),
-					client.getY(), client.objectDistance)) {
-				client.getActions().secondClickObject(client.objectId,
-						client.objectX, client.objectY);
+			player.objectXOffset = 0;
+			player.objectYOffset = 0;
+			if (player.goodDistance(player.objectX + player.objectXOffset,
+					player.objectY + player.objectYOffset, player.getX(),
+					player.getY(), player.objectDistance)) {
+				player.getActions().secondClickObject(player.objectId,
+						player.objectX, player.objectY);
 			} else {
-				client.clickObjectType = 3;
+				player.clickObjectType = 3;
 			}
 			break;
 		}
 	}
 
-	public void handleSpecialCase(Client client, int i, int j, int k) {
+	public void handleSpecialCase(Player player, int i, int j, int k) {
 	}
 }

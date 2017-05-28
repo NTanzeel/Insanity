@@ -1,6 +1,6 @@
 package server.model.players.skills;
 
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * Agility.java
@@ -11,9 +11,9 @@ import server.model.players.Client;
 
 public class Agility {
 
-	private Client c;
+	private Player c;
 
-	public Agility(Client c) {
+	public Agility(Player c) {
 		this.setC(c);
 	}
 
@@ -48,11 +48,11 @@ public class Agility {
 		 */
 	}
 
-	public Client getC() {
+	public Player getC() {
 		return c;
 	}
 
-	public void setC(Client c) {
+	public void setC(Player c) {
 		this.c = c;
 	}
 }

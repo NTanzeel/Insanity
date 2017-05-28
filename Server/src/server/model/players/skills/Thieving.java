@@ -1,8 +1,8 @@
 package server.model.players.skills;
 
 import server.Config;
+import server.model.players.Player;
 import server.util.Misc;
-import server.model.players.Client;
 
 /**
  * Thieving.java
@@ -13,9 +13,9 @@ import server.model.players.Client;
 
 public class Thieving {
 
-	private Client c;
+	private Player c;
 
-	public Thieving(Client c) {
+	public Thieving(Player c) {
 		this.c = c;
 	}
 

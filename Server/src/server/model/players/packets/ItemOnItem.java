@@ -5,13 +5,13 @@ package server.model.players.packets;
  */
 
 import server.model.items.UseItem;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 
 public class ItemOnItem implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		int usedWithSlot = c.getInStream().readUnsignedWord();
 		int itemUsedSlot = c.getInStream().readUnsignedWordA();
 		int useWith = c.playerItems[usedWithSlot] - 1;

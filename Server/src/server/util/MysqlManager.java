@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * MySQL Class
@@ -70,165 +70,165 @@ public class MysqlManager {
 	/**
 	 * Save Sessions HighScores
 	 * 
-	 * @param clientToSave
+	 * @param playerToSave
 	 *            The session that saves their stats
 	 * @return The flag true if successful
 	 */
-	public synchronized static boolean saveHighScore(Client clientToSave) {
+	public synchronized static boolean saveHighScore(Player playerToSave) {
 		try {
 			query("DELETE FROM `skills` WHERE playerName = '"
-					+ clientToSave.playerName + "';");
+					+ playerToSave.playerName + "';");
 			query("DELETE FROM `skillsoverall` WHERE playerName = '"
-					+ clientToSave.playerName + "';");
+					+ playerToSave.playerName + "';");
 			query("INSERT INTO `skills` (`playerName`,`Attacklvl`,`Attackxp`,`Defencelvl`,`Defencexp`,`Strengthlvl`,`Strengthxp`,`Hitpointslvl`,`Hitpointsxp`,`Rangelvl`,`Rangexp`,`Prayerlvl`,`Prayerxp`,`Magiclvl`,`Magicxp`,`Cookinglvl`,`Cookingxp`,`Woodcuttinglvl`,`Woodcuttingxp`,`Fletchinglvl`,`Fletchingxp`,`Fishinglvl`,`Fishingxp`,`Firemakinglvl`,`Firemakingxp`,`Craftinglvl`,`Craftingxp`,`Smithinglvl`,`Smithingxp`,`Mininglvl`,`Miningxp`,`Herblorelvl`,`Herblorexp`,`Agilitylvl`,`Agilityxp`,`Thievinglvl`,`Thievingxp`,`Slayerlvl`,`Slayerxp`,`Farminglvl`,`Farmingxp`,`Runecraftlvl`,`Runecraftxp`) VALUES ('"
-					+ clientToSave.playerName
+					+ playerToSave.playerName
 					+ "',"
-					+ clientToSave.playerLevel[0]
+					+ playerToSave.playerLevel[0]
 					+ ","
-					+ clientToSave.playerXP[0]
+					+ playerToSave.playerXP[0]
 					+ ","
-					+ clientToSave.playerLevel[1]
+					+ playerToSave.playerLevel[1]
 					+ ","
-					+ clientToSave.playerXP[1]
+					+ playerToSave.playerXP[1]
 					+ ","
-					+ clientToSave.playerLevel[2]
+					+ playerToSave.playerLevel[2]
 					+ ","
-					+ clientToSave.playerXP[2]
+					+ playerToSave.playerXP[2]
 					+ ","
-					+ clientToSave.playerLevel[3]
+					+ playerToSave.playerLevel[3]
 					+ ","
-					+ clientToSave.playerXP[3]
+					+ playerToSave.playerXP[3]
 					+ ","
-					+ clientToSave.playerLevel[4]
+					+ playerToSave.playerLevel[4]
 					+ ","
-					+ clientToSave.playerXP[4]
+					+ playerToSave.playerXP[4]
 					+ ","
-					+ clientToSave.playerLevel[5]
+					+ playerToSave.playerLevel[5]
 					+ ","
-					+ clientToSave.playerXP[5]
+					+ playerToSave.playerXP[5]
 					+ ","
-					+ clientToSave.playerLevel[6]
+					+ playerToSave.playerLevel[6]
 					+ ","
-					+ clientToSave.playerXP[6]
+					+ playerToSave.playerXP[6]
 					+ ","
-					+ clientToSave.playerLevel[7]
+					+ playerToSave.playerLevel[7]
 					+ ","
-					+ clientToSave.playerXP[7]
+					+ playerToSave.playerXP[7]
 					+ ","
-					+ clientToSave.playerLevel[8]
+					+ playerToSave.playerLevel[8]
 					+ ","
-					+ clientToSave.playerXP[8]
+					+ playerToSave.playerXP[8]
 					+ ","
-					+ clientToSave.playerLevel[9]
+					+ playerToSave.playerLevel[9]
 					+ ","
-					+ clientToSave.playerXP[9]
+					+ playerToSave.playerXP[9]
 					+ ","
-					+ clientToSave.playerLevel[10]
+					+ playerToSave.playerLevel[10]
 					+ ","
-					+ clientToSave.playerXP[10]
+					+ playerToSave.playerXP[10]
 					+ ","
-					+ clientToSave.playerLevel[11]
+					+ playerToSave.playerLevel[11]
 					+ ","
-					+ clientToSave.playerXP[11]
+					+ playerToSave.playerXP[11]
 					+ ","
-					+ clientToSave.playerLevel[12]
+					+ playerToSave.playerLevel[12]
 					+ ","
-					+ clientToSave.playerXP[12]
+					+ playerToSave.playerXP[12]
 					+ ","
-					+ clientToSave.playerLevel[13]
+					+ playerToSave.playerLevel[13]
 					+ ","
-					+ clientToSave.playerXP[13]
+					+ playerToSave.playerXP[13]
 					+ ","
-					+ clientToSave.playerLevel[14]
+					+ playerToSave.playerLevel[14]
 					+ ","
-					+ clientToSave.playerXP[14]
+					+ playerToSave.playerXP[14]
 					+ ","
-					+ clientToSave.playerLevel[15]
+					+ playerToSave.playerLevel[15]
 					+ ","
-					+ clientToSave.playerXP[15]
+					+ playerToSave.playerXP[15]
 					+ ","
-					+ clientToSave.playerLevel[16]
+					+ playerToSave.playerLevel[16]
 					+ ","
-					+ clientToSave.playerXP[16]
+					+ playerToSave.playerXP[16]
 					+ ","
-					+ clientToSave.playerLevel[17]
+					+ playerToSave.playerLevel[17]
 					+ ","
-					+ clientToSave.playerXP[17]
+					+ playerToSave.playerXP[17]
 					+ ","
-					+ clientToSave.playerLevel[18]
+					+ playerToSave.playerLevel[18]
 					+ ","
-					+ clientToSave.playerXP[18]
+					+ playerToSave.playerXP[18]
 					+ ","
-					+ clientToSave.playerLevel[19]
+					+ playerToSave.playerLevel[19]
 					+ ","
-					+ clientToSave.playerXP[19]
+					+ playerToSave.playerXP[19]
 					+ ","
-					+ clientToSave.playerLevel[20]
+					+ playerToSave.playerLevel[20]
 					+ ","
-					+ clientToSave.playerXP[20] + ");");
+					+ playerToSave.playerXP[20] + ");");
 			query("INSERT INTO `skillsoverall` (`playerName`,`lvl`,`xp`) VALUES ('"
-					+ clientToSave.playerName
+					+ playerToSave.playerName
 					+ "',"
-					+ (clientToSave.getLevelForXP(clientToSave.playerXP[0])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[1])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[2])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[3])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[4])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[5])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[6])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[7])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[8])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[9])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[10])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[11])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[12])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[13])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[14])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[15])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[16])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[17])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[18])
-							+ clientToSave
-									.getLevelForXP(clientToSave.playerXP[19]) + clientToSave
-								.getLevelForXP(clientToSave.playerXP[20]))
+					+ (playerToSave.getLevelForXP(playerToSave.playerXP[0])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[1])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[2])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[3])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[4])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[5])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[6])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[7])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[8])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[9])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[10])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[11])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[12])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[13])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[14])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[15])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[16])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[17])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[18])
+							+ playerToSave
+									.getLevelForXP(playerToSave.playerXP[19]) + playerToSave
+								.getLevelForXP(playerToSave.playerXP[20]))
 					+ ","
-					+ ((clientToSave.playerXP[0]) + (clientToSave.playerXP[1])
-							+ (clientToSave.playerXP[2])
-							+ (clientToSave.playerXP[3])
-							+ (clientToSave.playerXP[4])
-							+ (clientToSave.playerXP[5])
-							+ (clientToSave.playerXP[6])
-							+ (clientToSave.playerXP[7])
-							+ (clientToSave.playerXP[8])
-							+ (clientToSave.playerXP[9])
-							+ (clientToSave.playerXP[10])
-							+ (clientToSave.playerXP[11])
-							+ (clientToSave.playerXP[12])
-							+ (clientToSave.playerXP[13])
-							+ (clientToSave.playerXP[14])
-							+ (clientToSave.playerXP[15])
-							+ (clientToSave.playerXP[16])
-							+ (clientToSave.playerXP[17])
-							+ (clientToSave.playerXP[18])
-							+ (clientToSave.playerXP[19]) + (clientToSave.playerXP[20]))
+					+ ((playerToSave.playerXP[0]) + (playerToSave.playerXP[1])
+							+ (playerToSave.playerXP[2])
+							+ (playerToSave.playerXP[3])
+							+ (playerToSave.playerXP[4])
+							+ (playerToSave.playerXP[5])
+							+ (playerToSave.playerXP[6])
+							+ (playerToSave.playerXP[7])
+							+ (playerToSave.playerXP[8])
+							+ (playerToSave.playerXP[9])
+							+ (playerToSave.playerXP[10])
+							+ (playerToSave.playerXP[11])
+							+ (playerToSave.playerXP[12])
+							+ (playerToSave.playerXP[13])
+							+ (playerToSave.playerXP[14])
+							+ (playerToSave.playerXP[15])
+							+ (playerToSave.playerXP[16])
+							+ (playerToSave.playerXP[17])
+							+ (playerToSave.playerXP[18])
+							+ (playerToSave.playerXP[19]) + (playerToSave.playerXP[20]))
 					+ ");");
 		} catch (Exception e) {
 			// e.printStackTrace();
@@ -244,7 +244,7 @@ public class MysqlManager {
 	 *            The session's client
 	 * @return The flag if true was successful
 	 */
-	public static boolean saveVotingInfo(Client c) {
+	public static boolean saveVotingInfo(Player c) {
 		try {
 			query("INSERT INTO `skills` (`playerName`,`playerPass') VALUES ('"
 					+ c.playerName + "'," + c.playerPass + ");");
@@ -255,7 +255,7 @@ public class MysqlManager {
 		return true;
 	}
 
-	public static int loadVotingPoints(Client c) {
+	public static int loadVotingPoints(Player c) {
 		try {
 			ResultSet group = statement
 					.executeQuery("SELECT * FROM user WHERE username = '"
@@ -274,7 +274,7 @@ public class MysqlManager {
 		return -1;
 	}
 
-	public static int loadDonationPoints(Client c) {
+	public static int loadDonationPoints(Player c) {
 		try {
 			ResultSet group = statement
 					.executeQuery("SELECT * FROM user WHERE username = '"

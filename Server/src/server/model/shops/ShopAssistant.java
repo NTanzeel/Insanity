@@ -3,16 +3,16 @@ package server.model.shops;
 import server.Config;
 import server.Server;
 import server.model.items.Item;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.world.ShopHandler;
 
 public class ShopAssistant {
 
-	private Client c;
+	private Player c;
 
-	public ShopAssistant(Client client) {
-		this.c = client;
+	public ShopAssistant(Player player) {
+		this.c = player;
 	}
 
 	public boolean shopSellsItem(int itemID) {

@@ -1,6 +1,6 @@
 package server.model.players.packets;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 import server.model.players.PlayerHandler;
 
@@ -10,7 +10,7 @@ import server.model.players.PlayerHandler;
 public class Walking implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		if (packetType == 248 || packetType == 164) {
 			c.faceUpdate(0);
 			c.npcIndex = 0;

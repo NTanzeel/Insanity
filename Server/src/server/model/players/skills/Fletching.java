@@ -1,13 +1,13 @@
 package server.model.players.skills;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.Config;
 
 public class Fletching {
 
-	Client c;
+	Player c;
 
-	public Fletching(Client c) {
+	public Fletching(Player c) {
 		this.c = c;
 	}
 

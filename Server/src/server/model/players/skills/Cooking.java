@@ -1,14 +1,14 @@
 package server.model.players.skills;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.util.Misc;
 import server.Config;
 
 public class Cooking {
 
-	Client c;
+	Player c;
 
-	public Cooking(Client c) {
+	public Cooking(Player c) {
 		this.c = c;
 	}
 

@@ -1,6 +1,6 @@
 package server.model.items;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.util.Misc;
 import server.Config;
 
@@ -12,8 +12,8 @@ import server.Config;
 
 public class UseItem {
 
-	public static void ItemonObject(Client c, int objectID, int objectX,
-			int objectY, int itemId) {
+	public static void ItemonObject(Player c, int objectID, int objectX,
+                                    int objectY, int itemId) {
 		if (!c.getItems().playerHasItem(itemId, 1))
 			return;
 		switch (objectID) {
@@ -41,7 +41,7 @@ public class UseItem {
 
 	}
 
-	public static void ItemonItem(Client c, int itemUsed, int useWith) {
+	public static void ItemonItem(Player c, int itemUsed, int useWith) {
 		if (itemUsed == 227 || useWith == 227)
 			c.getHerblore().handlePotMaking(itemUsed, useWith);
 		if (c.getItems().getItemName(itemUsed).contains("(")
@@ -266,7 +266,7 @@ public class UseItem {
 		}
 	}
 
-	public static void ItemonNpc(Client c, int itemId, int npcId, int slot) {
+	public static void ItemonNpc(Player c, int itemId, int npcId, int slot) {
 		switch (itemId) {
 
 		default:

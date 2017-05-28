@@ -1,6 +1,6 @@
 package server.model.players.packets;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 
 /**
@@ -9,7 +9,7 @@ import server.model.players.PacketType;
 public class MagicOnItems implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		int slot = c.getInStream().readSignedWord();
 		int itemId = c.getInStream().readSignedWordA();
 		c.getInStream().readSignedWord();

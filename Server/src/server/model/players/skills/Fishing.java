@@ -1,8 +1,8 @@
 package server.model.players.skills;
 
 import server.Config;
+import server.model.players.Player;
 import server.util.Misc;
-import server.model.players.Client;
 
 /**
  * Fishing.java
@@ -13,7 +13,7 @@ import server.model.players.Client;
 
 public class Fishing {
 
-	private Client c;
+	private Player c;
 	private int fishType;
 	private int exp;
 	private int req;
@@ -29,7 +29,7 @@ public class Fishing {
 	private final int[] EXP = { 10, 50, 80, 90, 120, 110, 46 };
 	private int equipmentType;
 
-	public Fishing(Client c) {
+	public Fishing(Player c) {
 		this.c = c;
 	}
 

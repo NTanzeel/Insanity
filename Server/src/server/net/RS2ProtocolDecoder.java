@@ -5,7 +5,7 @@ import org.apache.mina.common.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
 
-import server.model.players.Client;
+import server.model.players.Player;
 import server.util.ISAACRandomGen;
 
 public class RS2ProtocolDecoder extends CumulativeProtocolDecoder {
@@ -60,7 +60,7 @@ public class RS2ProtocolDecoder extends CumulativeProtocolDecoder {
 					/*
 					 * Find the packet size.
 					 */
-					size = Client.PACKET_SIZES[opcode];
+					size = Player.PACKET_SIZES[opcode];
 
 					/*
 					 * Set the cached opcode and size.

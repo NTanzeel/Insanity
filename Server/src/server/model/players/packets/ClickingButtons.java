@@ -3,7 +3,7 @@ package server.model.players.packets;
 import server.Config;
 import server.Server;
 import server.model.items.GameItem;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PacketType;
 import server.model.players.PlayerHandler;
 import server.util.Misc;
@@ -14,7 +14,7 @@ import server.util.Misc;
 public class ClickingButtons implements PacketType {
 
 	@Override
-	public void processPacket(Client c, int packetType, int packetSize) {
+	public void processPacket(Player c, int packetType, int packetSize) {
 		int actionButtonId = Misc.hexToInt(c.getInStream().buffer, 0,
 				packetSize);
 		// int actionButtonId = c.getInStream().readShort();
@@ -622,7 +622,7 @@ public class ClickingButtons implements PacketType {
 			break;
 
 		case 26018:
-			Client o = (Client) PlayerHandler.players[c.duelingWith];
+			Player o = (Player) PlayerHandler.players[c.duelingWith];
 			if (o == null) {
 				c.getTradeAndDuel().declineDuel();
 				return;
@@ -656,7 +656,7 @@ public class ClickingButtons implements PacketType {
 			if (c.duelStatus == 5) {
 				break;
 			}
-			Client o1 = (Client) PlayerHandler.players[c.duelingWith];
+			Player o1 = (Player) PlayerHandler.players[c.duelingWith];
 			if (o1 == null) {
 				c.getTradeAndDuel().declineDuel();
 				return;
@@ -933,7 +933,7 @@ public class ClickingButtons implements PacketType {
 				c.lastButton = System.currentTimeMillis();
 
 			}
-			Client ot = (Client) PlayerHandler.players[c.tradeWith];
+			Player ot = (Player) PlayerHandler.players[c.tradeWith];
 			if (ot == null) {
 				c.getTradeAndDuel().declineTrade();
 				c.sendMessage("Trade declined as the other player has disconnected.");
@@ -1003,7 +1003,7 @@ public class ClickingButtons implements PacketType {
 
 			}
 			c.tradeAccepted = true;
-			Client ot1 = (Client) PlayerHandler.players[c.tradeWith];
+			Player ot1 = (Player) PlayerHandler.players[c.tradeWith];
 			if (ot1 == null) {
 				c.getTradeAndDuel().declineTrade();
 				c.sendMessage("Trade declined as the other player has disconnected.");
@@ -1044,7 +1044,7 @@ public class ClickingButtons implements PacketType {
 			}
 			break;
 		case 125006:// Decline
-			c.sendMessage("You have chosen to decline, Client will be disconnected from the server.");
+			c.sendMessage("You have chosen to decline, Player will be disconnected from the server.");
 			break;
 		/* End Rules Interface Buttons */
 		/* Player Options */

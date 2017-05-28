@@ -1,6 +1,6 @@
 package server.world;
 
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * @author Sanity
@@ -8,7 +8,7 @@ import server.model.players.Client;
 
 public class Clan {
 
-	public Clan(Client c, String name) {
+	public Clan(Player c, String name) {
 		this.owner = c.playerName;
 		this.name = name;
 	}

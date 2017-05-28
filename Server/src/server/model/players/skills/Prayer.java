@@ -1,16 +1,16 @@
 package server.model.players.skills;
 
 import server.Config;
-import server.model.players.Client;
+import server.model.players.Player;
 
 public class Prayer {
 
-	Client c;
+	Player c;
 
 	public int[][] bonesExp = { { 526, 5 }, { 532, 15 }, { 534, 30 },
 			{ 536, 72 }, { 6729, 125 } };
 
-	public Prayer(Client c) {
+	public Prayer(Player c) {
 		this.c = c;
 	}
 

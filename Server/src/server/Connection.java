@@ -6,7 +6,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import server.model.players.Client;
+import server.model.players.Player;
 
 /**
  * Connection Check Class
@@ -310,7 +310,7 @@ public class Connection {
 		}
 	}
 
-	public static boolean isMuted(Client c) {
+	public static boolean isMuted(Player c) {
 		// return mutedNames.contains(c.playerName) ||
 		// mutedIps.contains(c.connectedFrom);
 		return false;

@@ -3,16 +3,16 @@ package server.model.items;
 import server.Config;
 import server.Server;
 import server.model.npcs.NPCHandler;
-import server.model.players.Client;
+import server.model.players.Player;
 import server.model.players.PlayerHandler;
 import server.util.Misc;
 
 public class ItemAssistant {
 
-	private Client c;
+	private Player c;
 
-	public ItemAssistant(Client client) {
-		this.c = client;
+	public ItemAssistant(Player player) {
+		this.c = player;
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class ItemAssistant {
 	 **/
 
 	public void dropAllItems() {
-		Client o = (Client) PlayerHandler.players[c.killerId];
+		Player o = (Player) PlayerHandler.players[c.killerId];
 
 		for (int i = 0; i < c.playerItems.length; i++) {
 			if (o != null) {
