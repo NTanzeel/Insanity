@@ -438,9 +438,6 @@ public class Player {
     private ActionHandler actionHandler = new ActionHandler(this);
     private DialogueHandler dialogueHandler = new DialogueHandler(this);
     private Queue<Packet> queuedPackets = new LinkedList<Packet>();
-    private Potions potions = new Potions(this);
-    private PotionMixing potionMixing = new PotionMixing(this);
-    private Food food = new Food(this);
     private Future<?> currentTask;
 
     public Player(IoSession s, int _playerId) {
@@ -1869,18 +1866,6 @@ public class Player {
 
     public IoSession getSession() {
         return session;
-    }
-
-    public Potions getPotions() {
-        return potions;
-    }
-
-    public PotionMixing getPotMixing() {
-        return potionMixing;
-    }
-
-    public Food getFood() {
-        return food;
     }
 
     /**
