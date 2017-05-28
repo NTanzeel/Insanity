@@ -3,8 +3,6 @@ package server.model.players;
 import org.apache.mina.common.IoSession;
 import server.Config;
 import server.Server;
-import server.model.items.Item;
-import server.model.items.ItemAssistant;
 import server.model.npcs.NPC;
 import server.model.npcs.NPCHandler;
 import server.net.HostList;
@@ -21,8 +19,6 @@ import java.util.concurrent.Future;
 
 public class Player {
 
-    private static final int maxPlayerListSize = Config.MAX_PLAYERS;
-    private static final int maxNPCListSize = NPCHandler.maxNPCs;
     public static final int PACKET_SIZES[] = {0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
             0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
             0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20
@@ -50,12 +46,15 @@ public class Player {
             0, 4, 0, 0, 0, 0, -1, 0, -1, 4,// 240
             0, 0, 6, 6, 0, 0, 0 // 250
     };
+    private static final int maxPlayerListSize = Config.MAX_PLAYERS;
+    private static final int maxNPCListSize = NPCHandler.maxNPCs;
     private static Stream playerProps;
 
     static {
         playerProps = new Stream(new byte[100]);
     }
 
+    public final int walkingQueueSize = 50;
     final int[] BOWS = {9185, 839, 845, 847, 851, 855, 859, 841, 843, 849, 853, 857, 861, 4212, 4214, 4215, 11235, 4216, 4217, 4218, 4219, 4220, 4221, 4222, 4223, 6724, 4734, 4934, 4935, 4936, 4937};
     final int[] ARROWS = {882, 884, 886, 888, 890, 892, 4740, 11212, 9140, 9141, 4142, 9143, 9144, 9240, 9241, 9242, 9243, 9244, 9245};
     final int[] NO_ARROW_DROP = {4212, 4214, 4215, 4216, 4217, 4218, 4219, 4220, 4221, 4222, 4223, 4734, 4934, 4935, 4936, 4937};
@@ -152,7 +151,6 @@ public class Player {
     final int[] PRAYER_GLOW = {83, 84, 85, 601, 602, 86, 87, 88, 89, 90, 91, 603, 604, 92, 93, 94, 95, 96, 97, 605, 606, 98, 99, 100, 607, 608};
     final int[] PRAYER_HEAD_ICONS = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 1, 0, -1, -1, 3, 5, 4, -1, -1};
     final int[] DUEL_RULE_ID = {1, 2, 16, 32, 64, 128, 256, 512, 1024, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 2097152, 8388608, 16777216, 67108864, 134217728};
-    public final int walkingQueueSize = 50;
     final int[] POUCH_SIZE = {3, 6, 9, 12};
     public boolean disconnected = false;
     public boolean isActive = false;
@@ -194,25 +192,10 @@ public class Player {
             {2026, 0}, // dharok
             {2025, 0} // ahrim
     };
-    int barrowsKillCount;
-    int reduceSpellId;
-    // the spell
-    long[] reduceSpellDelay = new long[6];
-    boolean[] canUseReducingSpell = {true, true, true, true, true, true};
     public int slayerTask, taskAmount;
-    int prayerId = -1;
-    int headIcon = -1;
-    long stopPrayerDelay;
-    boolean usingPrayer;
     public boolean[] prayerActive = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-    int duelTeleX;
-    int duelTeleY;
-    int duelSlot;
-    int duelSpaceReq;
-    int duelOption;
     public int duelingWith;
     public int duelStatus;
-    int headIconPk = -1, headIconHints;
     public boolean duelRequested;
     public boolean[] duelRule = new boolean[22];
     public boolean doubleHit, usingSpecial, npcDroppingItems, usingRangeWeapon, usingBow, usingMagic, castingMagic;
@@ -351,6 +334,21 @@ public class Player {
     protected int travelBackX[] = new int[walkingQueueSize];
     protected int travelBackY[] = new int[walkingQueueSize];
     protected int numTravelBackSteps = 0;
+    int barrowsKillCount;
+    int reduceSpellId;
+    // the spell
+    long[] reduceSpellDelay = new long[6];
+    boolean[] canUseReducingSpell = {true, true, true, true, true, true};
+    int prayerId = -1;
+    int headIcon = -1;
+    long stopPrayerDelay;
+    boolean usingPrayer;
+    int duelTeleX;
+    int duelTeleY;
+    int duelSlot;
+    int duelSpaceReq;
+    int duelOption;
+    int headIconPk = -1, headIconHints;
     ArrayList<Integer> attackedPlayers = new ArrayList<>();
     ArrayList<String> lastKilledPlayers = new ArrayList<>();
     long lastCast = 0;
@@ -430,7 +428,6 @@ public class Player {
     private int newWalkCmdY[] = new int[walkingQueueSize];
     private boolean newWalkCmdIsRunning = false;
     private IoSession session;
-    private ItemAssistant itemAssistant = new ItemAssistant(this);
     private PlayerAssistant playerAssistant = new PlayerAssistant(this);
     private ActionHandler actionHandler = new ActionHandler(this);
     private DialogueHandler dialogueHandler = new DialogueHandler(this);
@@ -890,11 +887,11 @@ public class Player {
             playerProps.writeByte(0);
         }
 
-        if (!Item.isFullBody(playerEquipment[playerChest])) {
-            playerProps.writeWord(0x100 + playerAppearance[3]);
-        } else {
-            playerProps.writeByte(0);
-        }
+//        if (!Item.isFullBody(playerEquipment[playerChest])) {
+        playerProps.writeWord(0x100 + playerAppearance[3]);
+//        } else {
+//            playerProps.writeByte(0);
+//        }
 
         if (playerEquipment[playerLegs] > 1) {
             playerProps.writeWord(0x200 + playerEquipment[playerLegs]);
@@ -902,11 +899,11 @@ public class Player {
             playerProps.writeWord(0x100 + playerAppearance[5]);
         }
 
-        if (!Item.isFullHelm(playerEquipment[playerHat]) && !Item.isFullMask(playerEquipment[playerHat])) {
-            playerProps.writeWord(0x100 + playerAppearance[1]);
-        } else {
-            playerProps.writeByte(0);
-        }
+//        if (!Item.isFullHelm(playerEquipment[playerHat]) && !Item.isFullMask(playerEquipment[playerHat])) {
+        playerProps.writeWord(0x100 + playerAppearance[1]);
+//        } else {
+//            playerProps.writeByte(0);
+//        }
 
         if (playerEquipment[playerHands] > 1) {
             playerProps.writeWord(0x200 + playerEquipment[playerHands]);
@@ -920,11 +917,11 @@ public class Player {
             playerProps.writeWord(0x100 + playerAppearance[6]);
         }
 
-        if (playerAppearance[0] != 1 && !Item.isFullMask(playerEquipment[playerHat])) {
-            playerProps.writeWord(0x100 + playerAppearance[7]);
-        } else {
-            playerProps.writeByte(0);
-        }
+//        if (playerAppearance[0] != 1 && !Item.isFullMask(playerEquipment[playerHat])) {
+        playerProps.writeWord(0x100 + playerAppearance[7]);
+//        } else {
+//            playerProps.writeByte(0);
+//        }
 
         playerProps.writeByte(playerAppearance[8]);
         playerProps.writeByte(playerAppearance[9]);
@@ -1023,10 +1020,6 @@ public class Player {
     }
 
     public boolean wearing2h() {
-        Player c = this;
-        String s = c.getItems().getItemName(c.playerEquipment[c.playerWeapon]);
-        if (s.contains("2h")) return true;
-        else if (s.contains("godsword")) return true;
         return false;
     }
 
@@ -1562,7 +1555,6 @@ public class Player {
             // }
             getPA().handleWeaponStyle();
             getPA().handleLoginText();
-            accountFlagged = getPA().checkForFlags();
             // getPA().sendFrame36(43, fightMode-1);
             getPA().sendFrame36(108, 0);// resets autocast button
             getPA().sendFrame36(172, 1);
@@ -1598,24 +1590,6 @@ public class Player {
             // sendMessage("@blu@ALL BETA ACCOUNTS WILL BE RESET - EXP is at 10x it will be @ normal release.");
             getPA().showOption(4, 0, "Trade With", 3);
             getPA().showOption(5, 0, "Follow", 4);
-            getItems().resetItems(3214);
-            getItems().sendWeapon(playerEquipment[playerWeapon], getItems().getItemName(playerEquipment[playerWeapon]));
-            getItems().resetBonus();
-            getItems().getBonus();
-            getItems().writeBonus();
-            getItems().setEquipment(playerEquipment[playerHat], 1, playerHat);
-            getItems().setEquipment(playerEquipment[playerCape], 1, playerCape);
-            getItems().setEquipment(playerEquipment[playerAmulet], 1, playerAmulet);
-            getItems().setEquipment(playerEquipment[playerArrows], playerEquipmentN[playerArrows], playerArrows);
-            getItems().setEquipment(playerEquipment[playerChest], 1, playerChest);
-            getItems().setEquipment(playerEquipment[playerShield], 1, playerShield);
-            getItems().setEquipment(playerEquipment[playerLegs], 1, playerLegs);
-            getItems().setEquipment(playerEquipment[playerHands], 1, playerHands);
-            getItems().setEquipment(playerEquipment[playerFeet], 1, playerFeet);
-            getItems().setEquipment(playerEquipment[playerRing], 1, playerRing);
-            getItems().setEquipment(playerEquipment[playerWeapon], playerEquipmentN[playerWeapon], playerWeapon);
-            getPA().logIntoPM();
-            getItems().addSpecialBar(playerEquipment[playerWeapon]);
             int saveTimer = Config.SAVE_TIMER;
             saveCharacter = true;
             Misc.println("[REGISTERED]: " + playerName + "");
@@ -1624,7 +1598,6 @@ public class Player {
             flushOutStream();
             getPA().clearClanChat();
             getPA().resetFollow();
-            if (addStarter) getPA().addStarter();
             if (autoRet == 1) getPA().sendFrame36(172, 1);
             else getPA().sendFrame36(172, 0);
         }
@@ -1691,15 +1664,6 @@ public class Player {
             if (specAmount < 10) {
                 specAmount += .5;
                 if (specAmount > 10) specAmount = 10;
-                getItems().addSpecialBar(playerEquipment[playerWeapon]);
-            }
-        }
-
-
-        if (walkingToItem) {
-            if (getX() == pItemX && getY() == pItemY || goodDistance(getX(), getY(), pItemX, pItemY, 1)) {
-                walkingToItem = false;
-                Server.itemHandler.removeGroundItem(this, pItemId, pItemX, pItemY, true);
             }
         }
 
@@ -1825,10 +1789,6 @@ public class Player {
 
     public synchronized Stream getOutStream() {
         return outStream;
-    }
-
-    public ItemAssistant getItems() {
-        return itemAssistant;
     }
 
     public PlayerAssistant getPA() {

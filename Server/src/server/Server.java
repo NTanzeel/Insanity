@@ -17,7 +17,6 @@ import server.net.ConnectionHandler;
 import server.net.ConnectionThrottleFilter;
 import server.util.SimpleTimer;
 import server.util.log.Logger;
-import server.world.ItemHandler;
 import server.world.ObjectHandler;
 import server.world.ObjectManager;
 
@@ -43,7 +42,6 @@ public class Server {
     private static boolean shutdownServer = false;
     private static int garbageCollectDelay = 40;
     private static int serverlistenerPort;
-    public static ItemHandler itemHandler = new ItemHandler();
     public static PlayerHandler playerHandler = new PlayerHandler();
     public static NPCHandler npcHandler = new NPCHandler();
     public static ObjectHandler objectHandler = new ObjectHandler();
@@ -109,7 +107,6 @@ public class Server {
                 else
                     Thread.sleep(600);
                 engineTimer.reset();
-                itemHandler.process();
                 playerHandler.process();
                 npcHandler.process();
                 objectManager.process();

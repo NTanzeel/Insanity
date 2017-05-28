@@ -273,15 +273,6 @@ public class PlayerHandler {
     }
 
     private void removePlayer(Player plr) {
-        if (plr.privateChat != 2) {
-            for (int i = 1; i < Config.MAX_PLAYERS; i++) {
-                if (players[i] == null || players[i].isActive == false) continue;
-                Player o = (Player) PlayerHandler.players[i];
-                if (o != null) {
-                    o.getPA().updatePM(plr.playerId, 0);
-                }
-            }
-        }
         plr.destruct();
     }
 

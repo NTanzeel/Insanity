@@ -6,10 +6,6 @@ import server.util.Misc;
 
 public class PlayerAssistant {
 
-    public static int Barrows[] = {4708, 4710, 4712, 4714, 4716, 4718, 4720, 4722, 4724, 4726, 4728, 4730, 4732, 4734, 4736, 4738, 4745, 4747, 4749, 4751, 4753, 4755, 4757, 4759};
-    public static int Runes[] = {4740, 558, 560, 565};
-    public static int Pots[] = {};
-    public int CraftInt, Dcolor, FletchInt;
     public int mapStatus = 0;
     /**
      * Show option, attack, trade, follow etc
@@ -21,55 +17,10 @@ public class PlayerAssistant {
         this.c = Player;
     }
 
-    /**
-     * MulitCombat icon
-     *
-     * @param i1 0 = off 1 = on
-     */
-    public void multiWay(int i1) {
-        // synchronized(c) {
-        c.outStream.createFrame(61);
-        c.outStream.writeByte(i1);
-        c.updateRequired = true;
-        c.setAppearanceUpdateRequired(true);
-    }
-
     /*
      * Vengeance
      */
-    public void castVeng() {
-        if (c.playerLevel[6] < 94) {
-            c.sendMessage("You need a magic level of 94 to cast this spell.");
-            return;
-        }
-        if (c.playerLevel[1] < 40) {
-            c.sendMessage("You need a defence level of 40 to cast this spell.");
-            return;
-        }
-        if (!c.getItems().playerHasItem(9075, 4) || !c.getItems().playerHasItem(557, 10) || !c.getItems().playerHasItem(560, 2)) {
-            c.sendMessage("You don't have the required runes to cast this spell.");
-            return;
-        }
-        if (System.currentTimeMillis() - c.lastCast < 30000) {
-            c.sendMessage("You can only cast vengeance every 30 seconds.");
-            return;
-        }
-        if (c.vengOn) {
-            c.sendMessage("You already have vengeance casted.");
-            return;
-        }
-        c.startAnimation(905);
-        c.gfx100(666);// Just use c.gfx100
-        c.getItems().deleteItem2(9075, 4);
-        c.getItems().deleteItem2(557, 10);// For these you need to change to
-        // deleteItem(item, itemslot,
-        // amount);.
-        c.getItems().deleteItem2(560, 2);
-        addSkillXP(112, 6);
-        refreshSkill(6);
-        c.vengOn = true;
-        c.lastCast = System.currentTimeMillis();
-    }
+
 
     public void clearClanChat() {
         c.clanId = -1;
@@ -575,203 +526,6 @@ public class PlayerAssistant {
     }
 
     /**
-     * Open bank
-     **/
-    public void openUpBank() {
-        // synchronized(c) {
-        if (c.getOutStream() != null && c != null) {
-            c.getItems().resetItems(5064);
-            c.getItems().rearrangeBank();
-            c.getItems().resetBank();
-            c.getItems().resetTempItems();
-            c.getOutStream().createFrame(248);
-            c.getOutStream().writeWordA(5292);
-            c.getOutStream().writeWord(5063);
-            c.flushOutStream();
-        }
-    }
-
-    /**
-     * Private Messaging
-     **/
-    public void logIntoPM() {
-        setPrivateMessaging(2);
-        for (int i1 = 0; i1 < Config.MAX_PLAYERS; i1++) {
-            Player p = PlayerHandler.players[i1];
-            if (p != null && p.isActive) {
-                Player o = (Player) p;
-                if (o != null) {
-                    o.getPA().updatePM(c.playerId, 1);
-                }
-            }
-        }
-        boolean pmLoaded = false;
-
-        for (int i = 0; i < c.friends.length; i++) {
-            if (c.friends[i] != 0) {
-                for (int i2 = 1; i2 < Config.MAX_PLAYERS; i2++) {
-                    Player p = PlayerHandler.players[i2];
-                    if (p != null && p.isActive && Misc.playerNameToInt64(p.playerName) == c.friends[i]) {
-                        Player o = (Player) p;
-                        if (o != null) {
-                            if (c.playerRights >= 2 || p.privateChat == 0 || (p.privateChat == 1 && o.getPA().isInPM(Misc.playerNameToInt64(c.playerName)))) {
-                                loadPM(c.friends[i], 1);
-                                pmLoaded = true;
-                            }
-                            break;
-                        }
-                    }
-                }
-                if (!pmLoaded) {
-                    loadPM(c.friends[i], 0);
-                }
-                pmLoaded = false;
-            }
-            for (int i1 = 1; i1 < Config.MAX_PLAYERS; i1++) {
-                Player p = PlayerHandler.players[i1];
-                if (p != null && p.isActive) {
-                    Player o = (Player) p;
-                    if (o != null) {
-                        o.getPA().updatePM(c.playerId, 1);
-                    }
-                }
-            }
-        }
-    }
-
-    public void updatePM(int pID, int world) { // used for private chat updates
-        Player p = PlayerHandler.players[pID];
-        if (p == null || p.playerName == null || p.playerName.equals("null")) {
-            return;
-        }
-        Player o = (Player) p;
-        long l = Misc.playerNameToInt64(PlayerHandler.players[pID].playerName);
-
-        if (p.privateChat == 0) {
-            for (int i = 0; i < c.friends.length; i++) {
-                if (c.friends[i] != 0) {
-                    if (l == c.friends[i]) {
-                        loadPM(l, world);
-                        return;
-                    }
-                }
-            }
-        } else if (p.privateChat == 1) {
-            for (int i = 0; i < c.friends.length; i++) {
-                if (c.friends[i] != 0) {
-                    if (l == c.friends[i]) {
-                        if (o.getPA().isInPM(Misc.playerNameToInt64(c.playerName))) {
-                            loadPM(l, world);
-                            return;
-                        } else {
-                            loadPM(l, 0);
-                            return;
-                        }
-                    }
-                }
-            }
-        } else if (p.privateChat == 2) {
-            for (int i = 0; i < c.friends.length; i++) {
-                if (c.friends[i] != 0) {
-                    if (l == c.friends[i] && c.playerRights < 2) {
-                        loadPM(l, 0);
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    public boolean isInPM(long l) {
-        for (int i = 0; i < c.friends.length; i++) {
-            if (c.friends[i] != 0) {
-                if (l == c.friends[i]) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Drink AntiPosion Potions
-     *
-     * @param itemId    The itemId
-     * @param itemSlot  The itemSlot
-     * @param newItemId The new item After Drinking
-     * @param healType  The type of poison it heals
-     */
-
-    public void potionPoisonHeal(int itemId, int itemSlot, int newItemId, int healType) {
-        if (c.duelRule[5]) {
-            c.sendMessage("Potions has been disabled in this duel!");
-            return;
-        }
-        if (!c.isDead && System.currentTimeMillis() - c.foodDelay > 2000) {
-            if (c.getItems().playerHasItem(itemId, 1, itemSlot)) {
-                c.sendMessage("You drink the " + c.getItems().getItemName(itemId).toLowerCase() + ".");
-                c.foodDelay = System.currentTimeMillis();
-                // Actions
-                if (healType == 1) {
-                    // Cures The Poison
-                } else if (healType == 2) {
-                    // Cures The Poison + protects from getting poison again
-                }
-                c.startAnimation(0x33D);
-                c.getItems().deleteItem(itemId, itemSlot, 1);
-                c.getItems().addItem(newItemId, 1);
-                requestUpdates();
-            }
-        }
-    }
-
-    /**
-     * Magic on items
-     **/
-
-    public void magicOnItems(int slot, int itemId, int spellId) {
-        if (!c.getItems().playerHasItem(itemId, 1, slot)) {
-            return;
-        }
-
-        switch (spellId) {
-            case 1162: // low alch
-                if (System.currentTimeMillis() - c.alchDelay > 1000) {
-                    if (itemId == 995) {
-                        c.sendMessage("You can't alch coins");
-                        break;
-                    }
-                    c.getItems().deleteItem(itemId, slot, 1);
-                    c.getItems().addItem(995, 0 / 3);
-                    c.startAnimation(c.MAGIC_SPELLS[49][2]);
-                    c.gfx100(c.MAGIC_SPELLS[49][3]);
-                    c.alchDelay = System.currentTimeMillis();
-                    sendFrame106(6);
-                    addSkillXP(c.MAGIC_SPELLS[49][7] * Config.MAGIC_EXP_RATE, 6);
-                    refreshSkill(6);
-                }
-                break;
-
-            case 1178: // high alch
-                if (System.currentTimeMillis() - c.alchDelay > 2000) {
-                    if (itemId == 995) {
-                        c.sendMessage("You can't alch coins");
-                        break;
-                    }
-                    c.getItems().deleteItem(itemId, slot, 1);
-                    c.getItems().addItem(995, (int) (0 * .75));
-                    c.startAnimation(c.MAGIC_SPELLS[50][2]);
-                    c.gfx100(c.MAGIC_SPELLS[50][3]);
-                    c.alchDelay = System.currentTimeMillis();
-                    sendFrame106(6);
-                    addSkillXP(c.MAGIC_SPELLS[50][7] * Config.MAGIC_EXP_RATE, 6);
-                    refreshSkill(6);
-                }
-                break;
-        }
-    }
-
-    /**
      * Dieing
      **/
 
@@ -801,7 +555,6 @@ public class PlayerAssistant {
         }
         resetDamageDone();
         c.specAmount = 10;
-        c.getItems().addSpecialBar(c.playerEquipment[c.playerWeapon]);
         c.lastVeng = 0;
         c.vengOn = false;
         resetFollowers();
@@ -815,24 +568,6 @@ public class PlayerAssistant {
             if (PlayerHandler.players[i] != null) {
                 PlayerHandler.players[i].damageTaken[c.playerId] = 0;
             }
-        }
-    }
-
-    public void vengMe() {
-        if (System.currentTimeMillis() - c.lastVeng > 30000) {
-            if (c.getItems().playerHasItem(557, 10) && c.getItems().playerHasItem(9075, 4) && c.getItems().playerHasItem(560, 2)) {
-                c.vengOn = true;
-                c.lastVeng = System.currentTimeMillis();
-                c.startAnimation(4410);
-                c.gfx100(726);
-                c.getItems().deleteItem(557, c.getItems().getItemSlot(557), 10);
-                c.getItems().deleteItem(560, c.getItems().getItemSlot(560), 2);
-                c.getItems().deleteItem(9075, c.getItems().getItemSlot(9075), 4);
-            } else {
-                c.sendMessage("You do not have the required runes to cast this spell. (9075 for astrals)");
-            }
-        } else {
-            c.sendMessage("You must wait 30 seconds before casting this again.");
         }
     }
 
@@ -856,36 +591,6 @@ public class PlayerAssistant {
         c.isDead = false;
         c.faceUpdate(-1);
         c.freezeTimer = 0;
-        if (c.duelStatus <= 4) {
-            c.getItems().resetKeepItems();
-            if ((c.playerRights == 2 && Config.ADMIN_DROP_ITEMS) || c.playerRights != 2) {
-                if (!c.isSkulled) { // what items to keep
-                    c.getItems().keepItem(0, true);
-                    c.getItems().keepItem(1, true);
-                    c.getItems().keepItem(2, true);
-                }
-                if (c.prayerActive[10] && System.currentTimeMillis() - c.lastProtItem > 700) {
-                    c.getItems().keepItem(3, true);
-                }
-                c.getItems().dropAllItems(); // drop all items
-                c.getItems().deleteAllItems(); // delete all items
-
-                if (!c.isSkulled) { // add the kept items once we finish
-                    // deleting and dropping them
-                    for (int i1 = 0; i1 < 3; i1++) {
-                        if (c.itemKeptId[i1] > 0) {
-                            c.getItems().addItem(c.itemKeptId[i1], 1);
-                        }
-                    }
-                }
-                if (c.prayerActive[10]) { // if we have protect items
-                    if (c.itemKeptId[3] > 0) {
-                        c.getItems().addItem(c.itemKeptId[3], 1);
-                    }
-                }
-            }
-            c.getItems().resetKeepItems();
-        }
         for (int i = 0; i < 20; i++) {
             c.playerLevel[i] = getLevelForXP(c.playerXP[i]);
             c.getPA().refreshSkill(i);
@@ -1385,12 +1090,6 @@ public class PlayerAssistant {
         c.setAppearanceUpdateRequired(true);
     }
 
-    public void handleAlt(int id) {
-        if (!c.getItems().playerHasItem(id)) {
-            c.getItems().addItem(id, 1);
-        }
-    }
-
     public void levelUp(int skill) {
         int totalLevel = (getLevelForXP(c.playerXP[0]) + getLevelForXP(c.playerXP[1]) + getLevelForXP(c.playerXP[2]) + getLevelForXP(c.playerXP[3]) + getLevelForXP(c.playerXP[4]) + getLevelForXP(c.playerXP[5]) + getLevelForXP(c.playerXP[6]) + getLevelForXP(c.playerXP[7]) + getLevelForXP(c.playerXP[8]) + getLevelForXP(c.playerXP[9]) + getLevelForXP(c.playerXP[10]) + getLevelForXP(c.playerXP[11]) + getLevelForXP(c.playerXP[12]) + getLevelForXP(c.playerXP[13]) + getLevelForXP(c.playerXP[14]) + getLevelForXP(c.playerXP[15]) + getLevelForXP(c.playerXP[16]) + getLevelForXP(c.playerXP[17]) + getLevelForXP(c.playerXP[18]) + getLevelForXP(c.playerXP[19]) + getLevelForXP(c.playerXP[20]));
         sendFrame126("Total Lvl: " + totalLevel, 3984);
@@ -1750,18 +1449,6 @@ public class PlayerAssistant {
         c.randomCoffin = Misc.random(3) + 1;
     }
 
-    public int randomBarrows() {
-        return Barrows[(int) (Math.random() * Barrows.length)];
-    }
-
-    public int randomRunes() {
-        return Runes[(int) (Math.random() * Runes.length)];
-    }
-
-    public int randomPots() {
-        return Pots[(int) (Math.random() * Pots.length)];
-    }
-
     /**
      * Show an arrow icon on the selected player.
      *
@@ -1786,21 +1473,6 @@ public class PlayerAssistant {
         }
     }
 
-    public int getNpcId(int id) {
-        for (int i = 0; i < NPCHandler.maxNPCs; i++) {
-            if (NPCHandler.npcs[i] != null) {
-                if (NPCHandler.npcs[i].npcId == id) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
-    public void removeObject(int x, int y) {
-        object(-1, x, x, 10, 10);
-    }
-
     private void objectToRemove(int X, int Y) {
         object(-1, X, Y, 10, 10);
     }
@@ -1809,16 +1481,6 @@ public class PlayerAssistant {
         object(-1, X, Y, -1, 0);
     }
 
-    public void removeObjects() {
-        objectToRemove(2638, 4688);
-        objectToRemove2(2635, 4693);
-        objectToRemove2(2634, 4693);
-    }
-
-    public void handleGlory(int gloryId) {
-        c.getDH().sendOption4("Edgeville", "Al Kharid", "Karamja", "Mage Bank");
-        c.usingGlory = true;
-    }
 
     public void resetVariables() {
         c.usingGlory = false;
@@ -1833,61 +1495,6 @@ public class PlayerAssistant {
         return toReturn;
     }
 
-    public boolean checkForFlags() {
-        int[][] itemsToCheck = {{995, 100000000}, {35, 5}, {667, 5}, {2402, 5}, {746, 5}, {4151, 150}, {565, 100000}, {560, 100000}, {555, 300000}, {11235, 10}};
-        for (int j = 0; j < itemsToCheck.length; j++) {
-            if (itemsToCheck[j][1] < c.getItems().getTotalCount(itemsToCheck[j][0])) return true;
-        }
-        return false;
-    }
-
-    public void addStarter() {
-        c.getItems().addItem(995, 100000);
-        c.getItems().addItem(1731, 1);
-        c.getItems().addItem(554, 200);
-        c.getItems().addItem(555, 200);
-        c.getItems().addItem(556, 200);
-        c.getItems().addItem(558, 600);
-        c.getItems().addItem(1381, 1);
-        c.getItems().addItem(1323, 1);
-        c.getItems().addItem(841, 1);
-        c.getItems().addItem(882, 500);
-        c.getItems().addItem(380, 100);
-    }
-
-    public int getWearingAmount() {
-        int count = 0;
-        for (int j = 0; j < c.playerEquipment.length; j++) {
-            if (c.playerEquipment[j] > 0) count++;
-        }
-        return count;
-    }
-
-    public void useOperate(int itemId) {
-        switch (itemId) {
-            case 1712:
-            case 1710:
-            case 1708:
-            case 1706:
-                handleGlory(itemId);
-                break;
-        }
-    }
-
-    public void getSpeared(int otherX, int otherY) {
-        int x = c.absX - otherX;
-        int y = c.absY - otherY;
-        if (x > 0) x = 1;
-        else if (x < 0) x = -1;
-        if (y > 0) y = 1;
-        else if (y < 0) y = -1;
-        moveCheck(x, y);
-        c.lastSpear = System.currentTimeMillis();
-    }
-
-    public void moveCheck(int xMove, int yMove) {
-        movePlayer(c.absX + xMove, c.absY + yMove, c.heightLevel);
-    }
 
     public int findKiller() {
         int killer = c.playerId;
@@ -1909,67 +1516,6 @@ public class PlayerAssistant {
             c.sendMessage("You have been poisoned.");
             c.poisonDamage = damage;
         }
-    }
-
-    public boolean checkForPlayer(int x, int y) {
-        for (Player p : PlayerHandler.players) {
-            if (p != null) {
-                if (p.getX() == x && p.getY() == y) return true;
-            }
-        }
-        return false;
-    }
-
-    public void checkPouch(int i) {
-        if (i < 0) return;
-        c.sendMessage("This pouch has " + c.pouches[i] + " rune ess in it.");
-    }
-
-    public void fillPouch(int i) {
-        if (i < 0) return;
-        int toAdd = c.POUCH_SIZE[i] - c.pouches[i];
-        if (toAdd > c.getItems().getItemAmount(1436)) {
-            toAdd = c.getItems().getItemAmount(1436);
-        }
-        if (toAdd > c.POUCH_SIZE[i] - c.pouches[i]) toAdd = c.POUCH_SIZE[i] - c.pouches[i];
-        if (toAdd > 0) {
-            c.getItems().deleteItem(1436, toAdd);
-            c.pouches[i] += toAdd;
-        }
-    }
-
-    public void emptyPouch(int i) {
-        if (i < 0) return;
-        int toAdd = c.pouches[i];
-        if (toAdd > c.getItems().freeSlots()) {
-            toAdd = c.getItems().freeSlots();
-        }
-        if (toAdd > 0) {
-            c.getItems().addItem(1436, toAdd);
-            c.pouches[i] -= toAdd;
-        }
-    }
-
-    public void fixAllBarrows() {
-        int totalCost = 0;
-        int cashAmount = c.getItems().getItemAmount(995);
-        for (int j = 0; j < c.playerItems.length; j++) {
-            boolean breakOut = false;
-            for (int i = 0; i < c.getItems().brokenBarrows.length; i++) {
-                if (c.playerItems[j] - 1 == c.getItems().brokenBarrows[i][1]) {
-                    if (totalCost + 80000 > cashAmount) {
-                        breakOut = true;
-                        c.sendMessage("You have run out of money.");
-                        break;
-                    } else {
-                        totalCost += 80000;
-                    }
-                    c.playerItems[j] = c.getItems().brokenBarrows[i][0] + 1;
-                }
-            }
-            if (breakOut) break;
-        }
-        if (totalCost > 0) c.getItems().deleteItem(995, c.getItems().getItemSlot(995), totalCost);
     }
 
     public void handleLoginText() {

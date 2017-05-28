@@ -1086,8 +1086,7 @@ public class NPCHandler {
                 c.magePoints += 1;
             if (NPCDrops.constantDrops.get(npcs[i].npcType) != null) {
                 for (int item : NPCDrops.constantDrops.get(npcs[i].npcType)) {
-                    Server.itemHandler.createGroundItem(c, item, npcs[i].absX,
-                            npcs[i].absY, 1, c.playerId);
+
                     // if (c.clanId >= 0)
                     // Server.clanChat.handleLootShare(c, item, 1);
                 }
@@ -1097,22 +1096,11 @@ public class NPCHandler {
                 if (rareDrops(i)) {
                     int random = Misc.random(NPCDrops.rareDrops
                             .get(npcs[i].npcType).length - 1);
-                    Server.itemHandler.createGroundItem(c,
-                            NPCDrops.rareDrops.get(npcs[i].npcType)[random][0],
-                            npcs[i].absX, npcs[i].absY,
-                            NPCDrops.rareDrops.get(npcs[i].npcType)[random][1],
-                            c.playerId);
+
                 } else {
                     int random = Misc.random(NPCDrops.normalDrops
                             .get(npcs[i].npcType).length - 1);
-                    Server.itemHandler
-                            .createGroundItem(
-                                    c,
-                                    NPCDrops.normalDrops.get(npcs[i].npcType)[random][0],
-                                    npcs[i].absX,
-                                    npcs[i].absY,
-                                    NPCDrops.normalDrops.get(npcs[i].npcType)[random][1],
-                                    c.playerId);
+
                     // Server.clanChat.handleLootShare(c,
                     // NPCDrops.normalDrops.get(npcs[i].npcType)[random][0],
                     // NPCDrops.normalDrops.get(npcs[i].npcType)[random][1]);
