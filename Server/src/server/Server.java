@@ -10,12 +10,10 @@ import org.apache.mina.transport.socket.nio.SocketAcceptorConfig;
 
 import server.event.EventManager;
 import server.model.npcs.NPCHandler;
-import server.model.npcs.NPCDrops;
 import server.model.players.PlayerHandler;
 import server.model.players.Player;
 import server.model.players.Client;
 import server.model.players.PlayerSave;
-import server.model.minigames.*;
 import server.net.ConnectionHandler;
 import server.net.ConnectionThrottleFilter;
 import server.util.SimpleTimer;
@@ -54,11 +52,7 @@ public class Server {
     public static ShopHandler shopHandler = new ShopHandler();
     public static ObjectHandler objectHandler = new ObjectHandler();
     public static ObjectManager objectManager = new ObjectManager();
-    public static CastleWars castleWars = new CastleWars();
-    public static FightPits fightPits = new FightPits();
-    private static PestControl pestControl = new PestControl();
     public static ClanChatHandler clanChat = new ClanChatHandler();
-    public static FightCaves fightCaves = new FightCaves();
 
     static {
         if (!Config.SERVER_DEBUG) {
@@ -125,8 +119,6 @@ public class Server {
                 npcHandler.process();
                 shopHandler.process();
                 objectManager.process();
-                fightPits.process();
-                pestControl.process();
                 long cycleTime = engineTimer.elapsed();
                 sleepTime = cycleRate - cycleTime;
                 totalCycleTime += cycleTime;
