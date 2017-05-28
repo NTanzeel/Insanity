@@ -20,7 +20,6 @@ public class Potions {
 		if (System.currentTimeMillis() - c.potDelay >= 1500) {
 			c.potDelay = System.currentTimeMillis();
 			c.foodDelay = c.potDelay;
-			c.getCombat().resetPlayerAttack();
 			c.attackTimer++;
 			switch (itemId) {
 			case 6685: // brews

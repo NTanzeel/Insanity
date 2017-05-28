@@ -731,9 +731,6 @@ public class PlayerAssistant {
 
     public void potionPoisonHeal(int itemId, int itemSlot, int newItemId,
                                  int healType) {
-        c.attackTimer = c.getCombat().getAttackDelay(
-                c.getItems().getItemName(c.playerEquipment[c.playerWeapon])
-                        .toLowerCase());
         if (c.duelRule[5]) {
             c.sendMessage("Potions has been disabled in this duel!");
             return;
@@ -769,9 +766,6 @@ public class PlayerAssistant {
         switch (spellId) {
             case 1162: // low alch
                 if (System.currentTimeMillis() - c.alchDelay > 1000) {
-                    if (!c.getCombat().checkMagicReqs(49)) {
-                        break;
-                    }
                     if (itemId == 995) {
                         c.sendMessage("You can't alch coins");
                         break;
@@ -790,9 +784,6 @@ public class PlayerAssistant {
 
             case 1178: // high alch
                 if (System.currentTimeMillis() - c.alchDelay > 2000) {
-                    if (!c.getCombat().checkMagicReqs(50)) {
-                        break;
-                    }
                     if (itemId == 995) {
                         c.sendMessage("You can't alch coins");
                         break;
@@ -932,7 +923,6 @@ public class PlayerAssistant {
             }
             c.getItems().resetKeepItems();
         }
-        c.getCombat().resetPrayers();
         for (int i = 0; i < 20; i++) {
             c.playerLevel[i] = getLevelForXP(c.playerXP[i]);
             c.getPA().refreshSkill(i);
@@ -963,7 +953,6 @@ public class PlayerAssistant {
         }
         // PlayerSaving.getSingleton().requestSave(c.playerId);
         PlayerSave.saveGame(c);
-        c.getCombat().resetPlayerAttack();
         resetAnimation();
         c.startAnimation(65535);
         frame1();
@@ -1035,8 +1024,6 @@ public class PlayerAssistant {
             return;
         }
         if (!c.isDead && c.teleTimer == 0 && c.respawnTimer == -6) {
-            if (c.playerIndex > 0 || c.npcIndex > 0)
-                c.getCombat().resetPlayerAttack();
             c.stopMovement();
             removeAllWindows();
             c.teleX = x;
@@ -1180,9 +1167,7 @@ public class PlayerAssistant {
             return;
         }
 
-        if (c.getCombat().usingHally() && hallyDistance && !sameSpot) {
-            return;
-        }
+
 
         if (c.usingRangeWeapon && rangeWeaponDistance && !sameSpot) {
             return;
@@ -1305,10 +1290,6 @@ public class PlayerAssistant {
 
         if ((c.usingBow || c.mageFollow || (c.npcIndex > 0 && c.autocastId > 0))
                 && bowDistance && !sameSpot) {
-            return;
-        }
-
-        if (c.getCombat().usingHally() && hallyDistance && !sameSpot) {
             return;
         }
 
@@ -1522,9 +1503,6 @@ public class PlayerAssistant {
      * reseting animation
      **/
     public void resetAnimation() {
-        c.getCombat().getPlayerAnimIndex(
-                c.getItems().getItemName(c.playerEquipment[c.playerWeapon])
-                        .toLowerCase());
         c.startAnimation(c.playerStandIndex);
         requestUpdates();
     }
@@ -2119,14 +2097,6 @@ public class PlayerAssistant {
             case 1708:
             case 1706:
                 handleGlory(itemId);
-                break;
-            case 11283:
-            case 11284:
-                if (c.playerIndex > 0) {
-                    c.getCombat().handleDfs();
-                } else if (c.npcIndex > 0) {
-                    c.getCombat().handleDfsNPC();
-                }
                 break;
         }
     }

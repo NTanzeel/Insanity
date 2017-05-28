@@ -1220,9 +1220,6 @@ public class ItemAssistant {
 			resetBonus();
 			getBonus();
 			writeBonus();
-			c.getCombat().getPlayerAnimIndex(
-					c.getItems().getItemName(c.playerEquipment[c.playerWeapon])
-							.toLowerCase());
 			c.getPA().requestUpdates();
 			return true;
 		} else {
@@ -1255,10 +1252,7 @@ public class ItemAssistant {
 				c.getItems().resetBonus();
 				c.getItems().getBonus();
 				c.getItems().writeBonus();
-				c.getCombat().getPlayerAnimIndex(
-						c.getItems()
-								.getItemName(c.playerEquipment[c.playerWeapon])
-								.toLowerCase());
+
 				c.updateRequired = true;
 				c.setAppearanceUpdateRequired(true);
 			}
@@ -1299,11 +1293,7 @@ public class ItemAssistant {
 					resetBonus();
 					getBonus();
 					writeBonus();
-					c.getCombat().getPlayerAnimIndex(
-							c.getItems()
-									.getItemName(
-											c.playerEquipment[c.playerWeapon])
-									.toLowerCase());
+
 					c.getOutStream().createFrame(34);
 					c.getOutStream().writeWord(6);
 					c.getOutStream().writeWord(1688);

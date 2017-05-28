@@ -435,7 +435,6 @@ public class Player {
     private ShopAssistant shopAssistant = new ShopAssistant(this);
     private TradeAndDuel tradeAndDuel = new TradeAndDuel(this);
     private PlayerAssistant playerAssistant = new PlayerAssistant(this);
-    private CombatAssistant combatAssistant = new CombatAssistant(this);
     private ActionHandler actionHandler = new ActionHandler(this);
     private DialogueHandler dialogueHandler = new DialogueHandler(this);
     private Queue<Packet> queuedPackets = new LinkedList<Packet>();
@@ -1622,7 +1621,6 @@ public class Player {
             getItems().setEquipment(playerEquipment[playerFeet], 1, playerFeet);
             getItems().setEquipment(playerEquipment[playerRing], 1, playerRing);
             getItems().setEquipment(playerEquipment[playerWeapon], playerEquipmentN[playerWeapon], playerWeapon);
-            getCombat().getPlayerAnimIndex(getItems().getItemName(playerEquipment[playerWeapon]).toLowerCase());
             getPA().logIntoPM();
             getItems().addSpecialBar(playerEquipment[playerWeapon]);
             int saveTimer = Config.SAVE_TIMER;
@@ -1718,8 +1716,6 @@ public class Player {
             getPA().followNpc();
         }
 
-        getCombat().handlePrayerDrain();
-
         if (System.currentTimeMillis() - singleCombatDelay > 3300) {
             underAttackBy = 0;
         }
@@ -1801,34 +1797,9 @@ public class Player {
             }
         }
 
-        if (hitDelay == 1) {
-            if (oldNpcIndex > 0) {
-                getCombat().delayedHit(oldNpcIndex);
-            }
-            if (oldPlayerIndex > 0) {
-                getCombat().playerDelayedHit(oldPlayerIndex);
-            }
-        }
 
         if (attackTimer > 0) {
             attackTimer--;
-        }
-
-        if (attackTimer == 1) {
-            if (npcIndex > 0 && clickNpcType == 0) {
-                getCombat().attackNpc(npcIndex);
-            }
-            if (playerIndex > 0) {
-                getCombat().attackPlayer(playerIndex);
-            }
-        } else if (attackTimer <= 0 && (npcIndex > 0 || playerIndex > 0)) {
-            if (npcIndex > 0) {
-                attackTimer = 0;
-                getCombat().attackNpc(npcIndex);
-            } else if (playerIndex > 0) {
-                attackTimer = 0;
-                getCombat().attackPlayer(playerIndex);
-            }
         }
 
         if (timeOutCounter > Config.TIMEOUT) {
@@ -1890,10 +1861,6 @@ public class Player {
 
     public TradeAndDuel getTradeAndDuel() {
         return tradeAndDuel;
-    }
-
-    public CombatAssistant getCombat() {
-        return combatAssistant;
     }
 
     public ActionHandler getActions() {

@@ -76,52 +76,7 @@ public class NPCHandler {
     }
 
     public void multiAttackDamage(int i) {
-        int max = getMaxHit(i);
-        for (int j = 0; j < PlayerHandler.players.length; j++) {
-            if (PlayerHandler.players[j] != null) {
-                Player c = (Player) PlayerHandler.players[j];
-                if (c.isDead || c.heightLevel != npcs[i].heightLevel)
-                    continue;
-                if (PlayerHandler.players[j].goodDistance(c.absX,
-                        c.absY, npcs[i].absX, npcs[i].absY, 15)) {
-                    if (npcs[i].attackType == 2) {
-                        if (!c.prayerActive[16]) {
-                            if (Misc.random(500) + 200 > Misc.random(c
-                                    .getCombat().mageDef())) {
-                                int dam = Misc.random(max);
-                                c.dealDamage(dam);
-                                c.handleHitMask(dam);
-                            } else {
-                                c.dealDamage(0);
-                                c.handleHitMask(0);
-                            }
-                        } else {
-                            c.dealDamage(0);
-                            c.handleHitMask(0);
-                        }
-                    } else if (npcs[i].attackType == 1) {
-                        if (!c.prayerActive[17]) {
-                            int dam = Misc.random(max);
-                            if (Misc.random(500) + 200 > Misc.random(c
-                                    .getCombat().calculateRangeDefence())) {
-                                c.dealDamage(dam);
-                                c.handleHitMask(dam);
-                            } else {
-                                c.dealDamage(0);
-                                c.handleHitMask(0);
-                            }
-                        } else {
-                            c.dealDamage(0);
-                            c.handleHitMask(0);
-                        }
-                    }
-                    if (npcs[i].endGfx > 0) {
-                        c.gfx0(npcs[i].endGfx);
-                    }
-                }
-                c.getPA().refreshSkill(3);
-            }
-        }
+
     }
 
     public int getClosePlayer(int i) {
@@ -1879,18 +1834,10 @@ public class NPCHandler {
             if (c.playerIndex <= 0 && c.npcIndex <= 0)
                 if (c.autoRet == 1)
                     c.npcIndex = i;
-            if (c.attackTimer <= 3 || c.attackTimer == 0 && c.npcIndex == 0
-                    && c.oldNpcIndex == 0) {
-                c.startAnimation(c.getCombat().getBlockEmote());
-            }
             if (c.respawnTimer <= 0) {
                 int damage = 0;
                 if (npcs[i].attackType == 0) {
                     damage = Misc.random(npcs[i].maxHit);
-                    if (10 + Misc.random(c.getCombat().calculateMeleeDefence()) > Misc
-                            .random(NPCHandler.npcs[i].attack)) {
-                        damage = 0;
-                    }
                     if (c.prayerActive[18]) { // protect from melee
                         damage = 0;
                     }
@@ -1901,10 +1848,6 @@ public class NPCHandler {
 
                 if (npcs[i].attackType == 1) { // range
                     damage = Misc.random(npcs[i].maxHit);
-                    if (10 + Misc.random(c.getCombat().calculateRangeDefence()) > Misc
-                            .random(NPCHandler.npcs[i].attack)) {
-                        damage = 0;
-                    }
                     if (c.prayerActive[17]) { // protect from range
                         damage = 0;
                     }
@@ -1916,11 +1859,6 @@ public class NPCHandler {
                 if (npcs[i].attackType == 2) { // magic
                     damage = Misc.random(npcs[i].maxHit);
                     boolean magicFailed = false;
-                    if (10 + Misc.random(c.getCombat().mageDef()) > Misc
-                            .random(NPCHandler.npcs[i].attack)) {
-                        damage = 0;
-                        magicFailed = true;
-                    }
                     if (c.prayerActive[16]) { // protect from magic
                         damage = 0;
                         magicFailed = true;

@@ -932,7 +932,6 @@ public class TradeAndDuel {
 			c.getPA().sendFrame126("", 6840);
 		}
 		c.duelStatus = 6;
-		c.getCombat().resetPrayers();
 		for (int i = 0; i < 20; i++) {
 			c.playerLevel[i] = c.getPA().getLevelForXP(c.playerXP[i]);
 			c.getPA().refreshSkill(i);
@@ -951,7 +950,6 @@ public class TradeAndDuel {
 		c.canOffer = true;
 		c.duelSpaceReq = 0;
 		c.duelingWith = 0;
-		c.getCombat().resetPlayerAttack();
 		c.duelRequested = false;
 	}
 
@@ -1053,7 +1051,6 @@ public class TradeAndDuel {
 		c.duelSpaceReq = 0;
 		c.duelingWith = 0;
 		c.getPA().requestUpdates();
-		c.getCombat().resetPlayerAttack();
 		c.duelRequested = false;
 	}
 
