@@ -1,6 +1,5 @@
 package server.model.players;
 
-import server.model.players.packets.ChangeRegions;
 import server.model.players.packets.Chat;
 import server.model.players.packets.SilentPacket;
 import server.model.players.packets.Walking;
@@ -17,9 +16,6 @@ public class PacketHandler {
         }
 
         packetId[4] = new Chat();
-        ChangeRegions cr = new ChangeRegions();
-        packetId[121] = cr;
-        packetId[210] = cr;
         Walking w = new Walking();
         packetId[98] = w;
         packetId[164] = w;
