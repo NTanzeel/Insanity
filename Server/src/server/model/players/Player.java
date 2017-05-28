@@ -423,7 +423,6 @@ public class Player {
     private boolean newWalkCmdIsRunning = false;
     private IoSession session;
     private PlayerAssistant playerAssistant = new PlayerAssistant(this);
-    private ActionHandler actionHandler = new ActionHandler(this);
     private Queue<Packet> queuedPackets = new LinkedList<Packet>();
     private Future<?> currentTask;
 
@@ -1754,9 +1753,6 @@ public class Player {
         return playerAssistant;
     }
 
-    public ActionHandler getActions() {
-        return actionHandler;
-    }
 
     public IoSession getSession() {
         return session;
