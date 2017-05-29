@@ -156,8 +156,6 @@ public class RS2LoginProtocolDecoder extends CumulativeProtocolDecoder {
         cl.playerName = name;
         cl.playerName2 = cl.playerName;
         cl.playerPass = pass;
-        cl.setInStreamDecryption(inC);
-        cl.setOutStreamDecryption(outC);
         cl.outStream.packetEncryption = outC;
 
         cl.saveCharacter = false;

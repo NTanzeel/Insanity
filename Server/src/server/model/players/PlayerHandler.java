@@ -1,34 +1,20 @@
 package server.model.players;
 
 import server.Config;
-import server.Server;
-import server.util.Misc;
 import server.util.Stream;
-
-import java.net.InetSocketAddress;
 
 public class PlayerHandler {
 
-    public static Player players[] = new Player[Config.MAX_PLAYERS];
-    public static String messageToAll = "";
+    public static final Player[] players = new Player[Config.MAX_PLAYERS];
     public static int playerCount = 0;
-    public static String playersCurrentlyOn[] = new String[Config.MAX_PLAYERS];
-    public static boolean updateAnnounced;
-    public static boolean updateRunning;
-    public static int updateSeconds;
-    public static long updateStartTime;
+    private static String playersCurrentlyOn[] = new String[Config.MAX_PLAYERS];
 
     static {
         for (int i = 0; i < Config.MAX_PLAYERS; i++)
             players[i] = null;
     }
 
-    private boolean kickAllPlayers = false;
     private Stream updateBlock = new Stream(new byte[Config.BUFFER_SIZE]);
-
-    public static int getPlayerCount() {
-        return playerCount;
-    }
 
     public static boolean isPlayerOn(String playerName) {
         synchronized (PlayerHandler.players) {
@@ -56,21 +42,11 @@ public class PlayerHandler {
         player1.playerId = slot;
         players[slot] = player1;
         players[slot].isActive = true;
-        players[slot].connectedFrom = ((InetSocketAddress) player1.getSession().getRemoteAddress()).getAddress().getHostAddress();
-        if (Config.SERVER_DEBUG)
-            Misc.println("Player Slot " + slot + " slot 0 " + players[0] + " Player Hit " + players[slot]);
+
         return true;
     }
 
-    public void destruct() {
-        for (int i = 0; i < Config.MAX_PLAYERS; i++) {
-            if (players[i] == null) continue;
-            players[i].destruct();
-            players[i] = null;
-        }
-    }
-
-    public void updatePlayerNames() {
+    private void updatePlayerNames() {
         playerCount = 0;
         for (int i = 0; i < Config.MAX_PLAYERS; i++) {
             if (players[i] != null) {
@@ -87,21 +63,12 @@ public class PlayerHandler {
 
             updatePlayerNames();
 
-            if (kickAllPlayers) {
-                for (int i = 1; i < Config.MAX_PLAYERS; i++) {
-                    if (players[i] != null) {
-                        players[i].disconnected = true;
-                    }
-                }
-            }
-
             for (int i = 0; i < Config.MAX_PLAYERS; i++) {
                 if (players[i] == null || !players[i].isActive) continue;
                 try {
 
-                    if (players[i].disconnected && (System.currentTimeMillis() - players[i].logoutDelay > 10000 || players[i].properLogout || kickAllPlayers)) {
-
-                        Player o = (Player) PlayerHandler.players[i];
+                    if (players[i].disconnected && (System.currentTimeMillis() - players[i].logoutDelay > 10000 || players[i].properLogout)) {
+                        Player o = PlayerHandler.players[i];
                         if (PlayerSave.saveGame(o)) {
                             System.out.println("Game saved for player " + players[i].playerName);
                         } else {
@@ -113,7 +80,11 @@ public class PlayerHandler {
                     }
 
                     players[i].preProcessing();
-                    while (players[i].processQueuedPackets()) ;
+                    boolean packetsProcessed;
+                    do {
+                        packetsProcessed = !players[i].processQueuedPackets();
+                    } while (!packetsProcessed);
+
                     players[i].process();
                     players[i].postProcessing();
                     players[i].getNextPlayerMovement();
@@ -126,9 +97,9 @@ public class PlayerHandler {
             for (int i = 0; i < Config.MAX_PLAYERS; i++) {
                 if (players[i] == null || !players[i].isActive) continue;
                 try {
-                    if (players[i].disconnected && (System.currentTimeMillis() - players[i].logoutDelay > 10000 || players[i].properLogout || kickAllPlayers)) {
+                    if (players[i].disconnected && (System.currentTimeMillis() - players[i].logoutDelay > 10000 || players[i].properLogout)) {
 
-                        Player o1 = (Player) PlayerHandler.players[i];
+                        Player o1 = PlayerHandler.players[i];
                         if (PlayerSave.saveGame(o1)) {
                             System.out.println("Game saved for player " + players[i].playerName);
                         } else {
@@ -137,26 +108,16 @@ public class PlayerHandler {
                         removePlayer(players[i]);
                         players[i] = null;
                     } else {
-                        // if(o.g) {
                         if (!players[i].initialized) {
                             players[i].initialize();
                             players[i].initialized = true;
                         } else {
                             players[i].update();
                         }
-                        // }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            }
-
-            if (updateRunning && !updateAnnounced) {
-                updateAnnounced = true;
-                Server.UpdateServer = true;
-            }
-            if (updateRunning && (System.currentTimeMillis() - updateStartTime > (updateSeconds * 1000))) {
-                kickAllPlayers = true;
             }
 
             for (int i = 0; i < Config.MAX_PLAYERS; i++) {
@@ -171,12 +132,8 @@ public class PlayerHandler {
     }
 
 
-    public void updatePlayer(Player plr, Stream str) {
+    void updatePlayer(Player plr, Stream str) {
         updateBlock.currentOffset = 0;
-        if (updateRunning && !updateAnnounced) {
-            str.createFrame(114);
-            str.writeWordBigEndian(updateSeconds * 50 / 30);
-        }
         plr.updateThisPlayerMovement(str);
         boolean saveChatTextUpdate = plr.isChatTextUpdateRequired();
         plr.setChatTextUpdateRequired(false);
@@ -200,9 +157,7 @@ public class PlayerHandler {
         }
 
         int j = 0;
-        for (int i = 0; i < Config.MAX_PLAYERS; i++) { // memory leak fix
-            // if(updateBlock.currentOffset >= 4000)
-            // break;
+        for (int i = 0; i < Config.MAX_PLAYERS; i++) {
             if (plr.playerListSize >= 254) break;
             if (updateBlock.currentOffset + str.currentOffset >= 4900) break;
             if (players[i] == null || !players[i].isActive || players[i] == plr) continue;

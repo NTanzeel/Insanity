@@ -4,11 +4,9 @@ import org.apache.mina.common.IoSession;
 import server.Config;
 import server.net.Packet;
 import server.net.StaticPacketBuilder;
-import server.util.ISAACRandomGen;
 import server.util.Misc;
 import server.util.Stream;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.Future;
@@ -50,185 +48,48 @@ public class Player {
     }
 
     public final int walkingQueueSize = 50;
-    final int[] BOWS = {9185, 839, 845, 847, 851, 855, 859, 841, 843, 849, 853, 857, 861, 4212, 4214, 4215, 11235, 4216, 4217, 4218, 4219, 4220, 4221, 4222, 4223, 6724, 4734, 4934, 4935, 4936, 4937};
-    final int[] ARROWS = {882, 884, 886, 888, 890, 892, 4740, 11212, 9140, 9141, 4142, 9143, 9144, 9240, 9241, 9242, 9243, 9244, 9245};
-    final int[] NO_ARROW_DROP = {4212, 4214, 4215, 4216, 4217, 4218, 4219, 4220, 4221, 4222, 4223, 4734, 4934, 4935, 4936, 4937};
-    final int[] OTHER_RANGE_WEAPONS = {863, 864, 865, 866, 867, 868, 869, 806, 807, 808, 809, 810, 811, 825, 826, 827, 828, 829, 830, 800, 801, 802, 803, 804, 805, 6522};
-    final int[][] MAGIC_SPELLS = {
-            // example {magicId, level req, animation, startGFX, projectile Id,
-            // endGFX, maxhit, exp gained, rune 1, rune 1 amount, rune 2, rune 2
-            // amount, rune 3, rune 3 amount, rune 4, rune 4 amount}
 
-            // Modern Spells
-            {1152, 1, 711, 90, 91, 92, 2, 5, 556, 1, 558, 1, 0, 0, 0, 0}, // wind
-            // strike
-            {1154, 5, 711, 93, 94, 95, 4, 7, 555, 1, 556, 1, 558, 1, 0, 0}, // water
-            // strike
-            {1156, 9, 711, 96, 97, 98, 6, 9, 557, 2, 556, 1, 558, 1, 0, 0},// earth
-            // strike
-            {1158, 13, 711, 99, 100, 101, 8, 11, 554, 3, 556, 2, 558, 1, 0, 0}, // fire
-            // strike
-            {1160, 17, 711, 117, 118, 119, 9, 13, 556, 2, 562, 1, 0, 0, 0, 0}, // wind
-            // bolt
-            {1163, 23, 711, 120, 121, 122, 10, 16, 556, 2, 555, 2, 562, 1, 0, 0}, // water bolt
-            {1166, 29, 711, 123, 124, 125, 11, 20, 556, 2, 557, 3, 562, 1, 0, 0}, // earth bolt
-            {1169, 35, 711, 126, 127, 128, 12, 22, 556, 3, 554, 4, 562, 1, 0, 0}, // fire bolt
-            {1172, 41, 711, 132, 133, 134, 13, 25, 556, 3, 560, 1, 0, 0, 0, 0}, // wind
-            // blast
-            {1175, 47, 711, 135, 136, 137, 14, 28, 556, 3, 555, 3, 560, 1, 0, 0}, // water blast
-            {1177, 53, 711, 138, 139, 140, 15, 31, 556, 3, 557, 4, 560, 1, 0, 0}, // earth blast
-            {1181, 59, 711, 129, 130, 131, 16, 35, 556, 4, 554, 5, 560, 1, 0, 0}, // fire blast
-            {1183, 62, 711, 158, 159, 160, 17, 36, 556, 5, 565, 1, 0, 0, 0, 0}, // wind
-            // wave
-            {1185, 65, 711, 161, 162, 163, 18, 37, 556, 5, 555, 7, 565, 1, 0, 0}, // water wave
-            {1188, 70, 711, 164, 165, 166, 19, 40, 556, 5, 557, 7, 565, 1, 0, 0}, // earth wave
-            {1189, 75, 711, 155, 156, 157, 20, 42, 556, 5, 554, 7, 565, 1, 0, 0}, // fire wave
-            {1153, 3, 716, 102, 103, 104, 0, 13, 555, 3, 557, 2, 559, 1, 0, 0}, // confuse
-            {1157, 11, 716, 105, 106, 107, 0, 20, 555, 3, 557, 2, 559, 1, 0, 0}, // weaken
-            {1161, 19, 716, 108, 109, 110, 0, 29, 555, 2, 557, 3, 559, 1, 0, 0}, // curse
-            {1542, 66, 729, 167, 168, 169, 0, 76, 557, 5, 555, 5, 566, 1, 0, 0}, // vulnerability
-            {1543, 73, 729, 170, 171, 172, 0, 83, 557, 8, 555, 8, 566, 1, 0, 0}, // enfeeble
-            {1562, 80, 729, 173, 174, 107, 0, 90, 557, 12, 555, 12, 556, 1, 0, 0}, // stun
-            {1572, 20, 711, 177, 178, 181, 0, 30, 557, 3, 555, 3, 561, 2, 0, 0}, // bind
-            {1582, 50, 711, 177, 178, 180, 2, 60, 557, 4, 555, 4, 561, 3, 0, 0}, // snare
-            {1592, 79, 711, 177, 178, 179, 4, 90, 557, 5, 555, 5, 561, 4, 0, 0}, // entangle
-            {1171, 39, 724, 145, 146, 147, 15, 25, 556, 2, 557, 2, 562, 1, 0, 0}, // crumble undead
-            {1539, 50, 708, 87, 88, 89, 25, 42, 554, 5, 560, 1, 0, 0, 0, 0}, // iban
-            // blast
-            {12037, 50, 1576, 327, 328, 329, 19, 30, 560, 1, 558, 4, 0, 0, 0, 0}, // magic dart
-            {1190, 60, 811, 0, 0, 76, 20, 60, 554, 2, 565, 2, 556, 4, 0, 0}, // sara
-            // strike
-            {1191, 60, 811, 0, 0, 77, 20, 60, 554, 1, 565, 2, 556, 4, 0, 0}, // cause
-            // of
-            // guthix
-            {1192, 60, 811, 0, 0, 78, 20, 60, 554, 4, 565, 2, 556, 1, 0, 0}, // flames
-            // of
-            // zammy
-            {12445, 85, 1819, 0, 344, 345, 0, 65, 563, 1, 562, 1, 560, 1, 0, 0}, // teleblock
-
-            // Ancient Spells
-            {12939, 50, 1978, 0, 384, 385, 13, 30, 560, 2, 562, 2, 554, 1, 556, 1}, // smoke rush
-            {12987, 52, 1978, 0, 378, 379, 14, 31, 560, 2, 562, 2, 566, 1, 556, 1}, // shadow rush
-            {12901, 56, 1978, 0, 0, 373, 15, 33, 560, 2, 562, 2, 565, 1, 0, 0}, // blood
-            // rush
-            {12861, 58, 1978, 0, 360, 361, 16, 34, 560, 2, 562, 2, 555, 2, 0, 0}, // ice rush
-            {12963, 62, 1979, 0, 0, 389, 19, 36, 560, 2, 562, 4, 556, 2, 554, 2}, // smoke burst
-            {13011, 64, 1979, 0, 0, 382, 20, 37, 560, 2, 562, 4, 556, 2, 566, 2}, // shadow burst
-            {12919, 68, 1979, 0, 0, 376, 21, 39, 560, 2, 562, 4, 565, 2, 0, 0}, // blood
-            // burst
-            {12881, 70, 1979, 0, 0, 363, 22, 40, 560, 2, 562, 4, 555, 4, 0, 0}, // ice
-            // burst
-            {12951, 74, 1978, 0, 386, 387, 23, 42, 560, 2, 554, 2, 565, 2, 556, 2}, // smoke blitz
-            {12999, 76, 1978, 0, 380, 381, 24, 43, 560, 2, 565, 2, 556, 2, 566, 2}, // shadow blitz
-            {12911, 80, 1978, 0, 374, 375, 25, 45, 560, 2, 565, 4, 0, 0, 0, 0}, // blood
-            // blitz
-            {12871, 82, 1978, 366, 0, 367, 26, 46, 560, 2, 565, 2, 555, 3, 0, 0}, // ice blitz
-            {12975, 86, 1979, 0, 0, 391, 27, 48, 560, 4, 565, 2, 556, 4, 554, 4}, // smoke barrage
-            {13023, 88, 1979, 0, 0, 383, 28, 49, 560, 4, 565, 2, 556, 4, 566, 3}, // shadow barrage
-            {12929, 92, 1979, 0, 0, 377, 29, 51, 560, 4, 565, 4, 566, 1, 0, 0}, // blood
-            // barrage
-            {12891, 94, 1979, 0, 0, 369, 30, 52, 560, 4, 565, 2, 555, 6, 0, 0}, // ice
-            // barrage
-
-            {-1, 80, 811, 301, 0, 0, 0, 0, 554, 3, 565, 3, 556, 3, 0, 0}, // charge
-            {-1, 21, 712, 112, 0, 0, 0, 10, 554, 3, 561, 1, 0, 0, 0, 0}, // low
-            // alch
-            {-1, 55, 713, 113, 0, 0, 0, 20, 554, 5, 561, 1, 0, 0, 0, 0}, // high
-            // alch
-            {-1, 33, 728, 142, 143, 144, 0, 35, 556, 1, 563, 1, 0, 0, 0, 0} // telegrab
-
-    };
-    final int[] REDUCE_SPELL_TIME = {250000, 250000, 250000, 500000, 500000, 500000}; // how long does the other player stay immune to
-    final int[] REDUCE_SPELLS = {1153, 1157, 1161, 1542, 1543, 1562};
-    final int[] PRAYER_LEVEL_REQUIRED = {1, 4, 7, 8, 9, 10, 13, 16, 19, 22, 25, 26, 27, 28, 31, 34, 37, 40, 43, 44, 45, 46, 49, 52, 60, 70};
     final int[] PRAYER = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
-    final String[] PRAYER_NAME = {"Thick Skin", "Burst of Strength", "Clarity of Thought", "Sharp Eye", "Mystic Will", "Rock Skin", "Superhuman Strength", "Improved Reflexes", "Rapid Restore", "Rapid Heal", "Protect Item", "Hawk Eye", "Mystic Lore", "Steel Skin", "Ultimate Strength", "Incredible Reflexes", "Protect from Magic", "Protect from Missiles", "Protect from Melee", "Eagle Eye", "Mystic Might", "Retribution", "Redemption", "Smite", "Chivalry", "Piety"};
     final int[] PRAYER_GLOW = {83, 84, 85, 601, 602, 86, 87, 88, 89, 90, 91, 603, 604, 92, 93, 94, 95, 96, 97, 605, 606, 98, 99, 100, 607, 608};
-    final int[] PRAYER_HEAD_ICONS = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, 2, 1, 0, -1, -1, 3, 5, 4, -1, -1};
-    final int[] DUEL_RULE_ID = {1, 2, 16, 32, 64, 128, 256, 512, 1024, 4096, 8192, 16384, 32768, 65536, 131072, 262144, 524288, 2097152, 8388608, 16777216, 67108864, 134217728};
-    final int[] POUCH_SIZE = {3, 6, 9, 12};
     public boolean disconnected = false;
     public boolean isActive = false;
-    public boolean isSkulled = false;
     public boolean saveCharacter = false;
-    public boolean autocasting = false;
     public boolean addStarter = false;
-    public int specBarId;
-    public int attackLevelReq;
-    public int defenceLevelReq;
-    public int strengthLevelReq;
-    public int rangeLevelReq;
-    public int magicLevelReq;
-    public int followId;
-    public int skullTimer;
-    public int autocastId;
-    public int followId2;
-    public int pcPoints = 0;
-    public int magePoints = 0;
+
+
     public int autoRet = 0;
-    public int lastNpcAttacked = 0;
-    public int killCount = 0;
+
+
     public String properName;
-    public int[] voidStatus = new int[5];
-    public int[] itemKeptId = new int[4];
-    public boolean[] invSlot = new boolean[28], equipSlot = new boolean[14];
-    public double specAmount = 0;
-    public int underAttackBy;
-    public int underAttackBy2;
-    public int respawnTimer;
-    public long lastSpear;
-    public long singleCombatDelay2;
+
     public long logoutDelay;
-    public boolean mageAllowed;
-    public int[][] barrowsNpcs = {{2030, 0}, // verac
-            {2029, 0}, // toarg
-            {2028, 0}, // karil
-            {2027, 0}, // guthan
-            {2026, 0}, // dharok
-            {2025, 0} // ahrim
-    };
-    public int slayerTask, taskAmount;
+
+
     public boolean[] prayerActive = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
-    public int duelingWith;
-    public int duelStatus;
-    public boolean duelRequested;
-    public boolean[] duelRule = new boolean[22];
-    public boolean doubleHit, usingSpecial, npcDroppingItems, usingRangeWeapon, usingBow, usingMagic, castingMagic;
-    public int specMaxHitIncrease, freezeDelay, freezeTimer = -6, killerId, playerIndex, oldPlayerIndex, lastWeaponUsed, projectileStage, crystalBowArrowCount, playerMagicBook, teleGfx, teleEndAnimation, teleHeight, teleX, teleY, rangeItemUsed, killingNpcIndex, totalDamageDealt, oldNpcIndex, fightMode, attackTimer, npcIndex, npcClickIndex, npcType, castingSpellId, oldSpellId, spellId, hitDelay;
-    public boolean magicFailed, oldMagicFailed;
-    public int bowSpecShot, clickNpcType, clickObjectType, objectId, objectX, objectY, objectXOffset, objectYOffset, objectDistance;
-    public int pItemX, pItemY, pItemId;
-    public boolean isMoving, walkingToItem;
-    public boolean isShopping, updateShop;
-    public int myShopId;
-    public int tradeStatus, tradeWith;
-    public boolean forcedChatUpdateRequired, inDuel, tradeAccepted, goodTrade, inTrade, tradeRequested, tradeResetNeeded, tradeConfirmed, tradeConfirmed2, canOffer, acceptTrade, acceptedTrade;
-    public int attackAnim, animationRequest = -1, animationWaitCycles;
-    public int[] playerBonus = new int[12];
+
+    public int fightMode;
+
+    public boolean isMoving;
+
+    public boolean forcedChatUpdateRequired;
+    public int animationRequest = -1, animationWaitCycles;
+
     public boolean isRunning2 = true;
-    public boolean takeAsNote;
+
     public int combatLevel;
     public boolean saveFile = false;
     public int playerAppearance[] = new int[13];
     public int apset;
     public int actionID;
-    public int wearId, wearSlot, interfaceId;
-    public int tutorial = 15;
-    public boolean usingGlory = false;
-    public boolean antiFirePot = false;
-    public String connectedFrom = "";
-    public String globalMessage = "";
+
     public int playerId = -1;
     public String playerName = null;
     public String playerName2 = null;
     public String playerPass = null;
     public int playerRights;
+
     public PlayerHandler handler = null;
-    public int playerItems[] = new int[28];
-    public int playerItemsN[] = new int[28];
-    public int bankItems[] = new int[Config.BANK_SIZE];
-    public int bankItemsN[] = new int[Config.BANK_SIZE];
-    public boolean bankNotes = false;
+
     public int playerStandIndex = 0x328;
     public int playerTurnIndex = 0x337;
     public int playerWalkIndex = 0x333;
@@ -251,7 +112,7 @@ public class Player {
     public int playerDefence = 1;
     public int playerStrength = 2;
     public int playerHitpoints = 3;
-    // {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,3,2,1,4,6,5};
+
     public int playerRanged = 4;
     public int playerPrayer = 5;
     public int playerMagic = 6;
@@ -276,14 +137,12 @@ public class Player {
     public Player playerList[] = new Player[maxPlayerListSize];
     public int playerListSize = 0;
     public byte playerInListBitmap[] = new byte[(Config.MAX_PLAYERS + 7) >> 3];
-    public int npcListSize = 0;
+
     public int mapRegionX, mapRegionY;
     public int absX, absY;
     public int currentX, currentY;
     public int heightLevel;
-    public int playerSE = 0x328;
-    public int playerSEW = 0x333;
-    public int playerSER = 0x334;
+
     public boolean updateRequired = true;
     public int walkingQueueX[] = new int[walkingQueueSize], walkingQueueY[] = new int[walkingQueueSize];
     public int wQueueReadPtr = 0;
@@ -293,9 +152,7 @@ public class Player {
     public boolean didTeleport = false;
     public boolean mapRegionDidChange = false;
     public int dir1 = -1, dir2 = -1;
-    public boolean createItems = false;
-    public int poimiX = 0, poimiY = 0;
-    public byte cachedPropertiesBitmap[] = new byte[(Config.MAX_PLAYERS + 7) >> 3];
+
     public int DirectionCount = 0;
     public boolean isDead = false;
     public String forcedText = "null";
@@ -308,14 +165,10 @@ public class Player {
     public int face = -1;
     public int FocusPointX = -1, FocusPointY = -1;
     public int newWalkCmdSteps = 0;
-    public int[] damageTaken = new int[Config.MAX_PLAYERS];
     public byte buffer[] = null;
     public Stream inStream = null, outStream = null;
-    public int lowMemoryVersion = 0;
     public int timeOutCounter = 0;
-    public int returnCode = 2;
     public int packetSize = 0, packetType = -1;
-    public int donatorPoints = 0;
     protected int hitDiff2;
     protected boolean hitUpdateRequired2;
     protected boolean mask100update = false;
@@ -327,87 +180,14 @@ public class Player {
     protected int travelBackX[] = new int[walkingQueueSize];
     protected int travelBackY[] = new int[walkingQueueSize];
     protected int numTravelBackSteps = 0;
-    int barrowsKillCount;
-    int reduceSpellId;
-    // the spell
-    long[] reduceSpellDelay = new long[6];
-    boolean[] canUseReducingSpell = {true, true, true, true, true, true};
-    int prayerId = -1;
-    int headIcon = -1;
-    long stopPrayerDelay;
-    boolean usingPrayer;
-    int duelTeleX;
-    int duelTeleY;
-    int duelSlot;
-    int duelSpaceReq;
-    int duelOption;
-    int headIconPk = -1, headIconHints;
-    ArrayList<Integer> attackedPlayers = new ArrayList<>();
-    ArrayList<String> lastKilledPlayers = new ArrayList<>();
-    long lastCast = 0;
+
+
     boolean initialized = false;
-    boolean RebuildNPCList = false;
     boolean newPlayer = false;
-    boolean mageFollow = false;
-    boolean dbowSpec = false;
     boolean properLogout = false;
-    boolean maxNextHit = false;
-    boolean ssSpec = false;
-    boolean vengOn = false;
-    boolean accountFlagged = false;
-    boolean msbSpec = false;
-    int pkPoints;
-    int totalPlayerDamageDealt;
-    int killedBy;
-    int lastChatId = 1;
-    int privateChat;
-    int dialogueId;
-    int randomCoffin;
+
     int newLocation;
-    int specEffect;
-    int nextChat = 0;
-    int talkingNpc = -1;
-    int dialogueAction = 0;
-    int followDistance;
-    int barrageCount = 0;
-    int delayedDamage = 0;
-    int delayedDamage2 = 0;
-    int lastArrowUsed = -1;
-    int clanId = -1;
-    int pcDamage = 0;
-    int waveId;
-    int frozenBy = 0;
-    int poisonDamage = 0;
-    int teleAction = 0;
-    int bonusAttack = 0;
-    int[] pouches = new int[4];
-    long friends[] = new long[200];
-    double specAccuracy = 1;
-    double specDamage = 1;
-    double prayerPoint = 1.0;
-    int wildLevel;
-    int teleTimer;
-    int teleBlockLength;
-    long lastPoisonSip;
-    long poisonImmune;
-    long lastProtItem;
-    long dfsDelay;
-    long lastVeng;
-    long protMageDelay;
-    long protMeleeDelay;
-    long protRangeDelay;
-    long alchDelay;
-    long teleBlockDelay;
-    long godSpellDelay;
-    long singleCombatDelay;
-    long reduceStat;
-    long foodDelay;
-    long potDelay;
-    private int duelCount;
-    private long lastPoison;
-    private long specDelay = System.currentTimeMillis();
-    private long duelDelay;
-    private long restoreStatsDelay;
+
     private byte poisonMask = 0;
     private boolean appearanceUpdateRequired = true;
     private int hitDiff = 0;
@@ -429,13 +209,6 @@ public class Player {
         playerId = _playerId;
         playerRights = 0;
 
-        for (int i = 0; i < playerItems.length; i++) {
-            playerItems[i] = 0;
-        }
-        for (int i = 0; i < playerItemsN.length; i++) {
-            playerItemsN[i] = 0;
-        }
-
         for (int i = 0; i < playerLevel.length; i++) {
             if (i == 3) {
                 playerLevel[i] = 10;
@@ -450,13 +223,6 @@ public class Player {
             } else {
                 playerXP[i] = 0;
             }
-        }
-        for (int i = 0; i < Config.BANK_SIZE; i++) {
-            bankItems[i] = 0;
-        }
-
-        for (int i = 0; i < Config.BANK_SIZE; i++) {
-            bankItemsN[i] = 0;
         }
 
         playerAppearance[0] = 0; // gender
@@ -508,59 +274,7 @@ public class Player {
         buffer = new byte[Config.BUFFER_SIZE];
     }
 
-    public boolean fullVoidRange() {
-        return playerEquipment[playerHat] == 11664 && playerEquipment[playerLegs] == 8840 && playerEquipment[playerChest] == 8839 && playerEquipment[playerHands] == 8842;
-    }
-
-    public boolean fullVoidMage() {
-        return playerEquipment[playerHat] == 11663 && playerEquipment[playerLegs] == 8840 && playerEquipment[playerChest] == 8839 && playerEquipment[playerHands] == 8842;
-    }
-
-    public boolean fullVoidMelee() {
-        return playerEquipment[playerHat] == 11665 && playerEquipment[playerLegs] == 8840 && playerEquipment[playerChest] == 8839 && playerEquipment[playerHands] == 8842;
-    }
-
-    /**
-     * SouthWest, NorthEast, SouthWest, NorthEast
-     */
-
-    public boolean inArea(int x, int y, int x1, int y1) {
-        return absX > x && absX < x1 && absY < y && absY > y1;
-    }
-
-    public boolean inWild() {
-        return absX > 2941 && absX < 3392 && absY > 3518 && absY < 3966 || absX > 2941 && absX < 3392 && absY > 9918 && absY < 10366;
-    }
-
-    public boolean arenas() {
-        return absX > 3331 && absX < 3391 && absY > 3242 && absY < 3260;
-    }
-
-    public boolean inDuelArena() {
-        return (absX > 3322 && absX < 3394 && absY > 3195 && absY < 3291) || (absX > 3311 && absX < 3323 && absY > 3223 && absY < 3248);
-    }
-
-    public boolean inMulti() {
-        return (absX >= 3136 && absX <= 3327 && absY >= 3519 && absY <= 3607) || (absX >= 3190 && absX <= 3327 && absY >= 3648 && absY <= 3839) || (absX >= 3200 && absX <= 3390 && absY >= 3840 && absY <= 3967) || (absX >= 2992 && absX <= 3007 && absY >= 3912 && absY <= 3967) || (absX >= 2946 && absX <= 2959 && absY >= 3816 && absY <= 3831) || (absX >= 3008 && absX <= 3199 && absY >= 3856 && absY <= 3903) || (absX >= 3008 && absX <= 3071 && absY >= 3600 && absY <= 3711) || (absX >= 3072 && absX <= 3327 && absY >= 3608 && absY <= 3647) || (absX >= 2624 && absX <= 2690 && absY >= 2550 && absY <= 2619) || (absX >= 2371 && absX <= 2422 && absY >= 5062 && absY <= 5117) || (absX >= 2896 && absX <= 2927 && absY >= 3595 && absY <= 3630) || (absX >= 2892 && absX <= 2932 && absY >= 4435 && absY <= 4464) || (absX >= 2256 && absX <= 2287 && absY >= 4680 && absY <= 4711);
-    }
-
-    public boolean inFightCaves() {
-        return absX >= 2360 && absX <= 2445 && absY >= 5045 && absY <= 5125;
-    }
-
-    public boolean inPirateHouse() {
-        return absX >= 3038 && absX <= 3044 && absY >= 3949 && absY <= 3959;
-    }
-
-    public void updateshop(int i) {
-        Player p = PlayerHandler.players[playerId];
-    }
-
     public void println_debug(String str) {
-        System.out.println("[player-" + playerId + "]: " + str);
-    }
-
-    public void println(String str) {
         System.out.println("[player-" + playerId + "]: " + str);
     }
 
@@ -592,21 +306,6 @@ public class Player {
         walkingQueueY[wQueueWritePtr] = y;
         wQueueWritePtr = next;
         // }
-    }
-
-    public boolean goodDistance(int objectX, int objectY, int playerX, int playerY, int distance) {
-        for (int i = 0; i <= distance; i++) {
-            for (int j = 0; j <= distance; j++) {
-                if ((objectX + i) == playerX && ((objectY + j) == playerY || (objectY - j) == playerY || objectY == playerY)) {
-                    return true;
-                } else if ((objectX - i) == playerX && ((objectY + j) == playerY || (objectY - j) == playerY || objectY == playerY)) {
-                    return true;
-                } else if (objectX == playerX && ((objectY + j) == playerY || (objectY - j) == playerY || objectY == playerY)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     public int getNextWalkingDirection() {
@@ -807,10 +506,8 @@ public class Player {
 
         playerProps.writeByte(playerAppearance[0]);
 
-        playerProps.writeByte(headIcon);
-        playerProps.writeByte(headIconPk);
-        // playerProps.writeByte(headIconHints);
-        // playerProps.writeByte(bountyIcon);
+        playerProps.writeByte(-1); // Head Icon
+        playerProps.writeByte(-1); // Head Icon PK.
 
         if (playerEquipment[playerHat] > 1) {
             playerProps.writeWord(0x200 + playerEquipment[playerHat]);
@@ -950,13 +647,6 @@ public class Player {
         str.writeBytes_reverse(getChatText(), getChatTextSize(), 0);
     }
 
-    public void forcedChat(String text) {
-        forcedText = text;
-        forcedChatUpdateRequired = true;
-        updateRequired = true;
-        setAppearanceUpdateRequired(true);
-    }
-
     public void appendForcedChat(Stream str) {
         str.writeString(forcedText);
     }
@@ -966,39 +656,6 @@ public class Player {
         str.writeDWord(mask100var2);
     }
 
-    public void gfx100(int gfx) {
-        mask100var1 = gfx;
-        mask100var2 = 6553600;
-        mask100update = true;
-        updateRequired = true;
-    }
-
-    public void gfx0(int gfx) {
-        mask100var1 = gfx;
-        mask100var2 = 65536;
-        mask100update = true;
-        updateRequired = true;
-    }
-
-    public boolean wearing2h() {
-        return false;
-    }
-
-    /**
-     * Animations
-     **/
-    public void startAnimation(int animId) {
-        if (wearing2h() && animId == 829) return;
-        animationRequest = animId;
-        animationWaitCycles = 0;
-        updateRequired = true;
-    }
-
-    public void startAnimation(int animId, int time) {
-        animationRequest = animId;
-        animationWaitCycles = time;
-        updateRequired = true;
-    }
 
     public void appendAnimationRequest(Stream str) {
         str.writeWordBigEndian((animationRequest == -1) ? 65535 : animationRequest);
@@ -1015,11 +672,6 @@ public class Player {
         str.writeWordBigEndian(face);
     }
 
-    public void turnPlayerTo(int pointX, int pointY) {
-        FocusPointX = 2 * pointX + 1;
-        FocusPointY = 2 * pointY + 1;
-        updateRequired = true;
-    }
 
     private void appendSetFocusDestination(Stream str) {
         str.writeWordBigEndianA(FocusPointX);
@@ -1152,16 +804,6 @@ public class Player {
         face = 65535;
     }
 
-    public void stopMovement() {
-        if (teleportToX <= 0 && teleportToY <= 0) {
-            teleportToX = absX;
-            teleportToY = absY;
-        }
-        newWalkCmdSteps = 0;
-        getNewWalkCmdX()[0] = getNewWalkCmdY()[0] = travelBackX[0] = travelBackY[0] = 0;
-        getNextPlayerMovement();
-    }
-
     public void preProcessing() {
         newWalkCmdSteps = 0;
     }
@@ -1231,13 +873,9 @@ public class Player {
                             }
                         }
 
-                        if (!found) {
-                            this.println_debug("Fatal: Internal error: unable to determine connection vertex!  wp1=(" + wayPointX1 + ", " + wayPointY1 + "), wp2=(" + i + ", " + wayPointY2 + "), " + "first=(" + firstX + ", " + firstY + ")");
-                        } else {
+                        if (found) {
                             this.addToWalkingQueue(wayPointX1, wayPointY1);
                         }
-                    } else {
-                        this.println_debug("Fatal: The walking queue is corrupt! wp1=(" + wayPointX1 + ", " + wayPointY1 + "), " + "wp2=(" + i + ", " + wayPointY2 + ")");
                     }
                 } else {
                     for (i = 0; i < this.numTravelBackSteps; ++i) {
@@ -1274,45 +912,20 @@ public class Player {
         return playerId;
     }
 
-    public boolean inPcBoat() {
-        return absX >= 2660 && absX <= 2663 && absY >= 2638 && absY <= 2643;
-    }
-
-    public boolean inPcGame() {
-        return absX >= 2624 && absX <= 2690 && absY >= 2550 && absY <= 2619;
-    }
-
-    public void setHitDiff2(int hitDiff2) {
-        this.hitDiff2 = hitDiff2;
-    }
 
     public int getHitDiff() {
         return hitDiff;
-    }
-
-    public void setHitDiff(int hitDiff) {
-        this.hitDiff = hitDiff;
     }
 
     public boolean isHitUpdateRequired() {
         return hitUpdateRequired;
     }
 
-    public boolean getHitUpdateRequired() {
-        return hitUpdateRequired;
-    }
 
     public void setHitUpdateRequired(boolean hitUpdateRequired) {
         this.hitUpdateRequired = hitUpdateRequired;
     }
 
-    public boolean getHitUpdateRequired2() {
-        return hitUpdateRequired2;
-    }
-
-    public void setHitUpdateRequired2(boolean hitUpdateRequired2) {
-        this.hitUpdateRequired2 = hitUpdateRequired2;
-    }
 
     public boolean isAppearanceUpdateRequired() {
         return appearanceUpdateRequired;
@@ -1350,9 +963,6 @@ public class Player {
         return chatText;
     }
 
-    public void setChatText(byte chatText[]) {
-        this.chatText = chatText;
-    }
 
     public int getChatTextColor() {
         return chatTextColor;
@@ -1366,17 +976,11 @@ public class Player {
         return newWalkCmdX;
     }
 
-    public void setNewWalkCmdX(int newWalkCmdX[]) {
-        this.newWalkCmdX = newWalkCmdX;
-    }
 
     public int[] getNewWalkCmdY() {
         return newWalkCmdY;
     }
 
-    public void setNewWalkCmdY(int newWalkCmdY[]) {
-        this.newWalkCmdY = newWalkCmdY;
-    }
 
     public boolean isNewWalkCmdIsRunning() {
         return newWalkCmdIsRunning;
@@ -1386,50 +990,6 @@ public class Player {
         this.newWalkCmdIsRunning = newWalkCmdIsRunning;
     }
 
-    public void setInStreamDecryption(ISAACRandomGen inStreamDecryption) {
-    }
-
-    public void setOutStreamDecryption(ISAACRandomGen outStreamDecryption) {
-    }
-
-    public boolean samePlayer() {
-        for (int j = 0; j < PlayerHandler.players.length; j++) {
-            if (j == playerId) continue;
-            if (PlayerHandler.players[j] != null) {
-                if (PlayerHandler.players[j].playerName.equalsIgnoreCase(playerName)) {
-                    disconnected = true;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public void putInCombat(int attacker) {
-        underAttackBy = attacker;
-        logoutDelay = System.currentTimeMillis();
-        singleCombatDelay = System.currentTimeMillis();
-    }
-
-    public void dealDamage(int damage) {
-        if (teleTimer <= 0) playerLevel[3] -= damage;
-        else {
-            if (hitUpdateRequired) hitUpdateRequired = false;
-            if (hitUpdateRequired2) hitUpdateRequired2 = false;
-        }
-
-    }
-
-    public void handleHitMask(int damage) {
-        if (!hitUpdateRequired) {
-            hitUpdateRequired = true;
-            hitDiff = damage;
-        } else if (!hitUpdateRequired2) {
-            hitUpdateRequired2 = true;
-            hitDiff2 = damage;
-        }
-        updateRequired = true;
-    }
 
     public void flushOutStream() {
         if (disconnected || outStream.currentOffset == 0) return;
@@ -1443,14 +1003,6 @@ public class Player {
         }
     }
 
-    public void sendClan(String name, String message, String clan, int rights) {
-        outStream.createFrameVarSizeWord(217);
-        outStream.writeString(name);
-        outStream.writeString(message);
-        outStream.writeString(clan);
-        outStream.writeWord(rights);
-        outStream.endFrameVarSize();
-    }
 
     public void destruct() {
         if (session == null) return;
@@ -1496,68 +1048,58 @@ public class Player {
             outStream.createFrame(249);
             outStream.writeByteA(1); // 1 for members, zero for free
             outStream.writeWordBigEndianA(playerId);
-            for (int j = 0; j < PlayerHandler.players.length; j++) {
-                if (j == playerId) continue;
-                if (PlayerHandler.players[j] != null) {
-                    if (PlayerHandler.players[j].playerName.equalsIgnoreCase(playerName)) disconnected = true;
-                }
-            }
+
             for (int i = 0; i < 25; i++) {
                 getPA().setSkillLevel(i, playerLevel[i], playerXP[i]);
                 getPA().refreshSkill(i);
             }
+
             for (int p = 0; p < PRAYER.length; p++) { // reset prayer glows
                 prayerActive[p] = false;
                 getPA().sendFrame36(PRAYER_GLOW[p], 0);
             }
-            // if (playerName.equalsIgnoreCase("Sanity")) {
+
             getPA().sendCrashFrame();
-            // }
-            getPA().handleWeaponStyle();
+
+//            getPA().handleWeaponStyle();
             getPA().handleLoginText();
-            // getPA().sendFrame36(43, fightMode-1);
+
             getPA().sendFrame36(108, 0);// resets autocast button
             getPA().sendFrame36(172, 1);
+
             getPA().sendFrame107(); // reset screen
+
             getPA().setChatOptions(0, 0, 0); // reset private messaging options
+
+            setSidebarInterface(0, 2423);
             setSidebarInterface(1, 3917);
             setSidebarInterface(2, 638);
             setSidebarInterface(3, 3213);
             setSidebarInterface(4, 1644);
             setSidebarInterface(5, 5608);
-            if (playerMagicBook == 0) {
-                setSidebarInterface(6, 1151); // modern
-            } else {
-                if (playerMagicBook == 2) {
-                    setSidebarInterface(6, 29999); // lunar
-                } else {
-                    setSidebarInterface(6, 12855); // ancient
-                }
-            }
-            correctCoordinates();
+            setSidebarInterface(6, 1151); // modern
             setSidebarInterface(7, 18128);
             setSidebarInterface(8, 5065);
             setSidebarInterface(9, 5715);
             setSidebarInterface(10, 2449);
-            // setSidebarInterface(11, 4445); // wrench tab
             setSidebarInterface(11, 904); // wrench tab
             setSidebarInterface(12, 147); // run tab
             setSidebarInterface(13, -1);
-            setSidebarInterface(0, 2423);
+
             sendMessage("@red@Welcome to " + Config.SERVER_NAME);
-            // sendMessage("@blu@Beta will begin tonight, and continue until next wednesday (when I return)");
-            // sendMessage("@blu@At which point, I will fix up bugs and hopefully release it publicly next weekend.");
-            // sendMessage("@blu@ALL BETA ACCOUNTS WILL BE RESET - EXP is at 10x it will be @ normal release.");
+
             getPA().showOption(4, 0, "Trade With", 3);
             getPA().showOption(5, 0, "Follow", 4);
-            int saveTimer = Config.SAVE_TIMER;
-            saveCharacter = true;
+
             Misc.println("[REGISTERED]: " + playerName + "");
+
             handler.updatePlayer(this, outStream);
             flushOutStream();
+
             getPA().clearClanChat();
-            getPA().resetFollow();
+
             if (autoRet == 1) getPA().sendFrame36(172, 1);
+
             else getPA().sendFrame36(172, 0);
         }
     }
@@ -1569,179 +1111,18 @@ public class Player {
         }
     }
 
-    public void logout() {
-        synchronized (this) {
-            if (System.currentTimeMillis() - logoutDelay > 10000) {
-                outStream.createFrame(109);
-                properLogout = true;
-            } else {
-                sendMessage("You must wait a few seconds from being out of combat to logout.");
-            }
-        }
-    }
 
     public void process() {
-
-        if (System.currentTimeMillis() - lastPoison > 20000 && poisonDamage > 0) {
-            int damage = poisonDamage / 2;
-            if (damage > 0) {
-                sendMessage("Applying poison damage.");
-                if (!getHitUpdateRequired()) {
-                    setHitUpdateRequired(true);
-                    setHitDiff(damage);
-                    updateRequired = true;
-                    poisonMask = 1;
-                } else if (!getHitUpdateRequired2()) {
-                    setHitUpdateRequired2(true);
-                    setHitDiff2(damage);
-                    updateRequired = true;
-                    poisonMask = 2;
-                }
-                lastPoison = System.currentTimeMillis();
-                poisonDamage--;
-                dealDamage(damage);
-            } else {
-                poisonDamage = -1;
-                sendMessage("You are no longer poisoned.");
-            }
-        }
-
-        if (System.currentTimeMillis() - duelDelay > 800 && duelCount > 0) {
-            if (duelCount != 1) {
-                forcedChat("" + (--duelCount));
-                duelDelay = System.currentTimeMillis();
-            } else {
-                damageTaken = new int[Config.MAX_PLAYERS];
-                forcedChat("FIGHT!");
-                duelCount = 0;
-            }
-        }
-
-        if (System.currentTimeMillis() - specDelay > Config.INCREASE_SPECIAL_AMOUNT) {
-            specDelay = System.currentTimeMillis();
-            if (specAmount < 10) {
-                specAmount += .5;
-                if (specAmount > 10) specAmount = 10;
-            }
-        }
-
-        if (followId > 0) {
-            getPA().followPlayer();
-        }
-
-        if (System.currentTimeMillis() - singleCombatDelay > 3300) {
-            underAttackBy = 0;
-        }
-        if (System.currentTimeMillis() - singleCombatDelay2 > 3300) {
-            underAttackBy2 = 0;
-        }
-
-        if (System.currentTimeMillis() - restoreStatsDelay > 60000) {
-            restoreStatsDelay = System.currentTimeMillis();
-            for (int level = 0; level < playerLevel.length; level++) {
-                if (playerLevel[level] < getLevelForXP(playerXP[level])) {
-                    if (level != 5) { // prayer doesn't restore
-                        playerLevel[level] += 1;
-                        getPA().setSkillLevel(level, playerLevel[level], playerXP[level]);
-                        getPA().refreshSkill(level);
-                    }
-                } else if (playerLevel[level] > getLevelForXP(playerXP[level])) {
-                    playerLevel[level] -= 1;
-                    getPA().setSkillLevel(level, playerLevel[level], playerXP[level]);
-                    getPA().refreshSkill(level);
-                }
-            }
-        }
-
         getPA().sendFrame99(0);
         getPA().walkableInterface(-1);
         getPA().showOption(3, 0, "Null", 1);
-
-        if (isDead && respawnTimer == -6) {
-            getPA().applyDead();
-        }
-
-        if (respawnTimer == 7) {
-            respawnTimer = -6;
-            getPA().giveLife();
-        } else if (respawnTimer == 12) {
-            respawnTimer--;
-            startAnimation(0x900);
-            poisonDamage = -1;
-        }
-
-        if (respawnTimer > -6) {
-            respawnTimer--;
-        }
-        if (freezeTimer > -6) {
-            freezeTimer--;
-            if (frozenBy > 0) {
-                if (PlayerHandler.players[frozenBy] == null) {
-                    freezeTimer = -1;
-                    frozenBy = -1;
-                } else if (!goodDistance(absX, absY, PlayerHandler.players[frozenBy].absX, PlayerHandler.players[frozenBy].absY, 20)) {
-                    freezeTimer = -1;
-                    frozenBy = -1;
-                }
-            }
-        }
-
-        if (hitDelay > 0) {
-            hitDelay--;
-        }
-
-        if (teleTimer > 0) {
-            teleTimer--;
-            if (!isDead) {
-                if (teleTimer == 1 && newLocation > 0) {
-                    teleTimer = 0;
-                    getPA().changeLocation();
-                }
-                if (teleTimer == 5) {
-                    teleTimer--;
-                    getPA().processTeleport();
-                }
-                if (teleTimer == 9 && teleGfx > 0) {
-                    teleTimer--;
-                    gfx100(teleGfx);
-                }
-            } else {
-                teleTimer = 0;
-            }
-        }
-
-
-        if (attackTimer > 0) {
-            attackTimer--;
-        }
-
-        if (timeOutCounter > Config.TIMEOUT) {
-            disconnected = true;
-        }
-
-        timeOutCounter++;
-
     }
 
-    public Future<?> getCurrentTask() {
-        return currentTask;
-    }
-
-    public void setCurrentTask(Future<?> task) {
-        currentTask = task;
-    }
 
     public synchronized Stream getInStream() {
         return inStream;
     }
 
-    public synchronized int getPacketType() {
-        return packetType;
-    }
-
-    public synchronized int getPacketSize() {
-        return packetSize;
-    }
 
     public synchronized Stream getOutStream() {
         return outStream;
@@ -1752,21 +1133,12 @@ public class Player {
     }
 
 
-    public IoSession getSession() {
-        return session;
-    }
-
     /**
      * End of Skill Constructors
      */
 
     public void queueMessage(Packet arg1) {
-        // synchronized(queuedPackets) {
-        // if (arg1.getId() != 41)
         queuedPackets.add(arg1);
-        // else
-        // processPacket(arg1);
-        // }
     }
 
     public synchronized boolean processQueuedPackets() {
@@ -1782,33 +1154,10 @@ public class Player {
         packetSize = p.getLength();
         inStream.buffer = p.getData();
         if (packetType > 0) {
-            // sendMessage("PacketType: " + packetType);
             PacketHandler.processPacket(this, packetType, packetSize);
         }
         timeOutCounter = 0;
         return true;
-    }
-
-    public synchronized boolean processPacket(Packet p) {
-        synchronized (this) {
-            if (p == null) {
-                return false;
-            }
-            inStream.currentOffset = 0;
-            packetType = p.getId();
-            packetSize = p.getLength();
-            inStream.buffer = p.getData();
-            if (packetType > 0) {
-                // sendMessage("PacketType: " + packetType);
-                PacketHandler.processPacket(this, packetType, packetSize);
-            }
-            timeOutCounter = 0;
-            return true;
-        }
-    }
-
-    public void correctCoordinates() {
-
     }
 
 }
