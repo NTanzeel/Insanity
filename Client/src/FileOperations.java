@@ -2,20 +2,24 @@ import java.io.*;
 
 public class FileOperations {
 
-    public FileOperations()  {
+    public static int TotalRead = 0;
+    public static int TotalWrite = 0;
+    public static int CompleteWrite = 0;
+
+    public FileOperations() {
     }
 
     public static final byte[] ReadFile(String s) {
-        try  {
+        try {
             File file = new File(s);
-            int i = (int)file.length();
+            int i = (int) file.length();
             byte abyte0[] = new byte[i];
             DataInputStream datainputstream = new DataInputStream(new BufferedInputStream(new FileInputStream(s)));
             datainputstream.readFully(abyte0, 0, i);
             datainputstream.close();
             TotalRead++;
             return abyte0;
-        } catch(Exception exception) {
+        } catch (Exception exception) {
         }
         return null;
     }
@@ -28,20 +32,14 @@ public class FileOperations {
             fileoutputstream.close();
             TotalWrite++;
             CompleteWrite++;
-        }  catch(Throwable throwable) {
+        } catch (Throwable throwable) {
             System.out.println((new StringBuilder()).append("Write Error: ").append(s).toString());
         }
     }
-	
-	public static boolean FileExists(String file) {
-		File f = new File(file);
-		if(f.exists())
-			return true;
-		else
-			return false;
-	}
 
-    public static int TotalRead = 0;
-    public static int TotalWrite = 0;
-    public static int CompleteWrite = 0;
+    public static boolean FileExists(String file) {
+        File f = new File(file);
+        if (f.exists()) return true;
+        else return false;
+    }
 }
