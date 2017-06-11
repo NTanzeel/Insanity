@@ -1,7 +1,5 @@
 package com.insanity.window;
 
-import com.insanity.window.menu.MainMenu;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,7 +17,7 @@ public class Window extends JFrame {
         this.initialize();
     }
 
-    public JPanel getContentPanel() {
+    protected JPanel getContentPanel() {
         return this.contentPanel;
     }
 
@@ -38,14 +36,7 @@ public class Window extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        this.getContentPane().add(new MainMenu(), BorderLayout.NORTH);
-
         this.getContentPane().add(this.createContentPanel(), BorderLayout.CENTER);
-
-        this.pack();
-
-        this.setVisible(true);
-        this.setResizable(false);
     }
 
     private JPanel createContentPanel() {
@@ -57,7 +48,10 @@ public class Window extends JFrame {
         return this.contentPanel;
     }
 
-    @Override
-    public void show() {
+    protected void display() {
+        this.pack();
+
+        this.setVisible(true);
+        this.setResizable(false);
     }
 }
