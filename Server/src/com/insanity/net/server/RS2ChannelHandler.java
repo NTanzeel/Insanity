@@ -22,7 +22,7 @@ public class RS2ChannelHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) {
-        
+
     }
 
     @Override

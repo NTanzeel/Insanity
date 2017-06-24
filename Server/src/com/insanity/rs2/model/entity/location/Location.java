@@ -1,4 +1,4 @@
-package com.insanity.rs2.model.entity;
+package com.insanity.rs2.model.entity.location;
 
 /**
  * Represents a single location in the game world (on the map).
@@ -129,5 +129,35 @@ public class Location {
      */
     public int getRegionY() {
         return (y >> 3) - 6;
+    }
+
+    /**
+     * Checks if this location is within range of another.
+     *
+     * @param other The other location.
+     * @return <code>true</code> if the location is in range,
+     * <code>false</code> if not.
+     */
+    public boolean isWithinDistance(Location other) {
+        if (z != other.z) {
+            return false;
+        }
+        int deltaX = other.x - x, deltaY = other.y - y;
+        return deltaX <= 14 && deltaX >= -15 && deltaY <= 14 && deltaY >= -15;
+    }
+
+    /**
+     * Checks if this location is within interaction range of another.
+     *
+     * @param other The other location.
+     * @return <code>true</code> if the location is in range,
+     * <code>false</code> if not.
+     */
+    public boolean isWithinInteractionDistance(Location other) {
+        if (z != other.z) {
+            return false;
+        }
+        int deltaX = other.x - x, deltaY = other.y - y;
+        return deltaX <= 2 && deltaX >= -3 && deltaY <= 2 && deltaY >= -3;
     }
 }
