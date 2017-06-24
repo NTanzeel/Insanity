@@ -689,39 +689,6 @@ public class client extends RSApplet {
         ObjectDef.lowMem = false;
     }
 
-    public static void main(String args[]) {
-        try {
-            System.out.println("RS2 user rs2.client - release #" + 317);
-            if (args.length != 5) {
-                System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members], storeid");
-                return;
-            }
-            nodeID = Integer.parseInt(args[0]);
-            //portOff = Integer.parseInt(args[1]);
-            portOff = 0;
-            if (args[2].equals("lowmem")) setLowMem();
-            else if (args[2].equals("highmem")) {
-                setHighMem();
-            } else {
-                System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members], storeid");
-                return;
-            }
-            if (args[3].equals("free")) isMembers = false;
-            else if (args[3].equals("members")) {
-                isMembers = true;
-            } else {
-                System.out.println("Usage: node-id, port-offset, [lowmem/highmem], [free/members], storeid");
-                return;
-            }
-            signlink.storeid = Integer.parseInt(args[4]);
-            signlink.startpriv(InetAddress.getLocalHost());
-            new Jframe(args);
-            //rs2.client client1 = new rs2.client();
-            //client1.createClientFrame(503, 765);
-        } catch (Exception exception) {
-        }
-    }
-
     public static void setTab(int id) {
         needDrawTabArea = true;
         tabID = id;
@@ -747,6 +714,45 @@ public class client extends RSApplet {
         lowMem = true;
         ObjectManager.lowMem = true;
         ObjectDef.lowMem = true;
+    }
+
+    public static void main(String args[]) {
+        try {
+            System.out.println("Project Insanity Client - Release #" + 317);
+            if (args.length != 4) {
+                System.out.println("Usage: node-id, memory=[low/high], [free/members], storeid");
+                return;
+            }
+            nodeID = Integer.parseInt(args[0]);
+            portOff = 0;
+            switch (args[1]) {
+                case "low":
+                    setLowMem();
+                    break;
+                case "high":
+                    setHighMem();
+                    break;
+                default:
+                    System.out.println("Usage: node-id, memory=[low/high], [free/members], storeid");
+                    return;
+            }
+            switch (args[2]) {
+                case "free":
+                    isMembers = false;
+                    break;
+                case "members":
+                    isMembers = true;
+                    break;
+                default:
+                    System.out.println("Usage: node-id, memory=[low/high], [free/members], storeid");
+                    return;
+            }
+            signlink.storeid = Integer.parseInt(args[3]);
+            signlink.startpriv(InetAddress.getLocalHost());
+            new JFrame();
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        }
     }
 
     public final String methodR(/*int i,*/ int j) {
@@ -4805,7 +4811,7 @@ public class client extends RSApplet {
         chatButtons = null;
         tabArea = null;
         mapArea = null;
-		/**/
+        /**/
         mapBack = null;
         sideIcons = null;
         redStones = null;
@@ -5776,9 +5782,9 @@ public class client extends RSApplet {
             return signlink.mainapp.getDocumentBase().getHost().toLowerCase();
         }
         if (super.gameFrame != null) {
-            return ""; // runescape.com <- removed for rs2.Jframe to work
+            return ""; // runescape.com <- removed for rs2.JFrame to work
         } else {
-            return ""; // super.getDocumentBase().getHost().toLowerCase() <- removed for rs2.Jframe to work
+            return ""; // super.getDocumentBase().getHost().toLowerCase() <- removed for rs2.JFrame to work
         }
     }
 
@@ -5926,9 +5932,9 @@ public class client extends RSApplet {
             inputTaken = true;
             anInt1500 = anInt1315;
         }
-		/* Enable custom right click areas */
+        /* Enable custom right click areas */
         if (super.mouseX > 4 && super.mouseY > 480 && super.mouseX < 516 && super.mouseY < 503) rightClickChatButtons();
-		/**/
+        /**/
         boolean flag = false;
         while (!flag) {
             flag = true;
