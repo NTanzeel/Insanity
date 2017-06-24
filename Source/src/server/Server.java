@@ -103,7 +103,7 @@ public class Server {
                     for (Player p : PlayerHandler.players) {
                         if (p == null) continue;
                         PlayerSave.saveGame(p);
-                        System.out.println("Saved game for " + p.playerName + ".");
+                        System.out.println("Saved model for " + p.playerName + ".");
                         lastMassSave = System.currentTimeMillis();
                     }
 
@@ -115,7 +115,7 @@ public class Server {
             for (Player p : PlayerHandler.players) {
                 if (p == null) continue;
                 PlayerSave.saveGame(p);
-                System.out.println("Saved game for " + p.playerName + ".");
+                System.out.println("Saved model for " + p.playerName + ".");
             }
         }
         System.exit(0);

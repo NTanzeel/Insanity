@@ -20,7 +20,7 @@ public class PlayerSave {
         boolean File1 = false;
 
         try {
-            characterFile = new BufferedReader(new FileReader("./game/players/" + playerName + ".txt"));
+            characterFile = new BufferedReader(new FileReader("./model/players/" + playerName + ".txt"));
             File1 = true;
         } catch (FileNotFoundException ignored) {
         }
@@ -152,7 +152,7 @@ public class PlayerSave {
 
         BufferedWriter characterFile;
         try {
-            characterFile = new BufferedWriter(new FileWriter("./game/players/" + p.playerName + ".txt"));
+            characterFile = new BufferedWriter(new FileWriter("./model/players/" + p.playerName + ".txt"));
 
 			/* ACCOUNT */
             characterFile.write("[ACCOUNT]", 0, 9);

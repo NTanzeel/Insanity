@@ -6971,7 +6971,7 @@ public class client extends RSApplet {
             drawLoadingText(95, "Unpacking interfaces");
             TextDrawingArea aclass30_sub2_sub1_sub4s[] = {smallText, aTextDrawingArea_1271, chatTextDrawingArea, aTextDrawingArea_1273};
             RSInterface.unpack(streamLoader_1, aclass30_sub2_sub1_sub4s, streamLoader_2);
-            drawLoadingText(100, "Preparing game engine");
+            drawLoadingText(100, "Preparing model engine");
             for (int j6 = 0; j6 < 33; j6++) {
                 int k6 = 999;
                 int i7 = 0;
@@ -7138,17 +7138,17 @@ public class client extends RSApplet {
             k += 30;
             g.drawString("2: Try clearing your web-browsers cache from tools->internet options", 30, k);
             k += 30;
-            g.drawString("3: Try using a different game-world", 30, k);
+            g.drawString("3: Try using a different model-world", 30, k);
             k += 30;
             g.drawString("4: Try rebooting your computer", 30, k);
             k += 30;
-            g.drawString("5: Try selecting a different version of Java from the play-game menu", 30, k);
+            g.drawString("5: Try selecting a different version of Java from the play-model menu", 30, k);
         }
         if (genericLoadingError) {
             aBoolean831 = false;
             g.setFont(new Font("Helvetica", 1, 20));
             g.setColor(Color.white);
-            g.drawString("Error - unable to load game!", 50, 50);
+            g.drawString("Error - unable to load model!", 50, 50);
             g.drawString("To play RuneScape make sure you play from", 50, 100);
             g.drawString("http://www.runescape.com", 50, 150);
         }
