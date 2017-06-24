@@ -1,4 +1,4 @@
-package com.insanity.net.server;
+package com.insanity.rs2.net.server;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

@@ -4,7 +4,7 @@ import java.util.BitSet;
 
 /**
  * Holds update flags.
- * @author Graham Edgecombe
+ * @author Naqash Tanzeel
  *
  */
 public class UpdateFlags {

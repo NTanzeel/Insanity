@@ -1,4 +1,4 @@
-package com.insanity.net.server;
+package com.insanity.rs2.net.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;

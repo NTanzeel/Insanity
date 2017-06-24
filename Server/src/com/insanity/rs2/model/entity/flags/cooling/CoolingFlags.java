@@ -7,8 +7,7 @@ import java.util.BitSet;
 /**
  * Represents an entity's individual cooldowns.
  *
- * @author Graham Edgecombe
- * @author Adaptations by Brett Russell
+ * @author Naqash Tanzeel
  */
 public class CoolingFlags {
 

@@ -5966,8 +5966,8 @@ public class client extends RSApplet {
         return ((i & 0xff00ff) * l + (j & 0xff00ff) * k & 0xff00ff00) + ((i & 0xff00) * l + (j & 0xff00) * k & 0xff0000) >> 8;
     }
 
-    private void login(String s, String s1, boolean flag) {
-        signlink.errorname = s;
+    private void login(String username, String password, boolean flag) {
+        signlink.errorname = username;
         try {
             if (!flag) {
                 loginMessage1 = "";
@@ -5975,7 +5975,7 @@ public class client extends RSApplet {
                 drawLoginScreen(true);
             }
             socketStream = new RSSocket(this, openSocket(43594 + portOff));
-            long l = TextClass.longForName(s);
+            long l = TextClass.longForName(username);
             int i = (int) (l >> 16 & 31L);
             stream.currentOffset = 0;
             stream.writeWordBigEndian(14);
@@ -6002,8 +6002,8 @@ public class client extends RSApplet {
                 stream.writeDWord(ai[2]);
                 stream.writeDWord(ai[3]);
                 stream.writeDWord(/*signlink.uid*/999999);
-                stream.writeString(s);
-                stream.writeString(s1);
+                stream.writeString(username);
+                stream.writeString(password);
                 stream.doKeys();
                 aStream_847.currentOffset = 0;
                 if (flag) aStream_847.writeWordBigEndian(18);
@@ -6029,7 +6029,7 @@ public class client extends RSApplet {
                     Thread.sleep(2000L);
                 } catch (Exception _ex) {
                 }
-                login(s, s1, flag);
+                login(username, password, flag);
                 return;
             }
             if (k == 2) {
@@ -6234,7 +6234,7 @@ public class client extends RSApplet {
                     }
                 }
 
-                login(s, s1, flag);
+                login(username, password, flag);
                 return;
             }
             if (k == -1) {
@@ -6245,7 +6245,7 @@ public class client extends RSApplet {
                         } catch (Exception _ex) {
                         }
                         loginFailures++;
-                        login(s, s1, flag);
+                        login(username, password, flag);
                         return;
                     } else {
                         loginMessage1 = "No response from loginserver";

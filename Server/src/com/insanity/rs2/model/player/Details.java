@@ -1,5 +1,6 @@
 package com.insanity.rs2.model.player;
 
+import com.insanity.rs2.net.security.ISAACCipher;
 import io.netty.channel.Channel;
 
 /**
@@ -9,20 +10,28 @@ import io.netty.channel.Channel;
  */
 public class Details {
 
-    private Channel channel;
+    private final Channel channel;
+    private final int uid;
+    private final String username;
+    private final String password;
+    private final ISAACCipher inCipher;
+    private final ISAACCipher outCipher;
 
-    private String username;
-
-    private String password;
-
-    public Details(Channel channel, String username, String password) {
+    public Details(Channel channel, int uid, String username, String password, ISAACCipher inCipher, ISAACCipher outCipher) {
         this.channel = channel;
+        this.uid = uid;
         this.username = username;
         this.password = password;
+        this.inCipher = inCipher;
+        this.outCipher = outCipher;
     }
 
     public Channel getChannel() {
         return channel;
+    }
+
+    public int getUid() {
+        return uid;
     }
 
     public String getUsername() {
@@ -31,5 +40,13 @@ public class Details {
 
     public String getPassword() {
         return password;
+    }
+
+    public ISAACCipher getInCipher() {
+        return inCipher;
+    }
+
+    public ISAACCipher getOutCipher() {
+        return outCipher;
     }
 }

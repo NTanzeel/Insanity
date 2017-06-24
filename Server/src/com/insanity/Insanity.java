@@ -1,9 +1,7 @@
 package com.insanity;
 
-import com.insanity.net.server.RS2Server;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.insanity.io.MySQL;
+import com.insanity.rs2.net.server.RS2Server;
 
 /**
  * @author ntanzeel
@@ -13,8 +11,10 @@ import java.util.logging.Logger;
 public class Insanity {
 
     private static final Insanity instance = new Insanity();
-    private static final Logger logger = Logger.getLogger(Insanity.class.getName());
+
     private RS2Server server = new RS2Server(RS2Server.DEFAULT_PORT);
+
+    private MySQL database = new MySQL("http://localhost/insanity", "root", "");
 
     private Insanity() {
 
@@ -24,16 +24,11 @@ public class Insanity {
         return instance;
     }
 
-    public static void main(String[] args) throws Exception {
-        logger.info("Starting Insanity");
-        try {
-            instance.initialize();
-        } catch (InterruptedException e) {
-            logger.log(Level.SEVERE, "Error Starting Insanity", e);
-        }
+    public final int getVersion() {
+        return 1;
     }
 
-    private void initialize() throws InterruptedException {
+    public void start() throws InterruptedException {
         server.start();
     }
 }

@@ -1,7 +1,7 @@
-package com.insanity.net.server;
+package com.insanity.rs2.net.server;
 
-import com.insanity.net.decoder.LoginDecoder;
-import com.insanity.net.encoder.Encoder;
+import com.insanity.rs2.net.decoder.LoginDecoder;
+import com.insanity.rs2.net.encoder.Encoder;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -17,7 +17,7 @@ public class RS2ChannelInitializer extends ChannelInitializer<SocketChannel> {
     protected void initChannel(SocketChannel channel) throws Exception {
         channel.pipeline().addLast("readTimeoutHandler", new ReadTimeoutHandler(10));
         channel.pipeline().addLast("encoder", new Encoder());
-        channel.pipeline().addLast("decoder", new LoginDecoder());
+        channel.pipeline().addLast("loginDecoder", new LoginDecoder());
         channel.pipeline().addLast("channelHandler", new RS2ChannelHandler());
     }
 }

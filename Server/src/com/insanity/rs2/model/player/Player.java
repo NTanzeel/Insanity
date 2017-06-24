@@ -10,6 +10,12 @@ import com.insanity.rs2.world.region.Region;
  */
 public class Player extends Entity {
 
+    private Rights rights = Rights.PLAYER;
+
+    public Player() {
+
+    }
+
     @Override
     public void addToRegion(Region region) {
         region.addPlayer(this);

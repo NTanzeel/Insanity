@@ -1,4 +1,4 @@
-package com.insanity.net.decoder;
+package com.insanity.rs2.net.decoder;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -11,7 +11,7 @@ import java.util.List;
  * @version 1.0.0
  * @since 24/06/2017.
  */
-public class LoginDecoder extends ByteToMessageDecoder {
+public class Decoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {

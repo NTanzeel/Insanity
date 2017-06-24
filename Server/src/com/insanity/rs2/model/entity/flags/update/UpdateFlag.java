@@ -3,7 +3,7 @@ package com.insanity.rs2.model.entity.flags.update;
 /**
  * Represents a single type of update flag.
  *
- * @author Graham Edgecombe
+ * @author Naqash Tanzeel
  */
 public enum UpdateFlag {
 
