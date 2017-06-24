@@ -65,12 +65,12 @@ public class LoginDecoder extends ByteToMessageDecoder {
                  */
                 int opcode = in.readByte() & 0xFF;
 
-                if (opcode == 14) {
-                    state = LoginState.Login;
-                } else {
+                if (opcode != 14) {
                     logger.info("Invalid opcode: " + opcode);
                     ctx.close();
                 }
+
+                state = LoginState.KEY_EXCHANGE;
                 break;
 
             case KEY_EXCHANGE:
@@ -85,6 +85,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
                  * modification).
 				 */
                 ctx.channel().writeAndFlush(new Builder().writeBytes(INITIAL_RESPONSE).writeByte((byte) 0).writeLong(serverKey).toPacket());
+                state = LoginState.PRE_ENCRYPTION;
                 break;
 
             case PRE_ENCRYPTION:
@@ -122,6 +123,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
                     ctx.channel().close();
                     return;
                 }
+                state = LoginState.Login;
                 break;
             case Login:
                 if (!in.isReadable(this.loginSize)) {
@@ -141,7 +143,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 				/*
                  * We now read a short which is the client version and check if it equals 317.
 				 */
-                int version = in.readShort() & 0xFFFF;
+                int version = in.readUnsignedShort() & 0xFFFF;
                 if (version != Insanity.getInstance().getVersion()) {
                     logger.info("Incorrect version : " + version);
                     ctx.channel().close();
@@ -157,7 +159,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
                  * We now read the cache indices.
 				 */
                 for (int i = 0; i < 9; i++) {
-                    in.readByte();
+                    in.readInt();
                 }
 
 				/*

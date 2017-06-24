@@ -25,7 +25,7 @@ public class Insanity {
     }
 
     public final int getVersion() {
-        return 1;
+        return 317;
     }
 
     public MySQL getDatabase() {

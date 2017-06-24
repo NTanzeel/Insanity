@@ -54,6 +54,6 @@ public class Builder {
     }
 
     public Packet toPacket() {
-        return new Packet(opCode, type, buffer.array());
+        return new Packet(opCode, type, buffer);
     }
 }
