@@ -14,7 +14,7 @@ public class Insanity {
 
     private RS2Server server = new RS2Server(RS2Server.DEFAULT_PORT);
 
-    private MySQL database = new MySQL("http://localhost/insanity", "root", "");
+    private MySQL database = new MySQL("http://localhost/insanity", "root", "SQLRoot098!");
 
     private Insanity() {
 
@@ -26,6 +26,10 @@ public class Insanity {
 
     public final int getVersion() {
         return 1;
+    }
+
+    public MySQL getDatabase() {
+        return database;
     }
 
     public void start() throws InterruptedException {

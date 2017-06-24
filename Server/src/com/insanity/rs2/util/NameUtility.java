@@ -5,7 +5,7 @@ package com.insanity.rs2.util;
  * @version 1.0.0
  * @since 24/06/2017.
  */
-public class StringUtility {
+public class NameUtility {
 
     /**
      * Formats a name for display.
@@ -41,5 +41,25 @@ public class StringUtility {
         } else {
             return s;
         }
+    }
+
+    /**
+     * Checks if a name is valid.
+     *
+     * @param s The name.
+     * @return <code>true</code> if so, <code>false</code> if not.
+     */
+    public static boolean isValidName(String s) {
+        return formatNameForProtocol(s).matches("[a-z0-9_]+");
+    }
+
+    /**
+     * Formats a name for use in the protocol.
+     *
+     * @param s The name.
+     * @return The formatted name.
+     */
+    public static String formatNameForProtocol(String s) {
+        return s.toLowerCase().replace(" ", "_");
     }
 }

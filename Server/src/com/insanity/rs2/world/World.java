@@ -1,5 +1,6 @@
 package com.insanity.rs2.world;
 
+import com.insanity.rs2.engine.Engine;
 import com.insanity.rs2.world.entities.Entities;
 import com.insanity.rs2.world.region.Regions;
 
@@ -12,12 +13,18 @@ public class World {
 
     private static final World world = new World();
 
+    private Engine engine = new Engine();
+
     private Entities entities = new Entities();
 
     private Regions regions = new Regions();
 
     public static World getWorld() {
         return world;
+    }
+
+    public Engine getEngine() {
+        return engine;
     }
 
     public Entities getEntities() {

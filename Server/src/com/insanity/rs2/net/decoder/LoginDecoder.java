@@ -5,7 +5,7 @@ import com.insanity.rs2.model.player.Details;
 import com.insanity.rs2.net.packets.Builder;
 import com.insanity.rs2.net.security.ISAACCipher;
 import com.insanity.rs2.util.BufferUtility;
-import com.insanity.rs2.util.StringUtility;
+import com.insanity.rs2.util.NameUtility;
 import com.insanity.rs2.world.World;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -216,7 +216,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 				/*
                  * We read and format the name and passwords.
 				 */
-                String username = StringUtility.formatName(BufferUtility.getRS2String(in));
+                String username = NameUtility.formatName(BufferUtility.getRS2String(in));
                 String password = BufferUtility.getRS2String(in);
 
 				/*
