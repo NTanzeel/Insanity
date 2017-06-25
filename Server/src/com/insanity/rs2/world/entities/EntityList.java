@@ -155,7 +155,9 @@ public class EntityList<E extends Entity> implements Collection<E>, Iterable<E> 
         int ptr = 0;
         Entity[] entities = new Entity[size];
         for (int i = 0; i < this.entities.length; i++) {
-            entities[ptr++] = this.entities[i];
+            if (this.entities[i] != null) {
+                entities[ptr++] = this.entities[i];
+            }
         }
 
         return entities;

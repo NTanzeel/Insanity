@@ -1,6 +1,7 @@
 package com.insanity;
 
 import com.insanity.io.MySQL;
+import com.insanity.rs2.engine.Engine;
 import com.insanity.rs2.net.server.RS2Server;
 
 /**
@@ -14,7 +15,9 @@ public class Insanity {
 
     private RS2Server server = new RS2Server(RS2Server.DEFAULT_PORT);
 
-    private MySQL database = new MySQL("http://localhost/insanity", "root", "SQLRoot098!");
+    private Engine engine = new Engine();
+
+    private MySQL database = new MySQL("localhost:3306/insanity", "root", "SQLRoot098!");
 
     private Insanity() {
 
@@ -33,6 +36,12 @@ public class Insanity {
     }
 
     public void start() throws InterruptedException {
+        engine.start();
         server.start();
     }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
 }

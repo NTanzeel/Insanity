@@ -12,7 +12,6 @@ import com.insanity.rs2.model.player.loader.SQLPlayerLoader;
 import com.insanity.rs2.net.packets.Builder;
 import com.insanity.rs2.net.packets.Packet;
 import com.insanity.rs2.util.NameUtility;
-import com.insanity.rs2.world.World;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.util.AttributeKey;
@@ -42,61 +41,6 @@ public class Entities {
         return players;
     }
 
-    public void load(final Details details) {
-        World.getWorld().getEngine().submitWork(new Runnable() {
-            @Override
-            public void run() {
-                LoginResult loginResult = playerLoader.checkLogin(details);
-                int returnCode = loginResult.getReturnCode();
-
-                if (!NameUtility.isValidName(details.getUsername())) {
-                    returnCode = 11;
-                }
-
-                if (returnCode != 2) {
-                    Packet packet = new Builder().writeByte((byte) returnCode).toPacket();
-                    details.getChannel().writeAndFlush(packet).addListener(ChannelFutureListener.CLOSE);
-                } else {
-                    playerLoader.loadPlayer(loginResult.getPlayer());
-                    details.getChannel().attr(AttributeKey.valueOf("player")).set(loginResult.getPlayer());
-                    World.getWorld().getEngine().pushTask(new LoginTask(loginResult.getPlayer()));
-                }
-            }
-        });
-    }
-
-    public void register(final Player player) {
-        // do final checks e.g. is player online? is world full?
-        int returnCode = 2;
-        if (isPlayerOnline(player.getName())) {
-            returnCode = 5;
-        } else {
-            if (!players.add(player)) {
-                returnCode = 7;
-                logger.info("Could not register player : " + player + " [world full]");
-            }
-        }
-        final int fReturnCode = returnCode;
-        Builder builder = new Builder();
-        builder.writeByte((byte) returnCode);
-        builder.writeByte((byte) player.getRights().toInteger());
-        builder.writeByte((byte) 0);
-        player.getChannel().writeAndFlush(builder.toPacket()).addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(ChannelFuture channelFuture) throws Exception {
-                if (fReturnCode != 2) {
-                    player.getChannel().close();
-                } else {
-//                    player.getActionSender().sendLogin();
-                }
-            }
-        });
-
-        if (returnCode == 2) {
-            logger.info("Registered player : " + player + " [online=" + players.size() + "]");
-        }
-    }
-
     public boolean isPlayerOnline(String name) {
         name = NameUtility.formatName(name);
         for (Player player : players) {
@@ -105,5 +49,50 @@ public class Entities {
             }
         }
         return false;
+    }
+
+    public void load(final Details details) {
+        Insanity.getInstance().getEngine().submitWork(new Runnable() {
+            @Override
+            public void run() {
+                LoginResult loginResult = playerLoader.checkLogin(details);
+                int returnCode = loginResult.getReturnCode();
+
+                if (returnCode == 2) {
+                    if (!NameUtility.isValidName(details.getUsername())) {
+                        returnCode = 11;
+                    } else if (isPlayerOnline(loginResult.getPlayer().getName())) {
+                        returnCode = 5;
+                    } else if (players.capacity() == 0) {
+                        returnCode = 7;
+                    }
+                }
+
+                if (returnCode != 2) {
+                    Packet packet = new Builder().writeByte((byte) returnCode).toPacket();
+                    details.getChannel().writeAndFlush(packet).addListener(ChannelFutureListener.CLOSE);
+                } else {
+                    playerLoader.loadPlayer(loginResult.getPlayer());
+                    details.getChannel().attr(AttributeKey.valueOf("player")).set(loginResult.getPlayer());
+                    Insanity.getInstance().getEngine().pushTask(new LoginTask(loginResult.getPlayer()));
+                }
+            }
+        });
+    }
+
+    public void register(final Player player) {
+        final int returnCode = players.add(player) ? 2 : 7;
+        Builder builder = new Builder().writeByte((byte) returnCode).writeByte((byte) player.getRights().toInteger()).writeByte((byte) 0);
+        player.getChannel().writeAndFlush(builder.toPacket()).addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture channelFuture) throws Exception {
+                if (returnCode != 2) {
+                    player.getChannel().close();
+                } else {
+//                    player.getActionSender().sendLogin();
+                    logger.info("Registered player : " + player + " [online=" + players.size() + "]");
+                }
+            }
+        });
     }
 }

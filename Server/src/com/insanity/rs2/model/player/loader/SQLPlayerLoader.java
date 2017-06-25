@@ -25,7 +25,7 @@ public class SQLPlayerLoader implements PlayerLoader {
         int code = 2;
         Player player = null;
 
-        String query = "SELECT TOP 1 * FROM users WHERE username = ?";
+        String query = "SELECT * FROM users WHERE username = ? LIMIT 1";
         PreparedStatement statement = this.database.prepareStatement(query);
 
         try {

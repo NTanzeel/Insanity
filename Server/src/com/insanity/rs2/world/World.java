@@ -13,18 +13,12 @@ public class World {
 
     private static final World world = new World();
 
-    private Engine engine = new Engine();
-
     private Entities entities = new Entities();
 
     private Regions regions = new Regions();
 
     public static World getWorld() {
         return world;
-    }
-
-    public Engine getEngine() {
-        return engine;
     }
 
     public Entities getEntities() {
