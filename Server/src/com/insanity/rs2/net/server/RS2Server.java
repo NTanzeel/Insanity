@@ -15,14 +15,19 @@ public class RS2Server {
 
     private RS2ServerBootstrap bootstrap;
 
+    private ChannelFuture channelFuture;
+
     public RS2Server(int port) {
         this.port = port;
     }
 
+    public void bind() throws InterruptedException {
+        this.bootstrap = new RS2ServerBootstrap(128, true).init();
+        this.channelFuture = bootstrap.bind(this.port).sync();
+    }
+
     public void start() throws InterruptedException {
         try {
-            this.bootstrap = new RS2ServerBootstrap(128, true).init();
-            ChannelFuture channelFuture = bootstrap.bind(this.port).sync();
             channelFuture.channel().closeFuture().sync();
         } finally {
             this.bootstrap.shutdownGracefully();

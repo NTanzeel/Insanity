@@ -29,28 +29,66 @@ public class Builder {
         this.type = type;
     }
 
-    public Builder writeByte(byte b) {
-        this.buffer.writeByte(b);
+    public Builder writeByte(byte val) {
+        buffer.writeByte(val);
+        return this;
+    }
+
+    public Builder writeByteA(int val) {
+        buffer.writeByte(val + 128);
         return this;
     }
 
     public Builder writeBytes(byte[] bytes) {
-        this.buffer.writeBytes(bytes);
+        buffer.writeBytes(bytes);
         return this;
     }
 
-    public Builder writeInt(int i) {
-        this.buffer.writeInt(i);
+    /**
+     * Writes a short.
+     *
+     * @param s The short.
+     * @return The PacketBuilder instance, for chaining.
+     */
+    public Builder writeShort(int s) {
+        buffer.writeShort((short) s);
         return this;
     }
 
-    public Builder writeLong(long l) {
-        this.buffer.writeLong(l);
+    /**
+     * Writes a type-A short.
+     *
+     * @param val The value.
+     * @return The PacketBuilder instance, for chaining.
+     */
+    public Builder writeShortA(int val) {
+        return writeByte((byte) (val >> 8)).writeByte((byte) (val + 128));
+    }
+
+    /**
+     * Writes a little endian type-A short.
+     *
+     * @param val The value.
+     * @return The PacketBuilder instance, for chaining.
+     */
+    public Builder writeLEShortA(int val) {
+        buffer.writeByte((byte) (val + 128));
+        buffer.writeByte((byte) (val >> 8));
+        return this;
+    }
+
+    public Builder writeInt(int val) {
+        this.buffer.writeInt(val);
+        return this;
+    }
+
+    public Builder writeLong(long val) {
+        buffer.writeLong(val);
         return this;
     }
 
     public Builder writeString(String s) {
-        return this.writeBytes(s.getBytes());
+        return writeBytes(s.getBytes()).writeByte((byte) 10);
     }
 
     public Packet toPacket() {

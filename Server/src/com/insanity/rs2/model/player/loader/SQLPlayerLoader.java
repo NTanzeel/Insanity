@@ -32,8 +32,7 @@ public class SQLPlayerLoader implements PlayerLoader {
             statement.setString(1, details.getUsername());
             ResultSet resultSet = this.database.query(statement);
 
-            if (resultSet.isBeforeFirst()) {
-                resultSet.next();
+            if (resultSet.first()) {
                 if (!resultSet.getString("password").equals(details.getPassword())) {
                     code = 3;
                 }

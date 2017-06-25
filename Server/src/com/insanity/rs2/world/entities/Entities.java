@@ -89,7 +89,7 @@ public class Entities {
                 if (returnCode != 2) {
                     player.getChannel().close();
                 } else {
-//                    player.getActionSender().sendLogin();
+                    player.initialize();
                     logger.info("Registered player : " + player + " [online=" + players.size() + "]");
                 }
             }

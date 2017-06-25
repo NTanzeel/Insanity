@@ -30,7 +30,7 @@ public class Details {
         return channel;
     }
 
-    public int getUid() {
+    public int getUID() {
         return uid;
     }
 

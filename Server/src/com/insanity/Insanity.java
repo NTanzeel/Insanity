@@ -4,12 +4,16 @@ import com.insanity.io.MySQL;
 import com.insanity.rs2.engine.Engine;
 import com.insanity.rs2.net.server.RS2Server;
 
+import java.util.logging.Logger;
+
 /**
  * @author ntanzeel
  * @version 1.0.0
  * @since 29/05/2017.
  */
 public class Insanity {
+
+    private static final Logger logger = Logger.getLogger(Insanity.class.getName());
 
     private static final Insanity instance = new Insanity();
 
@@ -36,12 +40,14 @@ public class Insanity {
     }
 
     public void start() throws InterruptedException {
+        logger.info("Starting Insanity");
+        server.bind();
         engine.start();
+        logger.info("Ready - Listening for Connections On: " + RS2Server.DEFAULT_PORT);
         server.start();
     }
 
     public Engine getEngine() {
         return engine;
     }
-
 }
