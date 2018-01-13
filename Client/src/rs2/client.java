@@ -6269,7 +6269,7 @@ public class client extends RSApplet {
         loginMessage2 = "Error connecting to server.";
     }
 
-    private boolean doWalkTo(int i, int j, int k, int i1, int j1, int k1, int l1, int i2, int j2, boolean flag, int k2) {
+    private boolean doWalkTo(int i, int j, int k, int i1, int fromY, int k1, int l1, int toY, int fromX, boolean flag, int toX) {
         byte byte0 = 104;
         byte byte1 = 104;
         for (int l2 = 0; l2 < byte0; l2++) {
@@ -6278,14 +6278,14 @@ public class client extends RSApplet {
                 anIntArrayArray825[l2][i3] = 0x5f5e0ff;
             }
         }
-        int j3 = j2;
-        int k3 = j1;
-        anIntArrayArray901[j2][j1] = 99;
-        anIntArrayArray825[j2][j1] = 0;
+        int j3 = fromX;
+        int k3 = fromY;
+        anIntArrayArray901[fromX][fromY] = 99;
+        anIntArrayArray825[fromX][fromY] = 0;
         int l3 = 0;
         int i4 = 0;
-        bigX[l3] = j2;
-        bigY[l3++] = j1;
+        bigX[l3] = fromX;
+        bigY[l3++] = fromY;
         boolean flag1 = false;
         int j4 = bigX.length;
         int ai[][] = aClass11Array1230[plane].anIntArrayArray294;
@@ -6293,21 +6293,21 @@ public class client extends RSApplet {
             j3 = bigX[i4];
             k3 = bigY[i4];
             i4 = (i4 + 1) % j4;
-            if (j3 == k2 && k3 == i2) {
+            if (j3 == toX && k3 == toY) {
                 flag1 = true;
                 break;
             }
             if (i1 != 0) {
-                if ((i1 < 5 || i1 == 10) && aClass11Array1230[plane].method219(k2, j3, k3, j, i1 - 1, i2)) {
+                if ((i1 < 5 || i1 == 10) && aClass11Array1230[plane].method219(toX, j3, k3, j, i1 - 1, toY)) {
                     flag1 = true;
                     break;
                 }
-                if (i1 < 10 && aClass11Array1230[plane].method220(k2, i2, k3, i1 - 1, j, j3)) {
+                if (i1 < 10 && aClass11Array1230[plane].method220(toX, toY, k3, i1 - 1, j, j3)) {
                     flag1 = true;
                     break;
                 }
             }
-            if (k1 != 0 && k != 0 && aClass11Array1230[plane].method221(i2, k2, j3, k, l1, k1, k3)) {
+            if (k1 != 0 && k != 0 && aClass11Array1230[plane].method221(toY, toX, j3, k, l1, k1, k3)) {
                 flag1 = true;
                 break;
             }
@@ -6374,8 +6374,8 @@ public class client extends RSApplet {
             if (flag) {
                 int i5 = 100;
                 for (int k5 = 1; k5 < 2; k5++) {
-                    for (int i6 = k2 - k5; i6 <= k2 + k5; i6++) {
-                        for (int l6 = i2 - k5; l6 <= i2 + k5; l6++)
+                    for (int i6 = toX - k5; i6 <= toX + k5; i6++) {
+                        for (int l6 = toY - k5; l6 <= toY + k5; l6++)
                             if (i6 >= 0 && l6 >= 0 && i6 < 104 && l6 < 104 && anIntArrayArray825[i6][l6] < i5) {
                                 i5 = anIntArrayArray825[i6][l6];
                                 j3 = i6;
@@ -6394,7 +6394,7 @@ public class client extends RSApplet {
         bigX[i4] = j3;
         bigY[i4++] = k3;
         int l5;
-        for (int j5 = l5 = anIntArrayArray901[j3][k3]; j3 != j2 || k3 != j1; j5 = anIntArrayArray901[j3][k3]) {
+        for (int j5 = l5 = anIntArrayArray901[j3][k3]; j3 != fromX || k3 != fromY; j5 = anIntArrayArray901[j3][k3]) {
             if (j5 != l5) {
                 l5 = j5;
                 bigX[i4] = j3;
