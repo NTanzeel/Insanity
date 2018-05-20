@@ -34,7 +34,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
     private int writeLoopCycle;
     private long openSocketTime;
     private int[] mapIndices3;
-    private client clientInstance;
+    private Client clientInstance;
     private int completedSize;
     private int expectedSize;
     private int[] anIntArray1348;
@@ -152,7 +152,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
         }
     }
 
-    public void start(StreamLoader streamLoader, client client1) {
+    public void start(StreamLoader streamLoader, Client client1) {
         String as[] = {"model_version", "anim_version", "midi_version", "map_version"};
         for (int i = 0; i < 4; i++) {
             byte abyte0[] = streamLoader.getDataForName(as[i]);
@@ -243,7 +243,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
                 long l = System.currentTimeMillis();
                 if (l - openSocketTime < 4000L) return;
                 openSocketTime = l;
-                socket = clientInstance.openSocket(43594 + client.portOff);
+                socket = clientInstance.openSocket(43594 + Client.portOff);
                 inputStream = socket.getInputStream();
                 outputStream = socket.getOutputStream();
                 outputStream.write(15);

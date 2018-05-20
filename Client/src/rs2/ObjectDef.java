@@ -6,7 +6,7 @@ public final class ObjectDef {
 
     private static final Model[] aModelArray741s = new Model[4];
     public static boolean lowMem;
-    public static client clientInstance;
+    public static Client clientInstance;
     public static MRUNodes mruNodes2 = new MRUNodes(30);
     public static MRUNodes mruNodes1 = new MRUNodes(500);
     private static Stream stream;
@@ -187,7 +187,7 @@ public final class ObjectDef {
             int j = varBit.anInt648;
             int k = varBit.anInt649;
             int l = varBit.anInt650;
-            int i1 = client.anIntArray1232[l - k];
+            int i1 = Client.anIntArray1232[l - k];
             i = clientInstance.variousSettings[j] >> k & i1;
         } else if (anInt749 != -1) i = clientInstance.variousSettings[anInt749];
         if (i < 0 || i >= childrenIDs.length || childrenIDs[i] == -1) return null;

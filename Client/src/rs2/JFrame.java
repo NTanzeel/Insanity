@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.InetAddress;
 
-public class JFrame extends client {
+public class JFrame extends Client {
 
     JFrame() {
         super();

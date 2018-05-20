@@ -9,7 +9,7 @@ final class ObjectManager {
     private static final int anIntArray140[] = {16, 32, 64, 128};
     private static final int anIntArray144[] = {0, -1, 0, 1};
     private static final int anIntArray152[] = {1, 2, 4, 8};
-    public static client clientInstance;
+    public static Client clientInstance;
     static int anInt131;
     static int anInt145 = 99;
     static boolean lowMem = true;

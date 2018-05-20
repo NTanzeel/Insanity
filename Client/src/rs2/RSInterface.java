@@ -2137,7 +2137,7 @@ public final class RSInterface {
         if (model != null) return model;
         if (i == 1) model = Model.method462(j);
         if (i == 2) model = EntityDef.forID(j).method160();
-        if (i == 3) model = client.myPlayer.method453();
+        if (i == 3) model = Client.myPlayer.method453();
         if (i == 4) model = ItemDef.forID(j).method202(50);
         if (i == 5) model = null;
         if (model != null) aMRUNodes_264.removeFromCache(model, (i << 16) + j);

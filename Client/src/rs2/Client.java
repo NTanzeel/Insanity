@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URL;
 
-public class client extends RSApplet {
+public class Client extends RSApplet {
 
     static final int[][] anIntArrayArray1003 = {{6798, 107, 10283, 16, 4797, 7744, 5799, 4634, 33697, 22433, 2983, 54193}, {8741, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003, 25239}, {25238, 8742, 12, 64030, 43162, 7735, 8404, 1701, 38430, 24094, 10153, 56621, 4783, 1341, 16578, 35003}, {4626, 11146, 6439, 12, 4758, 10270}, {4550, 4537, 5681, 5673, 5790, 6806, 8076, 4574}};
     static final int[] anIntArray1204 = {9104, 10275, 7595, 3610, 7975, 8526, 918, 38802, 24466, 10145, 58654, 5027, 1457, 16565, 34991, 25486};
@@ -172,9 +172,6 @@ public class client extends RSApplet {
     private int[] npcIndices;
     private int anInt839;
     private int[] anIntArray840;
-    private int anInt841;
-    private int anInt842;
-    private int anInt843;
     private String aString844;
     private int privateChatMode;
     private Stream aStream_847;
@@ -266,8 +263,8 @@ public class client extends RSApplet {
     private Sprite multiOverlay;
     private String amountOrNameInput;
     private int daysSinceLastLogin;
-    private int pktSize;
-    private int pktType;
+    private int packetSize;
+    private int packetType;
     private int anInt1009;
     private int anInt1010;
     private int anInt1011;
@@ -474,7 +471,7 @@ public class client extends RSApplet {
     private int publicChatMode;
     private int anInt1289;
 
-    public client() {
+    public Client() {
         fullscreenInterfaceID = -1;
         chatRights = new int[500];
         chatTypeView = 0;
@@ -757,7 +754,7 @@ public class client extends RSApplet {
 
     public final String methodR(/*int i,*/ int j) {
         //if(i <= 0)
-        // pktType = inStream.readUnsignedByte();
+        // packetType = inStream.readUnsignedByte();
         if (j >= 0 && j < 10000) return String.valueOf(j);
         if (j >= 10000 && j < 10000000) return j / 1000 + "K";
         if (j >= 10000000 && j < 999999999) return j / 1000000 + "M";
@@ -4890,8 +4887,8 @@ public class client extends RSApplet {
         if (onDemandFetcher != null) System.out.println("Od-cycle:" + onDemandFetcher.onDemandCycle);
         System.out.println("loop-cycle:" + loopCycle);
         System.out.println("draw-cycle:" + anInt1061);
-        System.out.println("ptype:" + pktType);
-        System.out.println("psize:" + pktSize);
+        System.out.println("ptype:" + packetType);
+        System.out.println("psize:" + packetSize);
         if (socketStream != null) socketStream.printDebug();
         super.shouldDebug = true;
     }
@@ -6043,11 +6040,8 @@ public class client extends RSApplet {
                 loggedIn = true;
                 stream.currentOffset = 0;
                 inStream.currentOffset = 0;
-                pktType = -1;
-                anInt841 = -1;
-                anInt842 = -1;
-                anInt843 = -1;
-                pktSize = 0;
+                packetType = -1;
+                packetSize = 0;
                 anInt1009 = 0;
                 anInt1104 = 0;
                 anInt1011 = 0;
@@ -6196,11 +6190,8 @@ public class client extends RSApplet {
                 loggedIn = true;
                 stream.currentOffset = 0;
                 inStream.currentOffset = 0;
-                pktType = -1;
-                anInt841 = -1;
-                anInt842 = -1;
-                anInt843 = -1;
-                pktSize = 0;
+                packetType = -1;
+                packetSize = 0;
                 anInt1009 = 0;
                 anInt1104 = 0;
                 menuActionRow = 0;
@@ -9650,48 +9641,51 @@ public class client extends RSApplet {
             /*
              * Read the packet OpCode from the stream and compute the expected packet size.
              */
-            if (pktType == -1) {
+            if (packetType == -1) {
                 socketStream.flushInputStream(inStream.buffer, 1);
-                pktType = inStream.buffer[0] & 0xff;
+                packetType = inStream.buffer[0] & 0xff;
                 if (false) {
-                    pktType = pktType - encryption.getNextKey() & 0xff;
+                    packetType = packetType - encryption.getNextKey() & 0xff;
                 }
-                pktSize = SizeConstants.packetSizes[pktType];
+                packetSize = SizeConstants.packetSizes[packetType];
                 streamLength--;
             }
 
-            if (pktSize == -1) {
+            if (packetSize == -1) {
                 if (streamLength > 0) {
                     socketStream.flushInputStream(inStream.buffer, 1);
-                    pktSize = inStream.buffer[0] & 0xff;
+                    packetSize = inStream.buffer[0] & 0xff;
                     streamLength--;
                 } else {
                     return false;
                 }
             }
 
-            System.out.println("Packet Received: [OpCode: " + pktType + ", Size: " + pktSize + "]");
+            if (packetSize == -2) {
+                if (streamLength > 1) {
+                    socketStream.flushInputStream(inStream.buffer, 2);
+                    inStream.currentOffset = 0;
+                    packetSize = inStream.readUnsignedWord();
+                    streamLength -= 2;
+                } else {
+                    return false;
+                }
+            }
 
-            if (pktSize == -2) if (streamLength > 1) {
-                socketStream.flushInputStream(inStream.buffer, 2);
-                inStream.currentOffset = 0;
-                pktSize = inStream.readUnsignedWord();
-                streamLength -= 2;
-            } else {
+            System.out.println("Packet Received: [OpCode: " + packetType + ", Size: " + packetSize + "]");
+
+            if (streamLength < packetSize) {
                 return false;
             }
-            if (streamLength < pktSize) return false;
+
             inStream.currentOffset = 0;
-            socketStream.flushInputStream(inStream.buffer, pktSize);
+            socketStream.flushInputStream(inStream.buffer, packetSize);
             anInt1009 = 0;
-            anInt843 = anInt842;
-            anInt842 = anInt841;
-            anInt841 = pktType;
-            switch (pktType) {
+            switch (packetType) {
                 case 81:
-                    updatePlayers(pktSize, inStream);
+                    updatePlayers(packetSize, inStream);
                     aBoolean1080 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 176:
@@ -9713,7 +9707,7 @@ public class client extends RSApplet {
                             openInterfaceID = RSInterface.interfaceCache[k9].parentID;
                         }
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 64:
@@ -9729,7 +9723,7 @@ public class client extends RSApplet {
                     for (Class30_Sub1 class30_sub1 = (Class30_Sub1) aClass19_1179.reverseGetFirst(); class30_sub1 != null; class30_sub1 = (Class30_Sub1) aClass19_1179.reverseGetNext())
                         if (class30_sub1.anInt1297 >= anInt1268 && class30_sub1.anInt1297 < anInt1268 + 8 && class30_sub1.anInt1298 >= anInt1269 && class30_sub1.anInt1298 < anInt1269 + 8 && class30_sub1.anInt1295 == plane)
                             class30_sub1.anInt1294 = 0;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 185:
@@ -9738,7 +9732,7 @@ public class client extends RSApplet {
                     if (myPlayer.desc == null)
                         RSInterface.interfaceCache[k].mediaID = (myPlayer.anIntArray1700[0] << 25) + (myPlayer.anIntArray1700[4] << 20) + (myPlayer.equipment[0] << 15) + (myPlayer.equipment[8] << 10) + (myPlayer.equipment[11] << 5) + myPlayer.equipment[1];
                     else RSInterface.interfaceCache[k].mediaID = (int) (0x12345678L + myPlayer.desc.type);
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 /* Clan chat packet */
@@ -9755,14 +9749,14 @@ public class client extends RSApplet {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 107:
                     aBoolean1160 = false;
                     for (int l = 0; l < 5; l++)
                         aBooleanArray876[l] = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 72:
@@ -9772,14 +9766,14 @@ public class client extends RSApplet {
                         class9.inv[k15] = -1;
                         class9.inv[k15] = 0;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 214:
-                    ignoreCount = pktSize / 8;
+                    ignoreCount = packetSize / 8;
                     for (int j1 = 0; j1 < ignoreCount; j1++)
                         ignoreListAsLongs[j1] = inStream.readQWord();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 166:
@@ -9794,7 +9788,7 @@ public class client extends RSApplet {
                         yCameraPos = anInt1099 * 128 + 64;
                         zCameraPos = method42(plane, yCameraPos, xCameraPos) - anInt1100;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 134:
@@ -9807,7 +9801,7 @@ public class client extends RSApplet {
                     maxStats[k1] = 1;
                     for (int k20 = 0; k20 < 98; k20++)
                         if (i10 >= anIntArray1019[k20]) maxStats[k1] = k20 + 2;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 71:
@@ -9817,7 +9811,7 @@ public class client extends RSApplet {
                     tabInterfaceIDs[j10] = l1;
                     needDrawTabArea = true;
                     tabAreaAltered = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 74:
@@ -9829,7 +9823,7 @@ public class client extends RSApplet {
                         onDemandFetcher.method558(2, nextSong);
                     }
                     currentSong = i2;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 121:
@@ -9841,12 +9835,12 @@ public class client extends RSApplet {
                         onDemandFetcher.method558(2, nextSong);
                         prevSong = k10;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 109:
                     resetLogout();
-                    pktType = -1;
+                    packetType = -1;
                     return false;
 
                 case 70:
@@ -9856,19 +9850,19 @@ public class client extends RSApplet {
                     RSInterface class9_5 = RSInterface.interfaceCache[i16];
                     class9_5.anInt263 = k2;
                     class9_5.anInt265 = l10;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 73:
                 case 241:
                     int l2 = anInt1069;
                     int i11 = anInt1070;
-                    if (pktType == 73) {
+                    if (packetType == 73) {
                         l2 = inStream.method435();
                         i11 = inStream.readUnsignedWord();
                         aBoolean1159 = false;
                     }
-                    if (pktType == 241) {
+                    if (packetType == 241) {
                         i11 = inStream.method435();
                         inStream.initBitAccess();
                         for (int j16 = 0; j16 < 4; j16++) {
@@ -9885,7 +9879,7 @@ public class client extends RSApplet {
                         aBoolean1159 = true;
                     }
                     if (anInt1069 == l2 && anInt1070 == i11 && loadingStage == 2) {
-                        pktType = -1;
+                        packetType = -1;
                         return true;
                     }
                     anInt1069 = l2;
@@ -9900,7 +9894,7 @@ public class client extends RSApplet {
                     aTextDrawingArea_1271.drawText(0, "Loading - please wait.", 151, 257);
                     aTextDrawingArea_1271.drawText(0xffffff, "Loading - please wait.", 150, 256);
                     aRSImageProducer_1165.drawGraphics(4, super.graphics, 4);
-                    if (pktType == 73) {
+                    if (packetType == 73) {
                         int k16 = 0;
                         for (int i21 = (anInt1069 - 6) / 8; i21 <= (anInt1069 + 6) / 8; i21++) {
                             for (int k23 = (anInt1070 - 6) / 8; k23 <= (anInt1070 + 6) / 8; k23++)
@@ -9929,7 +9923,7 @@ public class client extends RSApplet {
                             }
                         }
                     }
-                    if (pktType == 241) {
+                    if (packetType == 241) {
                         int l16 = 0;
                         int ai[] = new int[676];
                         for (int i24 = 0; i24 < 4; i24++) {
@@ -10028,19 +10022,19 @@ public class client extends RSApplet {
                         destY -= j21;
                     }
                     aBoolean1160 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 208:
                     int i3 = inStream.method437();
                     if (i3 >= 0) method60(i3);
                     anInt1018 = i3;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 99:
                     anInt1021 = inStream.readUnsignedByte();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 75:
@@ -10048,22 +10042,22 @@ public class client extends RSApplet {
                     int j11 = inStream.method436();
                     RSInterface.interfaceCache[j11].anInt233 = 2;
                     RSInterface.interfaceCache[j11].mediaID = j3;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 114:
                     anInt1104 = inStream.method434() * 30;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 60:
                     anInt1269 = inStream.readUnsignedByte();
                     anInt1268 = inStream.method427();
-                    while (inStream.currentOffset < pktSize) {
+                    while (inStream.currentOffset < packetSize) {
                         int k3 = inStream.readUnsignedByte();
                         method137(inStream, k3);
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 35:
@@ -10076,7 +10070,7 @@ public class client extends RSApplet {
                     anIntArray1203[l3] = j17;
                     anIntArray928[l3] = k21;
                     anIntArray1030[l3] = 0;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 174:
@@ -10089,30 +10083,29 @@ public class client extends RSApplet {
                         anIntArray1250[anInt1062] = k17 + Sounds.anIntArray326[i4];
                         anInt1062++;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 104:
-                    System.out.println("Option Packet Received");
-                    int j4 = inStream.method427();
-                    int i12 = inStream.method426();
-                    String s6 = inStream.readString();
-                    if (j4 >= 1 && j4 <= 5) {
-                        if (s6.equalsIgnoreCase("null")) s6 = null;
-                        atPlayerActions[j4 - 1] = s6;
-                        atPlayerArray[j4 - 1] = i12 == 0;
+                    int slot = inStream.method427();
+                    boolean top = inStream.method426() == 0;
+                    String option = inStream.readString();
+                    if (slot >= 1 && slot <= 5) {
+                        if (option.equalsIgnoreCase("null")) {
+                            option = null;
+                        }
+                        atPlayerActions[slot - 1] = option;
+                        atPlayerArray[slot - 1] = top;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 78:
                     destX = 0;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 253:
-                    System.out.println("Chat Packet Received");
-
                     String s = inStream.readString();
                     if (s.endsWith(":tradereq:")) {
                         String s3 = s.substring(0, s.indexOf(":"));
@@ -10154,7 +10147,7 @@ public class client extends RSApplet {
                     } else {
                         pushMessage(s, 0, "");
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 1:
@@ -10162,7 +10155,7 @@ public class client extends RSApplet {
                         if (playerArray[k4] != null) playerArray[k4].anim = -1;
                     for (int j12 = 0; j12 < npcArray.length; j12++)
                         if (npcArray[j12] != null) npcArray[j12].anim = -1;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 50:
@@ -10207,13 +10200,13 @@ public class client extends RSApplet {
                                 flag6 = false;
                             }
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 110:
                     if (tabID == 12) needDrawTabArea = true;
                     energy = inStream.readUnsignedByte();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 254:
@@ -10246,7 +10239,7 @@ public class client extends RSApplet {
                         anInt936 = inStream.readUnsignedByte();
                     }
                     if (anInt855 == 10) anInt933 = inStream.readUnsignedWord();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 248:
@@ -10265,7 +10258,7 @@ public class client extends RSApplet {
                     needDrawTabArea = true;
                     tabAreaAltered = true;
                     aBoolean1149 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 79:
@@ -10277,7 +10270,7 @@ public class client extends RSApplet {
                         if (l12 > class9_3.scrollMax - class9_3.height) l12 = class9_3.scrollMax - class9_3.height;
                         class9_3.scrollPosition = l12;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 68:
@@ -10287,7 +10280,7 @@ public class client extends RSApplet {
                             method33(k5);
                             needDrawTabArea = true;
                         }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 196:
@@ -10308,7 +10301,7 @@ public class client extends RSApplet {
                     if (!flag5 && anInt1251 == 0) try {
                         anIntArray1240[anInt1169] = j18;
                         anInt1169 = (anInt1169 + 1) % 100;
-                        String s9 = TextInput.method525(pktSize - 13, inStream);
+                        String s9 = TextInput.method525(packetSize - 13, inStream);
                         //if(l21 != 3)
                         //s9 = rs2.Censor.doCensor(s9);
                         if (l21 == 2 || l21 == 3)
@@ -10318,13 +10311,13 @@ public class client extends RSApplet {
                     } catch (Exception exception1) {
                         signlink.reporterror("cde1");
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 85:
                     anInt1269 = inStream.method427();
                     anInt1268 = inStream.method427();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 24:
@@ -10334,7 +10327,7 @@ public class client extends RSApplet {
                         else tabID = 3;
                         needDrawTabArea = true;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 246:
@@ -10343,7 +10336,7 @@ public class client extends RSApplet {
                     int k18 = inStream.readUnsignedWord();
                     if (k18 == 65535) {
                         RSInterface.interfaceCache[i6].anInt233 = 0;
-                        pktType = -1;
+                        packetType = -1;
                         return true;
                     } else {
                         ItemDef itemDef = ItemDef.forID(k18);
@@ -10352,7 +10345,7 @@ public class client extends RSApplet {
                         RSInterface.interfaceCache[i6].modelRotation1 = itemDef.modelRotation1;
                         RSInterface.interfaceCache[i6].modelRotation2 = itemDef.modelRotation2;
                         RSInterface.interfaceCache[i6].modelZoom = (itemDef.modelZoom * 100) / i13;
-                        pktType = -1;
+                        packetType = -1;
                         return true;
                     }
 
@@ -10360,7 +10353,7 @@ public class client extends RSApplet {
                     boolean flag1 = inStream.readUnsignedByte() == 1;
                     int j13 = inStream.readUnsignedWord();
                     RSInterface.interfaceCache[j13].isMouseoverTriggered = flag1;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 142:
@@ -10379,7 +10372,7 @@ public class client extends RSApplet {
                     tabAreaAltered = true;
                     openInterfaceID = -1;
                     aBoolean1149 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 126:
@@ -10387,7 +10380,7 @@ public class client extends RSApplet {
                     int frame = inStream.method435();
                     if (text.startsWith("www.")) {
                         launchURL(text);
-                        pktType = -1;
+                        packetType = -1;
                         return true;
                     }
                     updateStrings(text, frame);
@@ -10395,7 +10388,7 @@ public class client extends RSApplet {
                     if (frame >= 18144 && frame <= 18244) {
                         clanList[frame - 18144] = text;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 206:
@@ -10404,13 +10397,13 @@ public class client extends RSApplet {
                     tradeMode = inStream.readUnsignedByte();
                     aBoolean1233 = true;
                     inputTaken = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 240:
                     if (tabID == 12) needDrawTabArea = true;
                     weight = inStream.readSignedWord();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 8:
@@ -10418,7 +10411,7 @@ public class client extends RSApplet {
                     int l13 = inStream.readUnsignedWord();
                     RSInterface.interfaceCache[k6].anInt233 = 1;
                     RSInterface.interfaceCache[k6].mediaID = l13;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 122:
@@ -10428,7 +10421,7 @@ public class client extends RSApplet {
                     int i22 = i14 >> 5 & 0x1f;
                     int l24 = i14 & 0x1f;
                     RSInterface.interfaceCache[l6].textColor = (i19 << 19) + (i22 << 11) + (l24 << 3);
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 53:
@@ -10446,7 +10439,7 @@ public class client extends RSApplet {
                         class9_1.inv[j25] = 0;
                         class9_1.invStackSizes[j25] = 0;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 230:
@@ -10457,13 +10450,13 @@ public class client extends RSApplet {
                     RSInterface.interfaceCache[j14].modelRotation1 = k19;
                     RSInterface.interfaceCache[j14].modelRotation2 = k22;
                     RSInterface.interfaceCache[j14].modelZoom = j7;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 221:
                     anInt900 = inStream.readUnsignedByte();
                     needDrawTabArea = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 177:
@@ -10486,18 +10479,18 @@ public class client extends RSApplet {
                         if (yCameraCurve < 128) yCameraCurve = 128;
                         if (yCameraCurve > 383) yCameraCurve = 383;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 249:
                     anInt1046 = inStream.method426();
                     unknownInt10 = inStream.method436();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 65:
-                    updateNPCs(inStream, pktSize);
-                    pktType = -1;
+                    updateNPCs(inStream, packetSize);
+                    packetType = -1;
                     return true;
 
                 case 27:
@@ -10505,7 +10498,7 @@ public class client extends RSApplet {
                     inputDialogState = 1;
                     amountOrNameInput = "";
                     inputTaken = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 187:
@@ -10513,7 +10506,7 @@ public class client extends RSApplet {
                     inputDialogState = 2;
                     amountOrNameInput = "";
                     inputTaken = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 97:
@@ -10534,14 +10527,14 @@ public class client extends RSApplet {
                     }
                     openInterfaceID = l7;
                     aBoolean1149 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 218:
                     int i8 = inStream.method438();
                     dialogID = i8;
                     inputTaken = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 87:
@@ -10554,7 +10547,7 @@ public class client extends RSApplet {
                         needDrawTabArea = true;
                         if (dialogID != -1) inputTaken = true;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 36:
@@ -10567,12 +10560,12 @@ public class client extends RSApplet {
                         needDrawTabArea = true;
                         if (dialogID != -1) inputTaken = true;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 61:
                     anInt1055 = inStream.readUnsignedByte();
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 200:
@@ -10584,7 +10577,7 @@ public class client extends RSApplet {
                         class9_4.anInt246 = 0;
                         class9_4.anInt208 = 0;
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 219:
@@ -10603,14 +10596,14 @@ public class client extends RSApplet {
                     }
                     openInterfaceID = -1;
                     aBoolean1149 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 34:
                     needDrawTabArea = true;
                     int i9 = inStream.readUnsignedWord();
                     RSInterface class9_2 = RSInterface.interfaceCache[i9];
-                    while (inStream.currentOffset < pktSize) {
+                    while (inStream.currentOffset < packetSize) {
                         int j20 = inStream.method422();
                         int i23 = inStream.readUnsignedWord();
                         int l25 = inStream.readUnsignedByte();
@@ -10620,7 +10613,7 @@ public class client extends RSApplet {
                             class9_2.invStackSizes[j20] = l25;
                         }
                     }
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 4:
@@ -10634,15 +10627,15 @@ public class client extends RSApplet {
                 case 156:
                 case 160:
                 case 215:
-                    method137(inStream, pktType);
-                    pktType = -1;
+                    method137(inStream, packetType);
+                    packetType = -1;
                     return true;
 
                 case 106:
                     tabID = inStream.method427();
                     needDrawTabArea = true;
                     tabAreaAltered = true;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
 
                 case 164:
@@ -10657,21 +10650,14 @@ public class client extends RSApplet {
                     inputTaken = true;
                     openInterfaceID = -1;
                     aBoolean1149 = false;
-                    pktType = -1;
+                    packetType = -1;
                     return true;
             }
-//            signlink.reporterror("T1 - " + pktType + "," + pktSize + " - " + anInt842 + "," + anInt843);
-            //resetLogout();
         } catch (IOException _ex) {
             dropClient();
         } catch (Exception exception) {
-//            String s2 = "T2 - " + pktType + "," + anInt842 + "," + anInt843 + " - " + pktSize + "," + (baseX + myPlayer.smallX[0]) + "," + (baseY + myPlayer.smallY[0]) + " - ";
-//            for (int j15 = 0; j15 < pktSize && j15 < 50; j15++)
-//                s2 = s2 + inStream.buffer[j15] + ",";
-//            signlink.reporterror(s2);
-//            //resetLogout();
         }
-        pktType = -1;
+        packetType = -1;
         return true;
     }
 

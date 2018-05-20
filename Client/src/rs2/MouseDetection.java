@@ -9,9 +9,9 @@ final class MouseDetection implements Runnable {
     public final int[] coordsX;
     public boolean running;
     public int coordsIndex;
-    private client clientInstance;
+    private Client clientInstance;
 
-    public MouseDetection(client client1) {
+    public MouseDetection(Client client1) {
         syncObject = new Object();
         coordsY = new int[500];
         running = true;

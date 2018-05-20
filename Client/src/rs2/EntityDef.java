@@ -9,7 +9,7 @@ import java.io.IOException;
 public final class EntityDef {
 
     public static int totalNPCs;
-    public static client clientInstance;
+    public static Client clientInstance;
     public static MRUNodes mruNodes = new MRUNodes(30);
     private static int anInt56;
     private static Stream stream;
@@ -635,7 +635,7 @@ public final class EntityDef {
             int k = varBit.anInt648;
             int l = varBit.anInt649;
             int i1 = varBit.anInt650;
-            int j1 = client.anIntArray1232[i1 - l];
+            int j1 = Client.anIntArray1232[i1 - l];
             j = clientInstance.variousSettings[k] >> l & j1;
         } else if (anInt59 != -1) j = clientInstance.variousSettings[anInt59];
         if (j < 0 || j >= childrenIDs.length || childrenIDs[j] == -1) return null;
