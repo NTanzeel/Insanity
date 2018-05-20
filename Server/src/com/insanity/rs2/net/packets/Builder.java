@@ -39,6 +39,16 @@ public class Builder {
         return this;
     }
 
+    public Builder writeByteC(int val) {
+        buffer.writeByte(-val);
+        return this;
+    }
+
+    public Builder writeByteS(int val) {
+        buffer.writeByte(128 - val);
+        return this;
+    }
+
     public Builder writeBytes(byte[] bytes) {
         buffer.writeBytes(bytes);
         return this;

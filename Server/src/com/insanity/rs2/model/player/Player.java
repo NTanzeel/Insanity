@@ -117,6 +117,11 @@ public class Player extends Entity {
         actionSender.sendSidebarInterfaces();
 
         actionSender.sendMessage("Welcome to RuneScape");
+
+        actionSender.sendInteractionOption("null", 1, true); // null or fight
+        actionSender. sendInteractionOption("null", 2, false); // challenge = duel arena only
+        actionSender.sendInteractionOption("Trade With", 3, false);
+        actionSender.sendInteractionOption("Follow", 4, false);
     }
 
     @Override

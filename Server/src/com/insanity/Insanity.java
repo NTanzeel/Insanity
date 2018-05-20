@@ -21,7 +21,7 @@ public class Insanity {
 
     private Engine engine = new Engine();
 
-    private MySQL database = new MySQL("localhost:3306/insanity", "root", "SQLRoot098!");
+    private MySQL database = new MySQL("localhost:3306/insanity", "insanity", "password");
 
     private Insanity() {
 

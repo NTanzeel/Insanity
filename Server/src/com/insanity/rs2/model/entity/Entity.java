@@ -93,4 +93,8 @@ public abstract class Entity {
     public CoolingFlags getCoolingFlags() {
         return coolingFlags;
     }
+
+    public void destroy() {
+        removeFromRegion(getRegion());
+    }
 }

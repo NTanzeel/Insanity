@@ -68,4 +68,17 @@ public class ActionSender {
         player.write(new Builder(71).writeShort(interfaceId).writeByteA(icon).toPacket());
         return this;
     }
+
+
+    /**
+     * Sends the player an option.
+     *
+     * @param slot The slot to place the option in the menu.
+     * @param top  Flag which indicates the item should be placed at the top.
+     * @return The action sender instance, for chaining.
+     */
+    public ActionSender sendInteractionOption(String option, int slot, boolean top) {
+        player.write(new Builder(104, Type.VARIABLE).writeByteC(slot + 1).writeByteA(top ? 1 : 0).writeString(option).toPacket());
+        return this;
+    }
 }
