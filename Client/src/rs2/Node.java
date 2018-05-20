@@ -7,6 +7,7 @@ public class Node {
     public long id;
     public Node prev;
     public Node next;
+
     public Node() {
     }
 

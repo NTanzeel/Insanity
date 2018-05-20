@@ -8,6 +8,7 @@ final class Item extends Animable {
     public int x;
     public int y;
     public int anInt1559;
+
     public Item() {
     }
 

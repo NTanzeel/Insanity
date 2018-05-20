@@ -7,6 +7,7 @@ public class NodeSub extends Node {
     public static int anInt1305;
     public NodeSub prevNodeSub;
     NodeSub nextNodeSub;
+
     public NodeSub() {
     }
 

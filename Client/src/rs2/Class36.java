@@ -14,6 +14,7 @@ public final class Class36 {
     public int anIntArray640[];
     public int anIntArray641[];
     public int anIntArray642[];
+
     private Class36() {
     }
 

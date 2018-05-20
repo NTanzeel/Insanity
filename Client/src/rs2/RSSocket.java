@@ -19,6 +19,7 @@ final class RSSocket implements Runnable {
     private int buffIndex;
     private boolean isWriter;
     private boolean hasIOError;
+
     public RSSocket(RSApplet RSApplet_, Socket socket1) throws IOException {
         closed = false;
         isWriter = false;

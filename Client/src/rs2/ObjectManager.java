@@ -31,6 +31,7 @@ final class ObjectManager {
     private final int anInt147;
     private final byte[][][] aByteArrayArrayArray148;
     private final byte[][][] aByteArrayArrayArray149;
+
     public ObjectManager(byte abyte0[][][], int ai[][][]) {
         anInt145 = 99;
         anInt146 = 104;

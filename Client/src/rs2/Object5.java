@@ -18,6 +18,7 @@ public final class Object5 {
     int anInt527;
     int anInt528;
     byte aByte530;
+
     public Object5() {
     }
 }

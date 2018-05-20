@@ -43,6 +43,7 @@ public final class EntityDef {
     private int anInt91;
     private int anInt92;
     private int[] models;//anIntArray94
+
     private EntityDef() {
         anInt55 = -1;
         anInt57 = -1;

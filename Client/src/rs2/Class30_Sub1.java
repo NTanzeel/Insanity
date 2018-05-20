@@ -16,6 +16,7 @@ final class Class30_Sub1 extends Node {
     public int anInt1300;
     public int anInt1301;
     public int anInt1302;
+
     Class30_Sub1() {
         anInt1294 = -1;
     }

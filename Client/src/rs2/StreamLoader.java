@@ -16,6 +16,7 @@ final class StreamLoader {
     private final int[] anIntArray730;
     private final int[] anIntArray731;
     private final boolean aBoolean732;
+
     public StreamLoader(byte abyte0[]) {
         Stream stream = new Stream(abyte0);
         int i = stream.read3Bytes();

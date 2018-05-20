@@ -11,6 +11,7 @@ public final class MRUNodes {
     private final NodeCache nodeCache;
     private final NodeSubList nodeSubList;
     private int spaceLeft;
+
     public MRUNodes(int i) {
         emptyNodeSub = new NodeSub();
         nodeSubList = new NodeSubList();

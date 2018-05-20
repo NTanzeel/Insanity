@@ -21,6 +21,7 @@ public final class Animation {
     public int anInt363;
     public int anInt364;
     public int anInt365;
+
     private Animation() {
         anInt356 = -1;
         aBoolean358 = false;

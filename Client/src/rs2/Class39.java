@@ -12,6 +12,7 @@ final class Class39 {
     private final int[][][] anIntArrayArrayArray666;
     private final int[][][] anIntArrayArrayArray667;
     private final int[] anIntArray668;
+
     public Class39() {
         anIntArray665 = new int[2];
         anIntArrayArrayArray666 = new int[2][2][4];

@@ -62,6 +62,7 @@ public class Entity extends Animable {
     int anInt1555;
     int anInt1556;
     int anInt1557;
+
     Entity() {
         smallX = new int[10];
         smallY = new int[10];

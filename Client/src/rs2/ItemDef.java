@@ -5,46 +5,46 @@ public final class ItemDef {
     public static MRUNodes mruNodes2 = new MRUNodes(50);
     public static ItemDef[] cache;
 
-	/*public static void dumpStacks() {
-		try {
-			FileOutputStream out = new FileOutputStream(new File("stackable.dat"));
-			for (int j = 0; j < 12000; j++) {
-				rs2.ItemDef item = rs2.ItemDef.forID(j);
-				out.write(item.stackable ? 1 : 0);
-			}
-			out.write(-1);
-			out.close();
-		} catch (IOException ioe) {ioe.printStackTrace();}	
-	}
-	
-	public static void dumpNotes() {
-		try {
-			FileOutputStream out = new FileOutputStream(new File("notes.dat"));
-			for (int j = 0; j < 12000; j++) {
-				rs2.ItemDef item = rs2.ItemDef.forID(j);
-				out.write(item.certTemplateID != -1 ? 0 : 1);
-			}
-			out.write(-1);
-			out.close();
-		} catch (IOException ioe) {ioe.printStackTrace();}
-	
-	
-	}
-	
-	public static void dumpPrices() {
-		try {
-			//FileOutputStream out = new FileOutputStream(new File("prices.dat"));
-			FileWriter fw = new FileWriter("prices.txt");
-			for (int j = 0; j < 12000; j++) {
-				rs2.ItemDef item = rs2.ItemDef.forID(j);
-				fw.write(item.id + " " + item.value + "\r\n");
-			}
-			fw.close();
-		} catch (IOException ioe) {ioe.printStackTrace();}
-	
-	
-	}
-	*/
+    /*public static void dumpStacks() {
+        try {
+            FileOutputStream out = new FileOutputStream(new File("stackable.dat"));
+            for (int j = 0; j < 12000; j++) {
+                rs2.ItemDef item = rs2.ItemDef.forID(j);
+                out.write(item.stackable ? 1 : 0);
+            }
+            out.write(-1);
+            out.close();
+        } catch (IOException ioe) {ioe.printStackTrace();}
+    }
+
+    public static void dumpNotes() {
+        try {
+            FileOutputStream out = new FileOutputStream(new File("notes.dat"));
+            for (int j = 0; j < 12000; j++) {
+                rs2.ItemDef item = rs2.ItemDef.forID(j);
+                out.write(item.certTemplateID != -1 ? 0 : 1);
+            }
+            out.write(-1);
+            out.close();
+        } catch (IOException ioe) {ioe.printStackTrace();}
+
+
+    }
+
+    public static void dumpPrices() {
+        try {
+            //FileOutputStream out = new FileOutputStream(new File("prices.dat"));
+            FileWriter fw = new FileWriter("prices.txt");
+            for (int j = 0; j < 12000; j++) {
+                rs2.ItemDef item = rs2.ItemDef.forID(j);
+                fw.write(item.id + " " + item.value + "\r\n");
+            }
+            fw.close();
+        } catch (IOException ioe) {ioe.printStackTrace();}
+
+
+    }
+    */
     public static int cacheIndex;
     public static boolean isMembers = true;
     public static Stream stream;
@@ -93,6 +93,7 @@ public final class ItemDef {
     public int anInt164;
     public int anInt199;
     public int anInt188;
+
     public ItemDef() {
         id = -1;
     }
@@ -148,8 +149,8 @@ public final class ItemDef {
                 itemDef.femaleEquip2 = itemDef.maleEquip2;
                 break;
         }
-		/* Hardcoded items start here */
-		/**/
+        /* Hardcoded items start here */
+        /**/
         return itemDef;
     }
 

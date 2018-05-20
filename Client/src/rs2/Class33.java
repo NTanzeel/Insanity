@@ -8,6 +8,7 @@ final class Class33 {
     int anInt603;
     int anInt604;
     int anInt605;
+
     public Class33() {
     }
 }

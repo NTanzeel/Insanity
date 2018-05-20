@@ -6,54 +6,54 @@ public final class SpotAnim {
     public static int length;
     public static SpotAnim cache[];
 
-	/*public static void loadAllFromTexts() {
-		File[] dir = new File("./gfx/").listFiles();
-		for (int j = 0; j < dir.length; j++) {
-			try {
-				File f = dir[j];
-				Scanner s = new Scanner(f);
-				System.out.println("File name: " + f.getName());
-				while (s.hasNextLine()) {
-					String line = s.nextLine();
-					if (line.startsWith("spotAnim.model")) {
-						cache[j].anInt405 = Integer.parseInt(line.substring(line.indexOf("=") + 2, line.length() - 2));
-						System.out.println("model: " + line.substring(line.indexOf("=") + 2, line.length() - 1));					
-					} else if (line.startsWith("spotAnim.animation")) {
-						cache[j].anInt405 = Integer.parseInt(line.substring(line.indexOf("=") + 2, line.length() - 2));
-						if (cache[j].anInt405 != -1)
-							cache[j].aAnimation_407 = rs2.Animation.anims[cache[j].anInt406];
-						System.out.println("animation: " + line.substring(line.indexOf("=") + 2, line.length() - 1));					
-						break;
-					}
-				}
-			} catch (Exception e){}	
-		
-		}
-	
-	}
-	public static void dumpGfx() {
-		try {
-			File f = new File("test.dat");
-			f.delete();
-			DataOutputStream out = new DataOutputStream(new FileOutputStream("test.dat"));
-			//rs2.Stream out = new rs2.Stream(streamLoader.getDataForName("spotanim.dat"));
-			out.writeShort(length);
-			for (int j = 0; j < cache.length; j++) {
-				if (cache[j].anInt405 == 0 || cache[j].anInt406 == 0 || cache[j].aAnimation_407 == null) {
-					out.writeByte(0);
-				} else {
-					out.writeByte(1);
-					out.writeShort(cache[j].anInt405);
-					out.writeByte(2);
-					out.writeShort(cache[j].anInt406);
-					out.writeByte(0);
-				}
-			}
-			out.close();
-		} catch (IOException ioe) {
-			ioe.printStackTrace();
-		}	
-	}*/
+    /*public static void loadAllFromTexts() {
+        File[] dir = new File("./gfx/").listFiles();
+        for (int j = 0; j < dir.length; j++) {
+            try {
+                File f = dir[j];
+                Scanner s = new Scanner(f);
+                System.out.println("File name: " + f.getName());
+                while (s.hasNextLine()) {
+                    String line = s.nextLine();
+                    if (line.startsWith("spotAnim.model")) {
+                        cache[j].anInt405 = Integer.parseInt(line.substring(line.indexOf("=") + 2, line.length() - 2));
+                        System.out.println("model: " + line.substring(line.indexOf("=") + 2, line.length() - 1));
+                    } else if (line.startsWith("spotAnim.animation")) {
+                        cache[j].anInt405 = Integer.parseInt(line.substring(line.indexOf("=") + 2, line.length() - 2));
+                        if (cache[j].anInt405 != -1)
+                            cache[j].aAnimation_407 = rs2.Animation.anims[cache[j].anInt406];
+                        System.out.println("animation: " + line.substring(line.indexOf("=") + 2, line.length() - 1));
+                        break;
+                    }
+                }
+            } catch (Exception e){}
+
+        }
+
+    }
+    public static void dumpGfx() {
+        try {
+            File f = new File("test.dat");
+            f.delete();
+            DataOutputStream out = new DataOutputStream(new FileOutputStream("test.dat"));
+            //rs2.Stream out = new rs2.Stream(streamLoader.getDataForName("spotanim.dat"));
+            out.writeShort(length);
+            for (int j = 0; j < cache.length; j++) {
+                if (cache[j].anInt405 == 0 || cache[j].anInt406 == 0 || cache[j].aAnimation_407 == null) {
+                    out.writeByte(0);
+                } else {
+                    out.writeByte(1);
+                    out.writeShort(cache[j].anInt405);
+                    out.writeByte(2);
+                    out.writeShort(cache[j].anInt406);
+                    out.writeByte(0);
+                }
+            }
+            out.close();
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }*/
     public static MRUNodes aMRUNodes_415 = new MRUNodes(30);
     private final int anInt400;
     public Animation aAnimation_407 = null;
@@ -67,6 +67,7 @@ public final class SpotAnim {
     private int anInt406;
     private int[] anIntArray408;
     private int[] anIntArray409;
+
     private SpotAnim() {
         anInt400 = 9;
         anInt406 = -1;

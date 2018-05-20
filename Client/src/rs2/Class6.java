@@ -29,6 +29,7 @@ final class Class6 {
     private int anInt110;
     private Class39 aClass39_111;
     private Class29 aClass29_112;
+
     public Class6() {
         anIntArray106 = new int[5];
         anIntArray107 = new int[5];

@@ -21,6 +21,7 @@ final class Class21 {
     public int anInt382;
     public int anInt383;
     public int anInt384;
+
     public Class21() {
     }
 }

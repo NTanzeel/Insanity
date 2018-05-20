@@ -50,6 +50,7 @@ public final class ObjectDef {
     private int[] anIntArray776;
     private int anInt783;
     private int[] modifiedModelColors;
+
     private ObjectDef() {
         type = -1;
     }

@@ -11,6 +11,7 @@ final class Class43 {
     final int anInt720;
     final int anInt722;
     boolean aBoolean721;
+
     public Class43(int i, int j, int k, int l, int i1, int j1, boolean flag) {
         aBoolean721 = true;
         anInt716 = i;

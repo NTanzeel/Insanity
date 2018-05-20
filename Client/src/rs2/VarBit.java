@@ -9,6 +9,7 @@ public final class VarBit {
     public int anInt649;
     public int anInt650;
     private boolean aBoolean651;
+
     private VarBit() {
         aBoolean651 = false;
     }

@@ -6865,12 +6865,12 @@ public class client extends RSApplet {
                     if (onDemandFetcher.method569(i3)) onDemandFetcher.method563((byte) 1, 2, i3);
             }
             drawLoadingText(80, "Unpacking media");
-			/* Custom sprite unpacking */
+            /* Custom sprite unpacking */
             chatArea = new Sprite("chatarea");
             tabArea = new Sprite("tabarea");
             mapArea = new Sprite("maparea");
             multiOverlay = new Sprite(streamLoader_2, "overlay_multiway", 0);
-			/**/
+            /**/
             mapBack = new Background(streamLoader_2, "mapback", 0);
             for (int c1 = 0; c1 <= 3; c1++)
                 chatButtons[c1] = new Sprite(streamLoader_2, "chatbuttons", c1);
@@ -7590,7 +7590,7 @@ public class client extends RSApplet {
             if (class9_1.contentType > 0) drawFriendsListOrWelcomeScreen(class9_1);
             //here
             int[] IDs = {1196, 1199, 1206, 1215, 1224, 1231, 1240, 1249, 1258, 1267, 1274, 1283, 1573, 1290, 1299, 1308, 1315, 1324, 1333, 1340, 1349, 1358, 1367, 1374, 1381, 1388, 1397, 1404, 1583, 12038, 1414, 1421, 1430, 1437, 1446, 1453, 1460, 1469, 15878, 1602, 1613, 1624, 7456, 1478, 1485, 1494, 1503, 1512, 1521, 1530, 1544, 1553, 1563, 1593, 1635, 12426, 12436, 12446, 12456, 6004, 18471,
-				/* Ancients */
+                    /* Ancients */
                     12940, 12988, 13036, 12902, 12862, 13046, 12964, 13012, 13054, 12920, 12882, 13062, 12952, 13000, 13070, 12912, 12872, 13080, 12976, 13024, 13088, 12930, 12892, 13096};
             for (int m5 = 0; m5 < IDs.length; m5++) {
                 if (class9_1.id == IDs[m5] + 1) {
@@ -9653,7 +9653,7 @@ public class client extends RSApplet {
             if (pktType == -1) {
                 socketStream.flushInputStream(inStream.buffer, 1);
                 pktType = inStream.buffer[0] & 0xff;
-                if (false)  {
+                if (false) {
                     pktType = pktType - encryption.getNextKey() & 0xff;
                 }
                 pktSize = SizeConstants.packetSizes[pktType];
@@ -9741,7 +9741,7 @@ public class client extends RSApplet {
                     pktType = -1;
                     return true;
 
-				/* Clan chat packet */
+                /* Clan chat packet */
                 case 217:
                     try {
                         name = inStream.readString();
@@ -10777,8 +10777,8 @@ public class client extends RSApplet {
         try {
             if (osName.startsWith("Mac OS")) {
                 Class fileMgr = Class.forName("com.apple.eio.FileManager");
-                Method openURL = fileMgr.getDeclaredMethod("openURL", new Class[]{String.class});
-                openURL.invoke(null, new Object[]{url});
+                Method openURL = fileMgr.getDeclaredMethod("openURL", String.class);
+                openURL.invoke(null, url);
             } else if (osName.startsWith("Windows"))
                 Runtime.getRuntime().exec("rundll32 url.dll,FileProtocolHandler " + url);
             else { //assume Unix or Linux

@@ -18,6 +18,7 @@ final class Animable_Sub5 extends Animable {
     private int anInt1599;
     private Animation aAnimation_1607;
     private int anInt1608;
+
     public Animable_Sub5(int i, int j, int k, int l, int i1, int j1, int k1, int l1, boolean flag) {
         anInt1610 = i;
         anInt1611 = k;

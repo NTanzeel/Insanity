@@ -10,6 +10,7 @@ public final class ISAACRandomGen {
     private int accumulator;
     private int lastResult;
     private int counter;
+
     public ISAACRandomGen(int seed[]) {
         memory = new int[256];
         results = new int[256];

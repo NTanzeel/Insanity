@@ -75,6 +75,7 @@ final class WorldController {
     private int anInt442;
     private int obj5CacheCurrPos;
     private int anInt488;
+
     public WorldController(int ai[][][]) {
         int i = 104;//was parameter
         int j = 104;//was parameter

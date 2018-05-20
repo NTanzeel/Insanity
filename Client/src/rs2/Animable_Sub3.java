@@ -13,6 +13,7 @@ final class Animable_Sub3 extends Animable {
     public boolean aBoolean1567;
     private int anInt1569;
     private int anInt1570;
+
     public Animable_Sub3(int i, int j, int l, int i1, int j1, int k1, int l1) {
         aBoolean1567 = false;
         aSpotAnim_1568 = SpotAnim.cache[i1];

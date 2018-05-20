@@ -12,6 +12,7 @@ final class Object4 {
     Animable aClass30_Sub2_Sub4_50;
     int uid;
     int anInt52;
+
     Object4() {
     }
 }

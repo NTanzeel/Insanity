@@ -85,9 +85,11 @@ public final class Model extends Animable {
     private int anInt1653;
     private int[] anIntArray1655;
     private int[] anIntArray1656;
+
     private Model() {
         aBoolean1659 = false;
     }
+
     private Model(int i) {
         aBoolean1659 = false;
         Class21 class21 = aClass21Array1661[i];
@@ -206,6 +208,7 @@ public final class Model extends Animable {
             anIntArray1645[j4] = stream.readUnsignedWord();
         }
     }
+
     public Model(int i, Model aclass30_sub2_sub4_sub6s[]) {
         aBoolean1659 = false;
         boolean flag = false;
@@ -285,6 +288,7 @@ public final class Model extends Animable {
             }
         }
     }
+
     public Model(Model aclass30_sub2_sub4_sub6s[]) {
         int i = 2;
         aBoolean1659 = false;
@@ -375,6 +379,7 @@ public final class Model extends Animable {
         }
         method466();
     }
+
     public Model(boolean flag, boolean flag1, boolean flag2, Model model) {
         aBoolean1659 = false;
         anInt1626 = model.anInt1626;
@@ -423,6 +428,7 @@ public final class Model extends Animable {
         anIntArray1644 = model.anIntArray1644;
         anIntArray1645 = model.anIntArray1645;
     }
+
     public Model(boolean flag, boolean flag1, Model model) {
         aBoolean1659 = false;
         anInt1626 = model.anInt1626;

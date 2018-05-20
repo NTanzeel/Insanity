@@ -6,6 +6,7 @@ public final class Class18 {
 
     public final int[] anIntArray342;
     public final int[][] anIntArrayArray343;
+
     public Class18(Stream stream) {
         int anInt341 = stream.readUnsignedByte();
         anIntArray342 = new int[anInt341];

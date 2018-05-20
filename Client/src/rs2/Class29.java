@@ -16,6 +16,7 @@ final class Class29 {
     private int anInt543;
     private int anInt544;
     private int anInt545;
+
     public Class29() {
     }
 

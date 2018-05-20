@@ -13,6 +13,7 @@ public final class Object1 {
     int orientation;
     int orientation1;
     byte aByte281;
+
     public Object1() {
     }
 }

@@ -12,6 +12,7 @@ public final class IDK {
     public int anInt657;
     public boolean aBoolean662;
     private int[] anIntArray658;
+
     private IDK() {
         anInt657 = -1;
         anIntArray659 = new int[6];

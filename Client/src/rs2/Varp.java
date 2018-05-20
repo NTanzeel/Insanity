@@ -9,6 +9,7 @@ public final class Varp {
     private static int[] anIntArray703;
     public int anInt709;
     public boolean aBoolean713;
+
     private Varp() {
         aBoolean713 = false;
     }

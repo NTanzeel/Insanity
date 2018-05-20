@@ -33,6 +33,7 @@ public final class Player extends Entity {
     private int anInt1702;
     private int anInt1715;
     private long aLong1718;
+
     Player() {
         aLong1697 = -1L;
         aBoolean1699 = false;

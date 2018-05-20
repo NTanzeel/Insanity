@@ -10,6 +10,7 @@ public final class Object3 {
     int anInt812;
     int anInt813;
     byte aByte816;
+
     public Object3() {
     }
 }

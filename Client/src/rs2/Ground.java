@@ -27,6 +27,7 @@ public final class Ground extends Node {
     int anInt1326;
     int anInt1327;
     int anInt1328;
+
     public Ground(int i, int j, int k) {
         obj5Array = new Object5[5];
         anIntArray1319 = new int[5];

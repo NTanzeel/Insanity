@@ -28,6 +28,7 @@ final class Animable_Sub4 extends Animable {
     private int anInt1593;
     private int anInt1594;
     private int anInt1596;
+
     public Animable_Sub4(int i, int j, int l, int i1, int j1, int k1, int l1, int i2, int j2, int k2, int l2) {
         aBoolean1579 = false;
         aSpotAnim_1592 = SpotAnim.cache[l2];

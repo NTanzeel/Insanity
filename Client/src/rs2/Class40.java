@@ -29,6 +29,7 @@ final class Class40 {
     final int anInt686;
     final int anInt687;
     int anIntArray682[];
+
     public Class40(int i, int j, int k, int l, int i1, int j1, int k1, int l1, int i2, int j2, int k2, int l2, int i3, int j3, int k3, int l3, int i4, int k4, int l4) {
         aBoolean683 = !(i3 != l2 || i3 != l || i3 != k2);
         anInt684 = j3;

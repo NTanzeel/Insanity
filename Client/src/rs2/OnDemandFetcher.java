@@ -53,6 +53,7 @@ public final class OnDemandFetcher extends OnDemandFetcherParent implements Runn
     private int[] mapIndices1;
     private byte[] modelIndices;
     private int loopCycle;
+
     public OnDemandFetcher() {
         requested = new NodeList();
         statusString = "";

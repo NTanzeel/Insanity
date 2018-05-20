@@ -9,6 +9,7 @@ public final class OnDemandData extends NodeSub {
     int ID;
     boolean incomplete;
     int loopCycle;
+
     public OnDemandData() {
         incomplete = true;
     }

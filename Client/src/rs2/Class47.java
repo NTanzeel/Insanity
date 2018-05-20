@@ -22,6 +22,7 @@ final class Class47 {
     int anInt802;
     int anInt803;
     int anInt804;
+
     Class47() {
     }
 }

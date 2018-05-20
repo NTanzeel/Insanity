@@ -14,6 +14,7 @@ public final class Flo {
     public int anInt397;
     public int anInt398;
     public int anInt399;
+
     private Flo() {
         anInt391 = -1;
         aBoolean393 = true;

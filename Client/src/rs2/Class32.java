@@ -42,6 +42,7 @@ final class Class32 {
     int anInt584;
     int anInt588;
     int anInt601;
+
     Class32() {
         anIntArray583 = new int[256];
         anIntArray585 = new int[257];

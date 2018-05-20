@@ -70,6 +70,7 @@ public final class RSInterface {
     public int childY[];
     private int anInt255;
     private int anInt256;
+
     public RSInterface() {
     }
 
