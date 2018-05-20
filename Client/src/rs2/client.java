@@ -9636,33 +9636,51 @@ public class client extends RSApplet {
     }
 
     private boolean parsePacket() {
-        if (socketStream == null) return false;
         try {
-            int i = socketStream.available();
-            if (i == 0) return false;
+            int streamLength = 0;
+
+            /*
+             * Check if the socket stream is available.
+             * Check if socket stream is open and there is content in the stream.
+             */
+            if (socketStream == null && (streamLength = socketStream.available()) != 0) {
+                return false;
+            }
+
+            /*
+             * Read the packet OpCode from the stream and compute the expected packet size.
+             */
             if (pktType == -1) {
                 socketStream.flushInputStream(inStream.buffer, 1);
                 pktType = inStream.buffer[0] & 0xff;
-                if (encryption != null) pktType = pktType - encryption.getNextKey() & 0xff;
+                if (false)  {
+                    pktType = pktType - encryption.getNextKey() & 0xff;
+                }
                 pktSize = SizeConstants.packetSizes[pktType];
-                i--;
+                streamLength--;
             }
-            if (pktSize == -1) if (i > 0) {
-                socketStream.flushInputStream(inStream.buffer, 1);
-                pktSize = inStream.buffer[0] & 0xff;
-                i--;
-            } else {
-                return false;
+
+            if (pktSize == -1) {
+                if (streamLength > 0) {
+                    socketStream.flushInputStream(inStream.buffer, 1);
+                    pktSize = inStream.buffer[0] & 0xff;
+                    streamLength--;
+                } else {
+                    return false;
+                }
             }
-            if (pktSize == -2) if (i > 1) {
+
+            System.out.println("Packet Received: [OpCode: " + pktType + ", Size: " + pktSize + "]");
+
+            if (pktSize == -2) if (streamLength > 1) {
                 socketStream.flushInputStream(inStream.buffer, 2);
                 inStream.currentOffset = 0;
                 pktSize = inStream.readUnsignedWord();
-                i -= 2;
+                streamLength -= 2;
             } else {
                 return false;
             }
-            if (i < pktSize) return false;
+            if (streamLength < pktSize) return false;
             inStream.currentOffset = 0;
             socketStream.flushInputStream(inStream.buffer, pktSize);
             anInt1009 = 0;
@@ -10075,6 +10093,7 @@ public class client extends RSApplet {
                     return true;
 
                 case 104:
+                    System.out.println("Option Packet Received");
                     int j4 = inStream.method427();
                     int i12 = inStream.method426();
                     String s6 = inStream.readString();
@@ -10092,6 +10111,8 @@ public class client extends RSApplet {
                     return true;
 
                 case 253:
+                    System.out.println("Chat Packet Received");
+
                     String s = inStream.readString();
                     if (s.endsWith(":tradereq:")) {
                         String s3 = s.substring(0, s.indexOf(":"));
@@ -10639,16 +10660,16 @@ public class client extends RSApplet {
                     pktType = -1;
                     return true;
             }
-            signlink.reporterror("T1 - " + pktType + "," + pktSize + " - " + anInt842 + "," + anInt843);
+//            signlink.reporterror("T1 - " + pktType + "," + pktSize + " - " + anInt842 + "," + anInt843);
             //resetLogout();
         } catch (IOException _ex) {
             dropClient();
         } catch (Exception exception) {
-            String s2 = "T2 - " + pktType + "," + anInt842 + "," + anInt843 + " - " + pktSize + "," + (baseX + myPlayer.smallX[0]) + "," + (baseY + myPlayer.smallY[0]) + " - ";
-            for (int j15 = 0; j15 < pktSize && j15 < 50; j15++)
-                s2 = s2 + inStream.buffer[j15] + ",";
-            signlink.reporterror(s2);
-            //resetLogout();
+//            String s2 = "T2 - " + pktType + "," + anInt842 + "," + anInt843 + " - " + pktSize + "," + (baseX + myPlayer.smallX[0]) + "," + (baseY + myPlayer.smallY[0]) + " - ";
+//            for (int j15 = 0; j15 < pktSize && j15 < 50; j15++)
+//                s2 = s2 + inStream.buffer[j15] + ",";
+//            signlink.reporterror(s2);
+//            //resetLogout();
         }
         pktType = -1;
         return true;
