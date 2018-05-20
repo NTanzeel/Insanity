@@ -95,4 +95,11 @@ public class Entities {
             }
         });
     }
+
+    public void deregister(final Player player) {
+        player.destroy();
+        player.getChannel().close();
+        players.remove(player);
+        logger.info("Unregistered player : " + player + " [online=" + players.size() + "]");
+    }
 }
