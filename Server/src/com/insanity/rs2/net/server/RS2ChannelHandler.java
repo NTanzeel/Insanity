@@ -1,7 +1,7 @@
 package com.insanity.rs2.net.server;
 
 import com.insanity.Insanity;
-import com.insanity.rs2.engine.task.impl.LogoutTask;
+import com.insanity.rs2.engine.task.LogoutTask;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 

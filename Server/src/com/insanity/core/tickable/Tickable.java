@@ -1,4 +1,4 @@
-package com.insanity.rs2.tickable;
+package com.insanity.core.tickable;
 
 
 /**

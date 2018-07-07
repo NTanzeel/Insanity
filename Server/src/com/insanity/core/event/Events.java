@@ -1,6 +1,6 @@
-package com.insanity.rs2.event;
+package com.insanity.core.event;
 
-import com.insanity.rs2.engine.Engine;
+import com.insanity.core.engine.TaskEngine;
 
 import java.util.concurrent.TimeUnit;
 
@@ -11,20 +11,20 @@ import java.util.concurrent.TimeUnit;
  *
  * @author Graham Edgecombe
  */
-public class EventManager {
+public class Events {
 
     /**
      * The <code>GameEngine</code> to manager events for.
      */
-    private Engine engine;
+    private TaskEngine engine;
 
     /**
-     * Creates an <code>EventManager</code> for the specified
+     * Creates an <code>Events</code> for the specified
      * <code>GameEngine</code>.
      *
      * @param engine The game engine the manager is managing events for.
      */
-    public EventManager(Engine engine) {
+    public Events(TaskEngine engine) {
         this.engine = engine;
     }
 

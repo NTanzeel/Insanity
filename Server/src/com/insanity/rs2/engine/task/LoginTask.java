@@ -1,7 +1,7 @@
-package com.insanity.rs2.engine.task.impl;
+package com.insanity.rs2.engine.task;
 
-import com.insanity.rs2.engine.Engine;
-import com.insanity.rs2.engine.task.Task;
+import com.insanity.core.engine.TaskEngine;
+import com.insanity.core.engine.task.Task;
 import com.insanity.rs2.model.player.Player;
 import com.insanity.rs2.world.World;
 
@@ -19,7 +19,7 @@ public class LoginTask implements Task {
     }
 
     @Override
-    public void execute(Engine context) {
-        World.getWorld().getEntities().register(player);
+    public void execute(TaskEngine context) {
+        World.getInstance().getEntities().register(player);
     }
 }

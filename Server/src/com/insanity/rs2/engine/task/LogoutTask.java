@@ -1,7 +1,7 @@
-package com.insanity.rs2.engine.task.impl;
+package com.insanity.rs2.engine.task;
 
-import com.insanity.rs2.engine.Engine;
-import com.insanity.rs2.engine.task.Task;
+import com.insanity.core.engine.TaskEngine;
+import com.insanity.core.engine.task.Task;
 import com.insanity.rs2.model.player.Player;
 import com.insanity.rs2.world.World;
 import io.netty.channel.Channel;
@@ -16,12 +16,12 @@ public class LogoutTask implements Task {
     }
 
     @Override
-    public void execute(Engine context) {
+    public void execute(TaskEngine context) {
         if (channel.hasAttr(AttributeKey.valueOf("player"))) {
             final Player player = (Player) channel.attr(AttributeKey.valueOf("player")).get();
 
             if (player != null) {
-                World.getWorld().getEntities().deregister(player);
+                World.getInstance().getEntities().deregister(player);
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.insanity;
 
 import com.insanity.io.MySQL;
-import com.insanity.rs2.engine.Engine;
+import com.insanity.core.engine.TaskEngine;
 import com.insanity.rs2.net.server.RS2Server;
 
 import java.util.logging.Logger;
@@ -19,7 +19,7 @@ public class Insanity {
 
     private RS2Server server = new RS2Server(RS2Server.DEFAULT_PORT);
 
-    private Engine engine = new Engine();
+    private TaskEngine engine = new TaskEngine();
 
     private MySQL database = new MySQL("localhost:3306/insanity", "insanity", "password");
 
@@ -47,7 +47,7 @@ public class Insanity {
         server.start();
     }
 
-    public Engine getEngine() {
+    public TaskEngine getEngine() {
         return engine;
     }
 }

@@ -1,4 +1,4 @@
-package com.insanity.rs2.event;
+package com.insanity.core.event;
 
 /**
  * Represents a task that is executed in the future, once or periodically.

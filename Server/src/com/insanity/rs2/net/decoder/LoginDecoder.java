@@ -246,7 +246,7 @@ public class LoginDecoder extends ByteToMessageDecoder {
 				 */
                 ctx.channel().pipeline().replace("loginDecoder", "decoder", new Decoder());
 
-                World.getWorld().getEntities().load(new Details(ctx.channel(), uid, username, password, inCipher, outCipher));
+                World.getInstance().getEntities().load(new Details(ctx.channel(), uid, username, password, inCipher, outCipher));
 
                 break;
         }

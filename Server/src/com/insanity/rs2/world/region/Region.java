@@ -153,7 +153,7 @@ public class Region {
         List<Region> overlappingRegions = new LinkedList<Region>();
         for (int x = -1; x <= 1; x++) {
             for (int y = -1; y <= 1; y++) {
-                overlappingRegions.add(World.getWorld().getRegions().getRegion(coordinates.getRelativeCoordinates(x, y)));
+                overlappingRegions.add(World.getInstance().getRegions().getRegion(coordinates.getRelativeCoordinates(x, y)));
             }
         }
         return Collections.unmodifiableCollection(overlappingRegions);

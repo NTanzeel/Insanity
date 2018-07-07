@@ -2,7 +2,7 @@ package com.insanity.rs2.world.entities;
 
 import com.insanity.Insanity;
 import com.insanity.rs2.config.Constants;
-import com.insanity.rs2.engine.task.impl.LoginTask;
+import com.insanity.rs2.engine.task.LoginTask;
 import com.insanity.rs2.model.npc.NPC;
 import com.insanity.rs2.model.player.Details;
 import com.insanity.rs2.model.player.Player;

@@ -33,7 +33,7 @@ public class CoolingFlags {
      */
     public void flag(CoolingFlag flag, int duration, Entity entity) {
         cooldowns.set(flag.ordinal(), true);
-//		World.getWorld().submit(new CooldownEvent(entity, cooldown, duration));
+//		World.getInstance().submit(new CooldownEvent(entity, cooldown, duration));
     }
 
     /**

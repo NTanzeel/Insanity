@@ -56,7 +56,7 @@ public abstract class Entity {
     public void setLocation(Location location) {
         this.location = location;
 
-        Region region = World.getWorld().getRegions().getRegion(location);
+        Region region = World.getInstance().getRegions().getRegion(location);
         if (this.region != region) {
             this.setRegion(region);
         }

@@ -1,4 +1,4 @@
-package com.insanity.rs2.tickable;
+package com.insanity.core.tickable;
 
 
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author Michael Bull
  */
-public class TickableManager {
+public class Tickables {
 
     /**
      * The list of tickables.
